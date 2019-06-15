@@ -59,5 +59,6 @@ const videoSchema = new Schema({
 })
 
 videoSchema.plugin( require('mongoose-autopopulate') );
+videoSchema.plugin( require('mongoose-paginate-v2') );
 
 module.exports = mongoose.model('Video', videoSchema, 'videos');

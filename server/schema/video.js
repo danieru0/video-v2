@@ -24,7 +24,13 @@ export default `
 	}
 
 	extend type Query {
-		videos: [Video!]!
+		videos(
+			page: Int!, 
+			limit: Int!,
+			author: ID,
+			title: String,
+			sort: String
+		): [Video]
 	}
 
 	extend type Mutation {
