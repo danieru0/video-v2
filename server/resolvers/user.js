@@ -1,4 +1,5 @@
 import User from '../models/user';
+import Video from '../models/video';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

@@ -63,10 +63,10 @@ const userSchema = new Schema({
 			default: Date.now
 		}
 	},
-	/*history: {
+	history: {
 		videos: [{
 			type: Schema.Types.ObjectId,
-			ref: 'Videos',
+			ref: 'Video',
 			autopopulate: true
 		}],
 		search: [{
@@ -76,7 +76,7 @@ const userSchema = new Schema({
 	},
 	likedVideos: [{
 		type: Schema.Types.ObjectId,
-		ref: 'Videos',
+		ref: 'Video',
 		autopopulate: true
 	}],
 	playlists: [{
@@ -84,15 +84,15 @@ const userSchema = new Schema({
 		name: String,
 		videos: [{
 			type: Schema.Types.ObjectId,
-			ref: 'Videos',
+			ref: 'Video',
 			autopopulate: true
 		}]
 	}],
 	uploadedVideos: [{
 		type: Schema.Types.ObjectId,
-		ref: 'Videos',
+		ref: 'Video',
 		autopopulate: true
-	}]*/
+	}]
 })
 
 userSchema.plugin( require('mongoose-autopopulate') );
