@@ -3,17 +3,17 @@ export default `
 		_id: ID!
 		email: String!
 		nick: String!
-		rules: {
-			canUpload: Boolean!
-			canComment: Boolean!
-			canUseSettings: Boolean!
-			canEditVideos: Boolean!
-		}
-		profile: {
-			background: String!
-			avatar: String!
-			description: String!
-			joined: String!
-		}
+		rules: [Rule!]!
+	}
+
+	type Rule {
+		canUpload: Boolean!
+		canComment: Boolean!
+		canUseSettings: Boolean!
+		canEditVideos: Boolean
+	}
+
+	extend type Mutation {
+		createUser(email: String!, nick: String!, password: String!): User
 	}
 `

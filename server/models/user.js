@@ -15,7 +15,7 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
-	rules: [{
+	rules: {
 		canUpload: {
 			type: Boolean,
 			required: true,
@@ -36,15 +36,17 @@ const userSchema = new Schema({
 			required: true,
 			default: true
 		}
-	}],
-	profile: [{
+	},
+	profile: {
 		background: {
 			type: String,
-			required: true
+			required: true,
+			default: 'https://png.pngtree.com/thumb_back/fw800/back_pic/00/14/65/3256657136926fa.jpg'
 		},
 		avatar: {
 			type: String,
-			required: true
+			required: true,
+			default: 'https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png'
 		},
 		description: {
 			type: String,
@@ -55,8 +57,8 @@ const userSchema = new Schema({
 			required: true,
 			default: Date.now
 		}
-	}],
-	history: [{
+	},
+	history: {
 		videos: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Videos',
@@ -66,7 +68,7 @@ const userSchema = new Schema({
 			type: String,
 			required: false
 		}]
-	}],
+	},
 	likedVideos: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Videos',
@@ -90,4 +92,4 @@ const userSchema = new Schema({
 
 userSchema.plugin( require('mongoose-autopopulate') );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema, 'users');
