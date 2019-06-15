@@ -5,6 +5,7 @@ export default `
 		nick: String!
 		rules: Rule!
 		profile: Profile!
+		uploadedVideos: [Video!]!
 	}
 
 	type Rule {

@@ -23,6 +23,10 @@ export default `
 		text: String!
 	}
 
+	extend type Query {
+		videos: [Video!]!
+	}
+
 	extend type Mutation {
 		createVideo(
 			title: String!
