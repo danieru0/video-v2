@@ -3,7 +3,8 @@ export default `
 		_id: ID!
 		email: String!
 		nick: String!
-		rules: [Rule!]!
+		rules: Rule!
+		profile: Profile!
 	}
 
 	type Rule {
@@ -11,6 +12,13 @@ export default `
 		canComment: Boolean!
 		canUseSettings: Boolean!
 		canEditVideos: Boolean
+	}
+
+	type Profile {
+		background: String!
+		avatar: String!
+		description: String!
+		joined: String!
 	}
 
 	extend type Mutation {
