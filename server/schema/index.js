@@ -1,4 +1,3 @@
-import testSchema from './test';
 import userSchema from './user';
 
 const linkSchema = `
@@ -11,4 +10,4 @@ const linkSchema = `
 	}
 `
 
-export default [linkSchema, testSchema, userSchema];
+export default [linkSchema, userSchema];

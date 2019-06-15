@@ -7,6 +7,8 @@ import { makeExecutableSchema } from 'graphql-tools';
 import typeDefs from './schema/index';
 import resolvers from './resolvers/index';
 
+import isAuth from './middlewares/isAuth';
+
 const app = express();
 const connectedSchema = makeExecutableSchema({
 	typeDefs,
@@ -14,6 +16,7 @@ const connectedSchema = makeExecutableSchema({
 })
 
 app.use(bodyParser.json());
+app.use(isAuth);
 
 app.use('/graphql', graphqlHttp({
 	schema: connectedSchema,

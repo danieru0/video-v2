@@ -15,6 +15,11 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
+	isAdmin: {
+		type: String,
+		required: true,
+		default: false
+	},
 	rules: {
 		canUpload: {
 			type: Boolean,
@@ -58,7 +63,7 @@ const userSchema = new Schema({
 			default: Date.now
 		}
 	},
-	history: {
+	/*history: {
 		videos: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Videos',
@@ -87,7 +92,7 @@ const userSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Videos',
 		autopopulate: true
-	}]
+	}]*/
 })
 
 userSchema.plugin( require('mongoose-autopopulate') );

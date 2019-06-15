@@ -21,7 +21,13 @@ export default `
 		joined: String!
 	}
 
+	type AuthenticationData {
+		token: String!,
+		user: User!
+	}
+
 	extend type Mutation {
 		createUser(email: String!, nick: String!, password: String!): User
+		loginUser(email: String!, password: String!): AuthenticationData
 	}
 `
