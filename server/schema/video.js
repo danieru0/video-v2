@@ -27,6 +27,10 @@ export default `
 		views: Int!
 	}
 
+	type Result {
+		result: Int!
+	}
+	
 	extend type Query {
 		videos(
 			page: Int!, 
@@ -46,5 +50,6 @@ export default `
 			path: String!
 		): Video
 		increaseViews(id: ID!): UpdatedViews
+		addVideoToPlaylist(playlistid: ID!, videoid: ID!): Result
 	}
 `

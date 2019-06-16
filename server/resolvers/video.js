@@ -68,6 +68,24 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		addVideoToPlaylist: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId);
+				const selectedPlaylist = user.playlists.filter(playlist => playlist._id == args.playlistid)[0];
+
+				selectedPlaylist.videos.push(args.videoid);
+				await user.save();
+
+				return { 
+					result: 1
+				}
+
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }

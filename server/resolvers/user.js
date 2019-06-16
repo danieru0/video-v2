@@ -44,7 +44,6 @@ export default {
 				throw err;
 			}
 		},
-
 		loginUser: async (parent, args) => {
 			try {
 				const existingUser = await User.findOne({ email: args.email });
@@ -58,6 +57,25 @@ export default {
 					token,
 					user: existingUser
 				}
+			} catch (err) {
+				throw err;
+			}
+		},
+		createPlaylist: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('User not authorized');
+
+				const user = await User.findById(req.userId);
+				if (!user) throw new Error('User not found');
+
+				const playlist = {
+					status: args.status,
+					name: args.name,
+					videos: []
+				}
+				user.playlists.push(playlist);
+				const result = await user.save();
+				return result.playlists;
 			} catch (err) {
 				throw err;
 			}
