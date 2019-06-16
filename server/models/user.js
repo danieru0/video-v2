@@ -67,7 +67,6 @@ const userSchema = new Schema({
 		videos: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Video',
-			autopopulate: true
 		}],
 		search: [{
 			type: String,
@@ -77,7 +76,6 @@ const userSchema = new Schema({
 	likedVideos: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Video',
-		autopopulate: true
 	}],
 	playlists: [{
 		status: String,
@@ -85,17 +83,14 @@ const userSchema = new Schema({
 		videos: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Video',
-			autopopulate: true
 		}]
 	}],
 	uploadedVideos: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Video',
-		autopopulate: true
 	}]
 })
 
-userSchema.plugin( require('mongoose-autopopulate') );
 userSchema.plugin( require('mongoose-paginate-v2') );
 
 module.exports = mongoose.model('User', userSchema, 'users');

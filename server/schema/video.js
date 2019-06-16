@@ -16,11 +16,8 @@ export default `
 	
 	type UserWithComment {
 		_id: ID!
-		email: String!
-		nick: String!
-		rules: Rule!
-		profile: Profile!
 		text: String!
+		author: User!
 	}
 
 	type UpdatedViews {
@@ -37,7 +34,8 @@ export default `
 			limit: Int!,
 			author: ID,
 			title: String,
-			sort: String
+			sort: String,
+			id: ID
 		): [Video]
 	}
 
@@ -51,5 +49,6 @@ export default `
 		): Video
 		increaseViews(id: ID!): UpdatedViews
 		addVideoToPlaylist(playlistid: ID!, videoid: ID!): Result
+		addComment(videoid: ID!, text: String!): UserWithComment
 	}
 `

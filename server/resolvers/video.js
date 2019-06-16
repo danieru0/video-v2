@@ -2,12 +2,25 @@ import Video from '../models/video';
 import User from '../models/user';
 
 export default {
+	Video: {
+		author: async (parent, args, req) => {
+			const video = await Video.findById(parent._id).populate('author');
+
+			return video.author;
+		},
+		comments: async (parent, args) => {
+			const video = await Video.findById(parent._id).populate('comments.author');
+
+			return video.comments;
+		}
+	},
 	Query: {
 		videos: async (parent, args, req) => {
 			try {
 				const query = {};
 				args.author && (query.author = args.author);
 				args.title && (query.title = {"$regex": args.title, "$options": "i"});
+				args.id && (query._id = args.id);
 				if (req.userId) args.author !== req.userId && (query.status = 'public');
 
 				const options = {
@@ -85,6 +98,28 @@ export default {
 
 			} catch (err) {
 				throw err;
+			}
+		},
+		addComment: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const video = await Video.findById(args.videoid);
+				if (!video) throw new Error('Video not found');
+
+				const comment = {
+					text: args.text,
+					author: req.userId
+				}
+				video.comments.push(comment);
+
+				const result = await video.save();
+				return {
+					text: args.text,
+					author: result
+				}
+			} catch (err) {
+				throw err;;
 			}
 		}
 	}

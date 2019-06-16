@@ -6,6 +6,18 @@ import jwt from 'jsonwebtoken';
 import SECRET from '../secret';
 
 export default {
+	User: {
+		uploadedVideos: async (parent, args) => {
+			const user = await User.findById(parent._id).populate('uploadedVideos');
+			
+			return user.uploadedVideos;
+		},
+		playlists: async (parent, args) => {
+			const user = await User.findById(parent._id).populate('playlists.videos');
+
+			return user.playlists;
+		}
+	},
 	Query: {
 		users: async (parent, args) => {
 			try {
@@ -20,6 +32,16 @@ export default {
 
 				const result = await User.paginate(query, options);
 				return result.docs;
+			} catch (err) {
+				throw err;
+			}
+		},
+		me: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId);
+				return user;
 			} catch (err) {
 				throw err;
 			}
@@ -63,7 +85,7 @@ export default {
 		},
 		createPlaylist: async (parent, args, req) => {
 			try {
-				if (!req.userId) throw new Error('User not authorized');
+				if (!req.userId) throw new Error('Not authenticated');
 
 				const user = await User.findById(req.userId);
 				if (!user) throw new Error('User not found');

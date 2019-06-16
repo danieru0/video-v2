@@ -42,6 +42,7 @@ export default `
 			limit: Int!
 			id: ID
 		): [User]
+		me: User
 	}
 
 	extend type Mutation {

@@ -39,13 +39,13 @@ const videoSchema = new Schema({
 	author: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
-		autopopulate: true
 	},
 	comments: [{
-		type: Schema.Types.ObjectId,
-		ref: 'User',
+		author: {
+			type: Schema.Types.ObjectId,
+			ref: 'User'
+		},
 		text: String,
-		autopopulate: true
 	}],
 	createdAt: {
 		type: Date,
@@ -58,7 +58,6 @@ const videoSchema = new Schema({
 	}
 })
 
-videoSchema.plugin( require('mongoose-autopopulate') );
 videoSchema.plugin( require('mongoose-paginate-v2') );
 
 module.exports = mongoose.model('Video', videoSchema, 'videos');
