@@ -3,11 +3,12 @@ import User from '../models/user';
 
 export default {
 	Query: {
-		videos: async (parent, args) => {
+		videos: async (parent, args, req) => {
 			try {
 				const query = {};
 				args.author && (query.author = args.author);
 				args.title && (query.title = {"$regex": args.title, "$options": "i"});
+				if (req.userId) args.author !== req.userId && (query.status = 'public');
 
 				const options = {
 					page: args.page,
@@ -56,6 +57,14 @@ export default {
 
 				const result = await video.save();
 				return result;
+			} catch (err) {
+				throw err;
+			}
+		},
+		increaseViews: async (parent, args) => {
+			try {
+				const result = await Video.findByIdAndUpdate(args.id, { $inc: { views: 1 } }, { new: true });
+				return { views: result.views };
 			} catch (err) {
 				throw err;
 			}

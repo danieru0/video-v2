@@ -6,6 +6,25 @@ import jwt from 'jsonwebtoken';
 import SECRET from '../secret';
 
 export default {
+	Query: {
+		users: async (parent, args) => {
+			try {
+				const query = {};
+				args.nick && (query.nick = {"$regex": args.nick, "$options": "i"});
+				args.id && (query._id = args.id);
+
+				const options = {
+					page: args.page,
+					limit: args.limit
+				}
+
+				const result = await User.paginate(query, options);
+				return result.docs;
+			} catch (err) {
+				throw err;
+			}
+		}
+	},
 	Mutation: {
 		createUser: async (parent, args) => {
 			try {

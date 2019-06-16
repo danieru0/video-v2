@@ -27,6 +27,15 @@ export default `
 		user: User!
 	}
 
+	extend type Query {
+		users(
+			nick: String,
+			page: Int!,
+			limit: Int!,
+			id: ID
+		): [User]
+	}
+
 	extend type Mutation {
 		createUser(email: String!, nick: String!, password: String!): User
 		loginUser(email: String!, password: String!): AuthenticationData

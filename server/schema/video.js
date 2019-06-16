@@ -23,6 +23,10 @@ export default `
 		text: String!
 	}
 
+	type UpdatedViews {
+		views: Int!
+	}
+
 	extend type Query {
 		videos(
 			page: Int!, 
@@ -41,5 +45,6 @@ export default `
 			status: String!
 			path: String!
 		): Video
+		increaseViews(id: ID!): UpdatedViews
 	}
 `

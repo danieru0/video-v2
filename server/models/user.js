@@ -9,7 +9,8 @@ const userSchema = new Schema({
 	},
 	password: {
 		type: String,
-		required: true
+		required: true,
+		select: false
 	},
 	nick: {
 		type: String,
@@ -96,5 +97,6 @@ const userSchema = new Schema({
 })
 
 userSchema.plugin( require('mongoose-autopopulate') );
+userSchema.plugin( require('mongoose-paginate-v2') );
 
 module.exports = mongoose.model('User', userSchema, 'users');
