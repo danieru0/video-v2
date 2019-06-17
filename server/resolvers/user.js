@@ -103,6 +103,21 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		changeProfileInfo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const me = await User.findById(req.userId).select('profile rules');
+				if (!me.rules.canUseSettings) throw new Error('Settings has been blocked! Contact administrator!');
+
+				me.profile = {...me.profile, ...args};
+				const result = await me.save();
+
+				return result.profile;
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }
