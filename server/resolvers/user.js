@@ -91,7 +91,7 @@ export default {
 		},
 		createPlaylist: async (parent, args, req) => {
 			try {
-				if (!req.userId) throw new Error('Not authenticated');
+				if (!req.userId) throw new Error('Not authenticated!');
 
 				const user = await User.findById(req.userId);
 				if (!user) throw new Error('User not found');
@@ -103,6 +103,23 @@ export default {
 				}
 				user.playlists.push(playlist);
 				const result = await user.save();
+				return result.playlists;
+			} catch (err) {
+				throw err;
+			}
+		},
+		removePlaylist: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const result = await User.findByIdAndUpdate(req.userId, {
+					$pull: {
+						playlists: {
+							_id: args.id
+						}
+					}
+				}, { new: true });
+
 				return result.playlists;
 			} catch (err) {
 				throw err;

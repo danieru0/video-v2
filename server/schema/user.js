@@ -49,5 +49,6 @@ export default `
 		createUser(email: String!, nick: String!, password: String!): User
 		loginUser(email: String!, password: String!): AuthenticationData
 		createPlaylist(name: String!, status: String!): [Playlist]
+		removePlaylist(id: ID!): [Playlist]
 	}
 `
