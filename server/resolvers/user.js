@@ -11,17 +11,6 @@ export default {
 			const user = await User.findById(parent._id).populate('uploadedVideos');
 			
 			return user.uploadedVideos;
-		},
-		playlists: async (parent, args) => {
-			if (args.id) {
-				const user = await User.find({_id: parent._id, "playlists._id": args.id}, { "playlists.$": 1 }).populate({
-					path: "playlists.videos"
-				});
-				return user[0].playlists;			
-			} else {
-				const user = await User.findById(parent._id).populate('playlists.videos');
-				return user.playlists;
-			}
 		}
 	},
 	Query: {
@@ -85,42 +74,6 @@ export default {
 					token,
 					user: existingUser
 				}
-			} catch (err) {
-				throw err;
-			}
-		},
-		createPlaylist: async (parent, args, req) => {
-			try {
-				if (!req.userId) throw new Error('Not authenticated!');
-
-				const user = await User.findById(req.userId);
-				if (!user) throw new Error('User not found');
-
-				const playlist = {
-					status: args.status,
-					name: args.name,
-					videos: []
-				}
-				user.playlists.push(playlist);
-				const result = await user.save();
-				return result.playlists;
-			} catch (err) {
-				throw err;
-			}
-		},
-		removePlaylist: async (parent, args, req) => {
-			try {
-				if (!req.userId) throw new Error('Not authenticated!');
-
-				const result = await User.findByIdAndUpdate(req.userId, {
-					$pull: {
-						playlists: {
-							_id: args.id
-						}
-					}
-				}, { new: true });
-
-				return result.playlists;
 			} catch (err) {
 				throw err;
 			}

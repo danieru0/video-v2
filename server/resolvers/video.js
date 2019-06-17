@@ -82,36 +82,6 @@ export default {
 				throw err;
 			}
 		},
-		addVideoToPlaylist: async (parent, args, req) => {
-			try {
-				if (!req.userId) throw new Error('Not authenticated!');
-
-				const user = await User.findById(req.userId);
-				const selectedPlaylist = user.playlists.filter(playlist => playlist._id == args.playlistid)[0];
-
-				selectedPlaylist.videos.push(args.videoid);
-				const result = await user.save();
-
-				return result.playlists;
-			} catch (err) {
-				throw err;
-			}
-		},
-		removeVideoFromPlaylist: async (parent, args, req) => {
-			try {
-				if (!req.userId) throw new Error('Not authenticated!');
-
-				const result = await User.findOneAndUpdate({ _id: req.userId, "playlists._id": args.playlistid }, {
-					$pull: {
-						"playlists.$.videos": args.videoid
-					}
-				}, { new: true });
-
-				return result.playlists;
-			} catch (err) {
-				throw err;
-			}
-		},
 		addComment: async (parent, args, req) => {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
