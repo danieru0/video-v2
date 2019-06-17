@@ -23,10 +23,6 @@ export default `
 	type UpdatedViews {
 		views: Int!
 	}
-
-	type Result {
-		result: Int!
-	}
 	
 	extend type Query {
 		videos(
@@ -48,7 +44,8 @@ export default `
 			path: String!
 		): Video
 		increaseViews(id: ID!): UpdatedViews
-		addVideoToPlaylist(playlistid: ID!, videoid: ID!): Result
+		addVideoToPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
+		removeVideoFromPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
 		addComment(videoid: ID!, text: String!): UserWithComment
 	}
 `

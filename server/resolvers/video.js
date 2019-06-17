@@ -90,12 +90,9 @@ export default {
 				const selectedPlaylist = user.playlists.filter(playlist => playlist._id == args.playlistid)[0];
 
 				selectedPlaylist.videos.push(args.videoid);
-				await user.save();
+				const result = await user.save();
 
-				return { 
-					result: 1
-				}
-
+				return result.playlists;
 			} catch (err) {
 				throw err;
 			}
@@ -119,7 +116,22 @@ export default {
 					author: result
 				}
 			} catch (err) {
-				throw err;;
+				throw err;
+			}
+		},
+		removeVideoFromPlaylist: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const result = await User.findOneAndUpdate({ _id: req.userId, "playlists._id": args.playlistid }, {
+					$pull: {
+						"playlists.$.videos": args.videoid
+					}
+				}, { new: true });
+
+				return result.playlists;
+			} catch (err) {
+				throw err;
 			}
 		}
 	}
