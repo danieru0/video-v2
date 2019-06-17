@@ -77,6 +77,32 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		setRules: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const me = await User.findById(req.userId).select('isAdmin');
+				if (!me.isAdmin) throw new Error('Not admin!');
+				
+				const selectedUser = await User.findById(args.id).select('rules');
+				if (!selectedUser) throw new Error('User not found!');
+
+				const rules = {};
+				args.hasOwnProperty('canUpload') && (rules.canUpload = args.canUpload);
+				args.hasOwnProperty('canComment') && (rules.canComment = args.canComment);
+				args.hasOwnProperty('canUseSettings') && (rules.canUseSettings = args.canUseSettings);
+				args.hasOwnProperty('canEditVideos') && (rules.canEditVideos = args.canEditVideos);
+
+				const newRules = {...selectedUser.rules, ...rules};
+				delete newRules['$init'];
+				selectedUser.rules = newRules;
+
+				const result = await selectedUser.save();
+				return result.rules
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }

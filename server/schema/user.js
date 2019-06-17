@@ -41,5 +41,6 @@ export default `
 	extend type Mutation {
 		createUser(email: String!, nick: String!, password: String!): User
 		loginUser(email: String!, password: String!): AuthenticationData
+		setRules(id: ID, canUpload: Boolean, canComment: Boolean, canUseSettings: Boolean, canEditVideos: Boolean): Rule
 	}
 `
