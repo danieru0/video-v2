@@ -6,7 +6,7 @@ export default `
 		rules: Rule!
 		profile: Profile!
 		uploadedVideos: [Video]
-		playlists: [Playlist]
+		playlists(id: ID): [Playlist]
 	}
 
 	type Rule {

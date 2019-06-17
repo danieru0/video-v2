@@ -13,9 +13,15 @@ export default {
 			return user.uploadedVideos;
 		},
 		playlists: async (parent, args) => {
-			const user = await User.findById(parent._id).populate('playlists.videos');
-
-			return user.playlists;
+			if (args.id) {
+				const user = await User.find({_id: parent._id, "playlists._id": args.id}, { "playlists.$": 1 }).populate({
+					path: "playlists.videos"
+				});
+				return user[0].playlists;			
+			} else {
+				const user = await User.findById(parent._id).populate('playlists.videos');
+				return user.playlists;
+			}
 		}
 	},
 	Query: {
