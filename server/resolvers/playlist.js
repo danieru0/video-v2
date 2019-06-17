@@ -82,5 +82,23 @@ export default {
 				throw err;
 			}
 		},
+		changePlaylistStatus: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				if (args.status !== 'public' && args.status !== 'private') throw new Error('Wrong status type! Available: public, private');
+				
+				const result = await User.findOneAndUpdate({ _id: req.userId, "playlists._id": args.playlistid }, {
+					"playlists.$.status": args.status
+				}, { new: true });
+
+				const updatedPlaylist = await User.findOne({ _id: req.userId, "playlists._id": args.playlistid }, { "playlists.$": 1 });
+
+				return updatedPlaylist.playlists[0];
+
+			} catch (err) {
+				throw err;
+			}
+		}
 	}
 }
