@@ -44,8 +44,6 @@ export default `
 			path: String!
 		): Video
 		increaseViews(id: ID!): UpdatedViews
-		addVideoToPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
-		removeVideoFromPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
 		addComment(videoid: ID!, text: String!): UserWithComment
 	}
 `

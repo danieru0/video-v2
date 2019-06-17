@@ -97,6 +97,21 @@ export default {
 				throw err;
 			}
 		},
+		removeVideoFromPlaylist: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const result = await User.findOneAndUpdate({ _id: req.userId, "playlists._id": args.playlistid }, {
+					$pull: {
+						"playlists.$.videos": args.videoid
+					}
+				}, { new: true });
+
+				return result.playlists;
+			} catch (err) {
+				throw err;
+			}
+		},
 		addComment: async (parent, args, req) => {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
@@ -115,21 +130,6 @@ export default {
 					text: args.text,
 					author: result
 				}
-			} catch (err) {
-				throw err;
-			}
-		},
-		removeVideoFromPlaylist: async (parent, args, req) => {
-			try {
-				if (!req.userId) throw new Error('Not authenticated!');
-
-				const result = await User.findOneAndUpdate({ _id: req.userId, "playlists._id": args.playlistid }, {
-					$pull: {
-						"playlists.$.videos": args.videoid
-					}
-				}, { new: true });
-
-				return result.playlists;
 			} catch (err) {
 				throw err;
 			}

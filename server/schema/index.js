@@ -1,5 +1,6 @@
 import userSchema from './user';
 import videoSchema from './video';
+import playlistSchema from './playlist';
 
 const linkSchema = `
 	type Query {
@@ -11,4 +12,4 @@ const linkSchema = `
 	}
 `
 
-export default [linkSchema, userSchema, videoSchema];
+export default [linkSchema, userSchema, videoSchema, playlistSchema];

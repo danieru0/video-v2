@@ -28,13 +28,6 @@ export default `
 		user: User!
 	}
 
-	type Playlist {
-		status: String!
-		name: String!
-		id: ID!
-		videos: [Video]
-	}
-
 	extend type Query {
 		users(
 			nick: String
@@ -48,7 +41,5 @@ export default `
 	extend type Mutation {
 		createUser(email: String!, nick: String!, password: String!): User
 		loginUser(email: String!, password: String!): AuthenticationData
-		createPlaylist(name: String!, status: String!): [Playlist]
-		removePlaylist(id: ID!): [Playlist]
 	}
 `
