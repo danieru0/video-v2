@@ -60,8 +60,10 @@ export default {
 				const me = await User.findById(req.userId).select('isAdmin');
 				if (!me.isAdmin) throw new Error('Not admin!');
 
-				const selectedUser = await User.findById(args.id).select('profile');
+				const selectedUser = await User.findById(args.id).select('profile isAdmin');
 				if (!selectedUser) throw new Error('User not found!');
+
+				args.hasOwnProperty('admin') && (selectedUser.isAdmin = args.admin);
 
 				selectedUser.profile = { ...selectedUser.profile, ...args };
 				const result = await selectedUser.save();
