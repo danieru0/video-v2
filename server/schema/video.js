@@ -38,8 +38,8 @@ export default `
 	extend type Mutation {
 		createVideo(
 			title: String!
-			description: String!
-			miniature: String!
+			description: String
+			miniature: String
 			status: String!
 			path: String!
 		): Video

@@ -21,11 +21,6 @@ const videoSchema = new Schema({
 		required: false,
 		default: 0
 	},
-	dislikes: {
-		type: Number,
-		required: false,
-		default: 0
-	},
 	miniature: {
 		type: String,
 		required: false,
