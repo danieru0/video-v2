@@ -106,6 +106,30 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		changeVideoInfo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId).select("uploadedVideos");
+				if (!user.uploadedVideos.includes(args.id)) throw new Error('This video is not uploaded by you!');
+
+				const selectedVideo = await Video.findById(args.id);
+				if (!selectedVideo) throw new Error('Video not found!');
+
+				args.title && (selectedVideo.title = args.title);
+				args.description && (selectedVideo.description = args.description);
+				if (args.miniature == 'default') {
+					selectedVideo.miniature = 'https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png';
+				} else if (args.miniature) {
+					selectedVideo.miniature = args.miniature;
+				}
+
+				const result = await selectedVideo.save();
+				return result;
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }

@@ -45,5 +45,6 @@ export default `
 		): Video
 		increaseViews(id: ID!): UpdatedViews
 		addComment(videoid: ID!, text: String!): UserWithComment
+		changeVideoInfo(id: ID!, title: String, description: String, miniature: String): Video
 	}
 `
