@@ -86,6 +86,9 @@ export default {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
 
+				const me = await User.findById(req.userId).select('rules');
+				if (!me.rules.canComment) throw new Error('Comments has been bocked! Contact administrator!');
+
 				const video = await Video.findById(args.videoid);
 				if (!video) throw new Error('Video not found');
 
