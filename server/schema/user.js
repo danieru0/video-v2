@@ -28,6 +28,10 @@ export default `
 		user: User!
 	}
 
+	type Result {
+		result: Boolean!
+	}
+
 	extend type Query {
 		users(
 			nick: String
@@ -43,5 +47,6 @@ export default `
 		loginUser(email: String!, password: String!): AuthenticationData
 		changeProfileInfo(background: String, avatar: String, description: String): Profile
 		setRules(id: ID, canUpload: Boolean, canComment: Boolean, canUseSettings: Boolean, canEditVideos: Boolean): Rule
+		toggleLikeVideo(id: ID!, boolean: Boolean!): Result
 	}
 `

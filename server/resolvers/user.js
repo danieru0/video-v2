@@ -118,6 +118,36 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		toggleLikeVideo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const video = await Video.findById(args.id);
+				if (!video) throw new Error('Video not found!');
+
+				const user = await User.findById(req.userId);
+				if (args.boolean) {
+					if (user.likedVideos.includes(video._id)) throw new Error('Video is already liked!');
+					user.likedVideos.push(video._id);
+					video.likes += 1;
+					await user.save();
+					await video.save();
+					return {
+						result: true
+					}
+				} else {
+					user.likedVideos.pull(video._id);
+					video.likes -= 1;
+					await user.save();
+					await video.save();
+					return {
+						result: false
+					}
+				}
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }
