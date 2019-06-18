@@ -29,7 +29,7 @@ export default {
 				throw err;
 			}
 		},
-		adminSetVideoInformation: async (parent, args, req) => {
+		adminSetVideoInfo: async (parent, args, req) => {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
 
@@ -49,6 +49,24 @@ export default {
 
 				const result = await selectedVideo.save();
 				return result;
+			} catch (err) {
+				throw err;
+			}
+		},
+		adminChangeProfileInfo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const me = await User.findById(req.userId).select('isAdmin');
+				if (!me.isAdmin) throw new Error('Not admin!');
+
+				const selectedUser = await User.findById(args.id).select('profile');
+				if (!selectedUser) throw new Error('User not found!');
+
+				selectedUser.profile = { ...selectedUser.profile, ...args };
+				const result = await selectedUser.save();
+
+				return result.profile;
 			} catch (err) {
 				throw err;
 			}
