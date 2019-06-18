@@ -16,6 +16,11 @@ export default {
 			const user = await User.findById(parent._id).populate('likedVideos');
 
 			return user.likedVideos;
+		},
+		history: async (parent, args) => {
+			const user = await User.findById(parent._id).populate('history.videos');
+
+			return user.history;
 		}
 	},
 	Query: {
