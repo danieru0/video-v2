@@ -130,6 +130,19 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		addVideoToHistory: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId);
+				user.history.videos.push(args.id);
+				const result = await user.save();
+
+				return result;
+			} catch (err) {
+				throw err;
+			}	
 		}
 	}
 }

@@ -8,8 +8,14 @@ export default `
 		uploadedVideos: [Video]
 		playlists(id: ID): [Playlist]
 		likedVideos(id: ID): [Video]
+		history: History
 	}
 
+	type History {
+		videos: [Video]
+		search: [String]
+	}
+	
 	type Rule {
 		canUpload: Boolean!
 		canComment: Boolean!
