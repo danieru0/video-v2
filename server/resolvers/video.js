@@ -41,6 +41,14 @@ export default {
 					}
 				}
 
+				if (req.userId) {
+					if (args.title) {
+						const user = await User.findById(req.userId).select('history');
+						user.history.search.push(args.title);
+						await user.save();
+					}
+				}
+
 				const result = await Video.paginate(query, options);
 				return result.docs;
 			} catch (err) {
