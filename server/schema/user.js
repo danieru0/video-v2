@@ -7,6 +7,7 @@ export default `
 		profile: Profile!
 		uploadedVideos: [Video]
 		playlists(id: ID): [Playlist]
+		likedVideos(id: ID): [Video]
 	}
 
 	type Rule {
@@ -40,6 +41,7 @@ export default `
 			id: ID
 		): [User]
 		me: User
+		checkIfUserLikedVideo(id: ID!): Result
 	}
 
 	extend type Mutation {

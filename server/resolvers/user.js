@@ -11,6 +11,11 @@ export default {
 			const user = await User.findById(parent._id).populate('uploadedVideos');
 			
 			return user.uploadedVideos;
+		},
+		likedVideos: async (parent, args) => {
+			const user = await User.findById(parent._id).populate('likedVideos');
+
+			return user.likedVideos;
 		}
 	},
 	Query: {
@@ -37,6 +42,25 @@ export default {
 
 				const user = await User.findById(req.userId);
 				return user;
+			} catch (err) {
+				throw err;
+			}
+		},
+		checkIfUserLikedVideo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId).select("likedVideos");
+
+				if (user.likedVideos.includes(args.id)) {
+					return {
+						result: true
+					}
+				} else {
+					return {
+						result: false
+					}
+				}
 			} catch (err) {
 				throw err;
 			}
@@ -137,6 +161,7 @@ export default {
 						result: true
 					}
 				} else {
+					if (!user.likedVideos.includes(video._id)) throw new Error('Video is not liked!');
 					user.likedVideos.pull(video._id);
 					video.likes -= 1;
 					await user.save();
