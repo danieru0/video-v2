@@ -15,7 +15,7 @@ const videoStorage = multer.diskStorage({
 		cb(null, './videos');
 	},
 	filename: function (req, file, cb) {
-		cb(null, file.originalname)
+		cb(null, mongoose.Types.ObjectId() + '.mp4')
 	}
 });
 
