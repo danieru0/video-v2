@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import multer from 'multer';
 import graphqlHttp from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 
@@ -8,6 +9,17 @@ import typeDefs from './schema/index';
 import resolvers from './resolvers/index';
 
 import isAuth from './middlewares/isAuth';
+
+const videoStorage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './videos');
+	},
+	filename: function (req, file, cb) {
+		cb(null, file.originalname)
+	}
+});
+
+const videoUpload = multer({ storage: videoStorage });
 
 const app = express();
 const connectedSchema = makeExecutableSchema({
@@ -17,6 +29,8 @@ const connectedSchema = makeExecutableSchema({
 
 app.use(bodyParser.json());
 app.use(isAuth);
+
+require('./routes/file')(app, videoUpload);
 
 app.use('/graphql', graphqlHttp({
 	schema: connectedSchema,
