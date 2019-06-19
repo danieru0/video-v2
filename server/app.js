@@ -11,15 +11,24 @@ import resolvers from './resolvers/index';
 import isAuth from './middlewares/isAuth';
 
 const videoStorage = multer.diskStorage({
-	destination: function (req, file, cb) {
+	destination: (req, file, cb) => {
 		cb(null, './videos');
 	},
-	filename: function (req, file, cb) {
-		cb(null, mongoose.Types.ObjectId() + '.mp4')
+	filename: (req, file, cb) => {
+		cb(null, mongoose.Types.ObjectId() + '.mp4');
 	}
 });
+const avatarStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './avatars');
+	},
+	filename: (req, file, cb) => {
+		cb(null, req.userId + '.jpg');
+	}
+})
 
 const videoUpload = multer({ storage: videoStorage });
+const avatarUpload = multer({ storage: avatarStorage });
 
 const app = express();
 const connectedSchema = makeExecutableSchema({
@@ -27,10 +36,12 @@ const connectedSchema = makeExecutableSchema({
 	resolvers
 })
 
+app.use('/avatars', express.static(__dirname + '/avatars'));
+
 app.use(bodyParser.json());
 app.use(isAuth);
 
-require('./routes/file')(app, videoUpload);
+require('./routes/file')(app, videoUpload, avatarUpload);
 
 app.use('/graphql', graphqlHttp({
 	schema: connectedSchema,

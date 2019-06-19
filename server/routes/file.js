@@ -6,6 +6,10 @@ module.exports = (app, videoUpload, imageUpload) => {
 		res.status(200).send('File name: ' + req.file.filename);
 	});
 
+	app.post('/upload/avatar', secureUpload, imageUpload.single('avatar'), (req, res) => {
+		res.status(200).send('File name: ' + req.file.filename);
+	});
+
 	//https://medium.com/@daspinola/video-stream-with-node-js-and-html5-320b3191a6b6 
 	app.get('/serve/video', (req, res) => {
 		const path = './videos/5d092a1c9cc2f81ee068c089.mp4';
