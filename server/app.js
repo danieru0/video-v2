@@ -25,10 +25,19 @@ const avatarStorage = multer.diskStorage({
 	filename: (req, file, cb) => {
 		cb(null, req.userId + '.jpg');
 	}
-})
+});
+const miniatureStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './miniatures');
+	},
+	filename: (req, file, cb) => {
+		cb(null, mongoose.Types.ObjectId() + '.jpg');
+	}
+});
 
 const videoUpload = multer({ storage: videoStorage });
 const avatarUpload = multer({ storage: avatarStorage });
+const miniatureUpload = multer({ storage: miniatureStorage });
 
 const app = express();
 const connectedSchema = makeExecutableSchema({
@@ -37,11 +46,12 @@ const connectedSchema = makeExecutableSchema({
 })
 
 app.use('/avatars', express.static(__dirname + '/avatars'));
+app.use('/miniatures', express.static(__dirname + '/miniatures'));
 
 app.use(bodyParser.json());
 app.use(isAuth);
 
-require('./routes/file')(app, videoUpload, avatarUpload);
+require('./routes/file')(app, videoUpload, avatarUpload, miniatureUpload);
 
 app.use('/graphql', graphqlHttp({
 	schema: connectedSchema,
