@@ -151,6 +151,25 @@ export default {
 			} catch (err) {
 				throw err;
 			}	
+		},
+		removeVideo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const user = await User.findById(req.userId);
+				if (!user.uploadedVideos.includes(args.id)) throw new Error('This video is not uploaded by you!');
+
+				const selectedVideo = await Video.findById(args.id);
+				if (!selectedVideo) throw new Error('Video not found!');
+
+				await Video.findByIdAndRemove(args.id);
+				user.uploadedVideos.pull(args.id);
+				const result = await user.save();
+
+				return result;
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }
