@@ -72,6 +72,25 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		adminRemoveVideo: async (parent, args, req) => {
+			try {
+				if (!req.userId) throw new Error('Not authenticated!');
+
+				const me = await User.findById(req.userId).select('isAdmin');
+				if (!me.isAdmin) throw new Error('Not admin!');
+
+				const selectedVideo = await Video.findById(args.id);
+				if (!selectedVideo) throw new Error('Video not found!');
+				
+				await Video.findByIdAndRemove(args.id);
+
+				return {
+					result: true
+				}
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 }
