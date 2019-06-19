@@ -83,11 +83,12 @@ export default {
 				const selectedVideo = await Video.findById(args.id);
 				if (!selectedVideo) throw new Error('Video not found!');
 				
+				const author = await User.findById(selectedVideo.author);
+				author.uploadedVideos.pull(args.id);
 				await Video.findByIdAndRemove(args.id);
+				const result = await author.save();
 
-				return {
-					result: true
-				}
+				return result;
 			} catch (err) {
 				throw err;
 			}
