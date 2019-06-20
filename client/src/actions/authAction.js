@@ -22,8 +22,12 @@ export const signIn = (email, password) => {
 				}
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
-			
+
 			localStorage.setItem('token', result.data.data.loginUser.token);
+			window.location = '/';
+			dispatch({
+				type: 'REFRESH_TOKEN_CHECK'
+			});
 
 		} catch (err) {
 			dispatch({
