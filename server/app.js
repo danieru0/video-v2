@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import graphqlHttp from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
+import cors from 'cors';
 
 import typeDefs from './schema/index';
 import resolvers from './resolvers/index';
@@ -44,6 +45,8 @@ const connectedSchema = makeExecutableSchema({
 	typeDefs,
 	resolvers
 })
+
+app.use(cors());
 
 app.use('/avatars', express.static(__dirname + '/avatars'));
 app.use('/miniatures', express.static(__dirname + '/miniatures'));

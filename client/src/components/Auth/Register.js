@@ -22,6 +22,10 @@ const RegisterForm = styled.form`
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Lato';
+
+	@media (max-width: 500px) {
+		width: 90%;
+	}
 `
 
 const RegisterTitle = styled.p`
@@ -89,7 +93,7 @@ const RegisterButton = styled.button`
 	}
 `
 
-const RegisterNoAccount = styled.div`
+const RegisterAccount = styled.div`
 	width: 500px;
 	height: 60px;
 	background: #249775;
@@ -98,6 +102,10 @@ const RegisterNoAccount = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	@media (max-width: 500px) {
+		width: 90%;
+	}
 `
 
 const StyledLink = styled(Link)`
@@ -130,9 +138,9 @@ const Register = () => {
 				</RegisterInputGroup>
 				<RegisterButton>Register</RegisterButton>
 			</RegisterForm>
-			<RegisterNoAccount>
+			<RegisterAccount>
 				<StyledLink to="/login">Already registered? Log in!</StyledLink>
-			</RegisterNoAccount>
+			</RegisterAccount>
 		</RegisterBackground>
 	);
 };

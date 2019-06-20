@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
+
+import Loader from '../../shared/Loader/Loader';
 
 const LoginBackground = styled.div`
 	width: 100%;
@@ -18,10 +20,16 @@ const LoginForm = styled.form`
 	height: 360px;
 	background: #ffffff;
 	border: 1px solid #EDEDED;
+	border-bottom: none;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Lato';
+	position: relative;
+
+	@media (max-width: 500px) {
+		width: 90%;
+	}
 `
 
 const LoginTitle = styled.p`
@@ -98,6 +106,11 @@ const LoginNoAccount = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid transparent;
+
+	@media (max-width: 500px) {
+		width: 90%;
+	}
 `
 
 const StyledLink = styled(Link)`
@@ -110,19 +123,48 @@ const ErrorMessage = styled.p`
 	margin: 0;
 `
 
-const Login = () => {
+const LoaderContainer = styled.div`
+	width: calc(100% + 2px);
+	height: 100%;
+	background: rgba(0,0,0,0.3);
+	position: absolute;
+	z-index: 2;
+	visibility: ${({authProcess}) => authProcess ? 'visible' : 'hidden'}
+	opacity: ${({authProcess}) => authProcess ? '1' : '0'}
+	transition: opacity .3s, visibility .3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
+
+const Login = ({ handleSubmit, authProcess, authErrors }) => {
+	const [email, setEmailInput] = useState(false);
+	const [password, setPasswordInput] = useState(false);
+
+	const handleEmailInput = e => {
+		setEmailInput(e.target.value);
+	}
+
+	const handlePasswordInput = e => {
+		setPasswordInput(e.target.value);
+	}
+
 	return (
 		<LoginBackground>
-			<LoginForm>
+			<LoginForm onSubmit={event => handleSubmit(event, email, password)}>
+				<LoaderContainer authProcess={authProcess}>
+					<Loader />
+				</LoaderContainer>
 				<LoginTitle>Login</LoginTitle>
 				<LoginInputGroup>
 					<StyledIcon name="envelope"></StyledIcon>
-					<LoginInput required type="email" placeholder="E-mail..."/>
-					<ErrorMessage>Wrong password or email!</ErrorMessage>
+					<LoginInput onChange={handleEmailInput} required type="email" placeholder="E-mail..."/>
+					{ authErrors.email && <ErrorMessage>{authErrors.email}</ErrorMessage> }
 				</LoginInputGroup>
 				<LoginInputGroup>
 					<StyledIcon name="lock"></StyledIcon>
-					<LoginInput required type="password" placeholder="Password..."/>
+					<LoginInput onChange={handlePasswordInput} required type="password" placeholder="Password..."/>
+					{ authErrors.email && <ErrorMessage>{authErrors.password}</ErrorMessage> }
 				</LoginInputGroup>
 				<LoginButton>Login</LoginButton>
 			</LoginForm>
