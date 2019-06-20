@@ -74,11 +74,11 @@ export default {
 	Mutation: {
 		createUser: async (parent, args) => {
 			try {
-				const existingUserEmail = await User.findOne({ email: args.email });
-				if (existingUserEmail) throw new Error('User already exists');
-	
 				const existingUserNick = await User.findOne({ nick: args.nick });
-				if (existingUserNick) throw new Error('Nick is taken!');
+				if (existingUserNick) throw new Error('nick:This nick is taken!');
+
+				const existingUserEmail = await User.findOne({ email: args.email });
+				if (existingUserEmail) throw new Error('email:This email is taken');
 
 				const hashedPassword = await bcryptjs.hash(args.password, 12);
 				const user = new User({

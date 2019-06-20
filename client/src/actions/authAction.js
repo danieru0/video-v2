@@ -75,13 +75,13 @@ export const signUp = (nick, email, password) => {
 			});
 			window.location = '/login';
 		} catch (err) {
+			const errorType = err.split(':')[0];
+			const errorMessage = err.split(':')[1];
+			const errorData = {};
+			errorData[errorType] = errorMessage;
 			dispatch({
 				type: 'SET_AUTH_ERRORS',
-				data: {
-					nick: err,
-					email: err,
-					password: err
-				}
+				data: errorData
 			});
 			dispatch({
 				type: 'SET_AUTH_PROCESS',
