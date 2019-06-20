@@ -74,6 +74,8 @@ export default {
 	Mutation: {
 		createUser: async (parent, args) => {
 			try {
+				if (args.nick.trim().length > 10) throw new Error('nick:Nick is too long! Maximum length is 10 characters!');
+
 				const existingUserNick = await User.findOne({ nick: args.nick });
 				if (existingUserNick) throw new Error('nick:This nick is taken!');
 
@@ -84,7 +86,7 @@ export default {
 				const user = new User({
 					email: args.email,
 					password: hashedPassword,
-					nick: args.nick
+					nick: args.nick.trim()
 				});
 	
 				const result = await user.save();
