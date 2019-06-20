@@ -5,13 +5,18 @@ import { connect } from 'react-redux';
 import Login from './Login';
 import Register from './Register';
 
-import { signIn } from '../../actions/authAction';
+import { signIn, signUp } from '../../actions/authAction';
 
 class AuthContainer extends Component {
 
-	handleSubmit = (e, email, password) => {
+	handleLoginSubmit = (e, email, password) => {
 		e.preventDefault();
 		this.props.signIn(email, password);
+	}
+
+	handleRegisterSubmit = (e, nick, email, password) => {
+		e.preventDefault();
+		this.props.signUp(nick, email, password);
 	}
 
 	render() {
@@ -20,8 +25,8 @@ class AuthContainer extends Component {
 			<>
 				{
 					type === 'login'
-						? <Login authErrors={authErrors} authProcess={authProcess} handleSubmit={this.handleSubmit} />
-						: <Register />
+						? <Login authErrors={authErrors} authProcess={authProcess} handleSubmit={this.handleLoginSubmit} />
+						: <Register authErrors={authErrors} authProcess={authProcess} handleSubmit={this.handleRegisterSubmit} />
 				}
 			</>
 		);
@@ -39,4 +44,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { signIn })(AuthContainer);
+export default connect(mapStateToProps, { signIn, signUp })(AuthContainer);

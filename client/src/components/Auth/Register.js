@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
+
+import Loader from '../../shared/Loader/Loader';
 
 const RegisterBackground = styled.div`
 	width: 100%;
@@ -22,6 +24,7 @@ const RegisterForm = styled.form`
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Lato';
+	position: relative;
 
 	@media (max-width: 500px) {
 		width: 90%;
@@ -118,23 +121,57 @@ const ErrorMessage = styled.p`
 	margin: 0;
 `
 
-const Register = () => {
+const LoaderContainer = styled.div`
+	width: calc(100% + 2px);
+	height: 100%;
+	background: rgba(0,0,0,0.3);
+	position: absolute;
+	z-index: 2;
+	visibility: ${({authProcess}) => authProcess ? 'visible' : 'hidden'}
+	opacity: ${({authProcess}) => authProcess ? '1' : '0'}
+	transition: opacity .3s, visibility .3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
+
+const Register = ({ handleSubmit, authProcess, authErrors }) => {
+	const [email, setEmailInput] = useState(false);
+	const [password, setPasswordInput] = useState(false);
+	const [nick, setNickInput] = useState(false);
+
+	const handleEmailInput = e => {
+		setEmailInput(e.target.value);
+	}
+
+	const handlePasswordInput = e => {
+		setPasswordInput(e.target.value);
+	}
+
+	const handleNickInput = e => {
+		setNickInput(e.target.value);
+	}
 	return (
 		<RegisterBackground>
-			<RegisterForm>
+			<RegisterForm onSubmit={(event) => handleSubmit(event, nick, email, password)}>
+				<LoaderContainer authProcess={authProcess}>
+					<Loader />
+				</LoaderContainer>
 				<RegisterTitle>Register</RegisterTitle>
 				<RegisterInputGroup>
 					<StyledIcon name="user"></StyledIcon>
-					<RegisterInput required type="text" placeholder="Username..."/>
+					<RegisterInput onChange={handleNickInput} required type="text" placeholder="Username..."/>
+					{ authErrors.nick && <ErrorMessage>{authErrors.nick}</ErrorMessage> }
 				</RegisterInputGroup>
 				<RegisterInputGroup>
 					<StyledIcon name="envelope"></StyledIcon>
-					<RegisterInput required type="email" placeholder="E-mail..."/>
-					<ErrorMessage>Wrong password or email!</ErrorMessage>
+					<RegisterInput onChange={handleEmailInput} required type="email" placeholder="E-mail..."/>
+					{ authErrors.email && <ErrorMessage>{authErrors.email}</ErrorMessage> }
 				</RegisterInputGroup>
 				<RegisterInputGroup>
 					<StyledIcon name="lock"></StyledIcon>
-					<RegisterInput required type="password" placeholder="Password..."/>
+					<RegisterInput onChange={handlePasswordInput} required type="password" placeholder="Password..."/>
+					{ authErrors.password && <ErrorMessage>{authErrors.password}</ErrorMessage> }
 				</RegisterInputGroup>
 				<RegisterButton>Register</RegisterButton>
 			</RegisterForm>

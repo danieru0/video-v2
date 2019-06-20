@@ -17,7 +17,7 @@ export default function withAuth(ComponentToCheck) {
 		}
 
 		render() {
-			if (!this.props.token) {
+			if (!this.state.token) {
 				return <Redirect to="/login" />
 			}
 
