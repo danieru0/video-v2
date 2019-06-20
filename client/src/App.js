@@ -9,6 +9,7 @@ function App() {
 			<div className="App">
 				<Switch>
 					<Route path="/login" render={props => <AuthContainer type="login" {...props}/> }/>
+					<Route path="/register" render={props => <AuthContainer type="register" {...props}/> }/>
 				</Switch>
 			</div>
 		</BrowserRouter>
