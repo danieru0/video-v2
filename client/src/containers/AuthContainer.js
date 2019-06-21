@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Login from './Login';
-import Register from './Register';
+import Login from '../components/Auth/Login';
+import Register from '../components/Auth/Register';
 
-import { signIn, signUp } from '../../actions/authAction';
+import { signIn, signUp } from '../actions/authAction';
 
 class AuthContainer extends Component {
 
