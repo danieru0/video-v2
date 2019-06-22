@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import User from './User';
 
@@ -12,6 +13,7 @@ const SideNavContainer = styled.div`
 	background: #ffffff;
 	border-right: 1px solid #E7E7E7;
 	font-family: 'Lato';
+	overflow-y: auto;
 `
 
 const SideNavLogo = styled.div`
@@ -138,6 +140,7 @@ class SideNav extends Component {
 		const { user } = this.props;
 		return (
 			<SideNavContainer>
+				<Scrollbars>
 				<SideNavLogo>
 					<StyledLinkLogo to="/">
 						<StyledIconLogo name="play" />
@@ -195,6 +198,7 @@ class SideNav extends Component {
 						)
 					}
 				</SideNavList>
+				</Scrollbars>
 			</SideNavContainer>
 		);
 	}
