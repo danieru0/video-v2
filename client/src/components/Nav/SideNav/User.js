@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const UserContainer = styled.div`
 	width: 200px;
@@ -127,28 +128,28 @@ class User extends Component {
 	}
 
 	render() {
-		const logged = true;
+		const { user } = this.props;
 		return (
 			<UserContainer onClick={(e) => this.handleDropdownClick(e, true)}>
-				<UserAvatar src={logged ? "https://i.pravatar.cc/300" : "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclinicforspecialchildren.org%2Fwp-content%2Fuploads%2F2016%2F08%2Favatar-placeholder.gif&f=1"} alt=""/>
+				<UserAvatar src={user ? user.profile.avatar : "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclinicforspecialchildren.org%2Fwp-content%2Fuploads%2F2016%2F08%2Favatar-placeholder.gif&f=1"} alt=""/>
 				<UserWrapper>
-					<UserName>{logged ? "daniel" : "Not logged"}</UserName>
-					<UserEmail>{logged && "dabrowskidaniel006@gmail.com"}</UserEmail>
+					<UserName>{user ? user.nick : "Not logged"}</UserName>
+					<UserEmail>{user && user.email}</UserEmail>
 				</UserWrapper>
 				<StyledDropIcon name="caret-down"/>
 				<UserDropdownMenu onClick={(e) => this.handleDropdownClick(e, false)} dropdown={this.state.dropdown}>
 					<UserDropdownList>
 						{
-							logged ? (
+							user ? (
 								<>
 									<UserDropdownItem>
-										<StyledDropdownLink to="/user">
+										<StyledDropdownLink to={`/${user.nick}`}>
 											<StyledDropdownIcon name="user" />
 											Your account
 										</StyledDropdownLink>
 									</UserDropdownItem>
 									<UserDropdownItem>
-										<StyledDropdownLink to="/user/videos">
+										<StyledDropdownLink to={`/${user.nick}/videos`}>
 											<StyledDropdownIcon name="play" />
 											Your videos
 										</StyledDropdownLink>
@@ -190,4 +191,10 @@ class User extends Component {
 	}
 };
 
-export default User;
+const mapStateToProps = state => {
+	return {
+		user: state.userReducer.user
+	}
+}
+
+export default connect(mapStateToProps, null)(User);

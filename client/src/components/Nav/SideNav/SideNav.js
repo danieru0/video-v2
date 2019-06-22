@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import User from './User';
 
@@ -134,7 +135,7 @@ class SideNav extends Component {
 	}
 
 	render() {
-		const logged = true;
+		const { user } = this.props;
 		return (
 			<SideNavContainer>
 				<SideNavLogo>
@@ -153,7 +154,7 @@ class SideNav extends Component {
 						</SideNavStyledLink>
 					</SideNavItem>
 					{
-						logged && (
+						user && (
 							<>
 								<SideNavItem>
 									<SideNavStyledLink onClick={() => this.changeRoute('/favourites')} active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
@@ -172,7 +173,7 @@ class SideNav extends Component {
 					}
 					<SideNavLine>
 						{
-							logged && (
+							user && (
 								<SideNavAddPlaylistButton>
 									<StyledButtonIcon name="plus"/>
 								</SideNavAddPlaylistButton>
@@ -180,21 +181,17 @@ class SideNav extends Component {
 						}
 					</SideNavLine>
 					{
-						logged && (
-							<>
-								<SideNavItem>
-									<SideNavStyledLink onClick={() => this.changeRoute('/user/playlist/nazwa1')} active={this.state.activeRoute === '/user/playlist/nazwa1' ? 1 : 0} to="/">
-										<StyledSideNavIcon name="folder" />
-										Nazwa1
-									</SideNavStyledLink>
-								</SideNavItem>
-								<SideNavItem>
-									<SideNavStyledLink onClick={() => this.changeRoute('/user/playlist/nazwa2')} active={this.state.activeRoute === '/user/playlist/nazwa1' ? 1 : 0} to="/">
-										<StyledSideNavIcon name="lock" />
-										Nazwa2
-									</SideNavStyledLink>
-								</SideNavItem>
-						</>
+						user && (
+							user.playlists.map((item, index) => {
+								return (
+									<SideNavItem key={index}>
+										<SideNavStyledLink onClick={() => this.changeRoute(`${user.nick}/playlist/${item.name}`)} active={this.state.activeRoute === `${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
+											<StyledSideNavIcon name={item.status === 'public' ? "folder" : "lock"} />
+											{item.name}
+										</SideNavStyledLink>
+									</SideNavItem>
+								)
+							})
 						)
 					}
 				</SideNavList>
@@ -203,4 +200,10 @@ class SideNav extends Component {
 	}
 }
 
-export default SideNav;
+const mapStateToProps = state => {
+	return {
+		user: state.userReducer.user
+	}
+}
+
+export default connect(mapStateToProps, null)(SideNav);

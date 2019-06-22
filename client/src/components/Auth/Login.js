@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../../shared/Loader/Loader';
 
 const LoginBackground = styled.div`
-	width: 100%;
+	width: calc(100% - 250px);
 	height: 100vh;
 	display: flex;
 	justify-content: center;

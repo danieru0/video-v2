@@ -18,6 +18,14 @@ export const getFrontUserInformations = () => {
 									name
 									status
 								}
+								profile {
+									avatar
+								}
+								email
+								playlists {
+									status
+									name
+								}
 							}
 						}
 					`
@@ -25,10 +33,16 @@ export const getFrontUserInformations = () => {
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			console.log(result.data);
+			dispatch({
+				type: 'UPDATE_USER_INFO',
+				data: result.data.data.me
+			});
 
 		} catch (err) {
-			console.log(err);
+			if (err === 'Not authenticated!') {
+				localStorage.removeItem('token');
+				window.location = '/login';
+			}
 		}
 	}
 }
