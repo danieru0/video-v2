@@ -11,9 +11,13 @@ const TopNavContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	position: fixed;
+	top: 0;
+	margin-left: 250px;
 
 	@media (max-width: 920px) {
 		width: 100%;
+		margin-left: 0px;
 	}
 `
 

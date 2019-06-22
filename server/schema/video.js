@@ -8,6 +8,7 @@ export default `
 		dislikes: Int!
 		miniature: String!
 		status: String!
+		length: String!
 		author: User!
 		comments: [UserWithComment!]!
 		createdAt: String!
@@ -42,6 +43,7 @@ export default `
 			miniature: String
 			status: String!
 			path: String!
+			length: String!
 		): Video
 		increaseViews(id: ID!): UpdatedViews
 		addComment(videoid: ID!, text: String!): UserWithComment

@@ -19,4 +19,5 @@ body {
 
   .App {
 	  display: flex;
+	  background: #FAFAFA;
   }

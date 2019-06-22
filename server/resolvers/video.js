@@ -70,8 +70,9 @@ export default {
 					miniature: args.miniature,
 					status: args.status,
 					author: req.userId,
-					path: args.path
-				})
+					path: args.path,
+					length: args.length
+				});
 
 				user.uploadedVideos.push(video);
 				await user.save();

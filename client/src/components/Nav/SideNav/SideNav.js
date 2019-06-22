@@ -15,6 +15,7 @@ const SideNavContainer = styled.div`
 	font-family: 'Lato';
 	overflow-y: auto;
 	transition: transform .3s;
+	position: fixed;
 
 	@media (max-width: 920px) {
 		transform: ${({mobileMenu}) => mobileMenu ? 'translateX(0);' : 'translateX(-100%);'}

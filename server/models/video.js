@@ -21,6 +21,10 @@ const videoSchema = new Schema({
 		required: false,
 		default: 0
 	},
+	length: {
+		type: String,
+		required: true
+	},
 	miniature: {
 		type: String,
 		required: false,
@@ -45,7 +49,7 @@ const videoSchema = new Schema({
 	createdAt: {
 		type: Date,
 		required: true,
-		default: Date.now
+		default: new Date()
 	},
 	path: {
 		type: String,
