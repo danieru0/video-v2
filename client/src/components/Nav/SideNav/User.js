@@ -52,6 +52,7 @@ const UserDropdownMenu = styled.div`
 	width: 200px;
 	top: 60px;
 	box-shadow: 0px 0px 15px -1px #000;
+	background: #fff;
 	cursor: default;
 	display: ${({dropdown}) => dropdown ? 'block' : 'none'}
 `
@@ -122,7 +123,7 @@ class User extends Component {
 	handleDropdownClick = (e, boolean) => {
 		e.preventDefault();
 		e.stopPropagation();
-		this.setState({dropdown: boolean})
+		this.setState({dropdown: boolean});
 	}
 
 	render() {

@@ -43,8 +43,98 @@ const StyledIconText = styled.p`
 	letter-spacing: -1px;
 `
 
+const SideNavList = styled.ul`
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	width: 100%;
+`
+
+const SideNavItem = styled.li`
+	width: 100%;
+	height: 60px;
+`
+
+const SideNavStyledLink = styled(Link)`
+	text-decoration: none;
+	color: #000;
+	font-weight: bold;
+	letter-spacing: -1px;
+	font-size: 18px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	background: ${({active}) => active && '#E6F5F0'}
+	color: ${({active}) => active && '#10A074'}
+
+	.fa {
+		color: ${({active}) => active && '#10A074'}
+	}
+
+	&:hover .fa {
+		color: #10A074;
+	}
+
+	&:hover {
+		color: #10A074;
+		background: #E6F5F0;
+	}
+`
+
+const StyledSideNavIcon = styled(FontAwesome)`
+	font-size: 24px;
+	color: #ADADAD;
+	margin-right: 24px;
+	margin-left: 32px;
+`
+
+const SideNavLine = styled.div`
+	width: 100%;
+	height: 1px;
+	background: #E7E7E7;
+	position: relative;
+`
+
+const SideNavAddPlaylistButton = styled.button`
+	padding: 6px 10px;
+	background: #fff;
+	border-radius: 5px;
+	border: 2px solid #B4B4B4;
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	top: -15px;
+	outline: none;
+`
+
+const StyledButtonIcon = styled(FontAwesome)`
+	font-size: 18px;
+	color: #B4B4B4;
+`
+
 class SideNav extends Component {
+	constructor() {
+		super();
+		this.state = {
+			activeRoute: '/'
+		}
+	}
+
+	componentDidMount() {
+		this.setState({
+			activeRoute: window.location.pathname
+		})
+	}
+
+	changeRoute = route => {
+		this.setState({
+			activeRoute: route
+		})
+	}
+
 	render() {
+		const logged = true;
 		return (
 			<SideNavContainer>
 				<SideNavLogo>
@@ -55,6 +145,59 @@ class SideNav extends Component {
 					</StyledLinkLogo>
 				</SideNavLogo>
 				<User />
+				<SideNavList>
+					<SideNavItem>
+						<SideNavStyledLink onClick={() => this.changeRoute('/')} active={this.state.activeRoute === '/' ? 1 : 0} to="/">
+							<StyledSideNavIcon name="home" />
+							Home
+						</SideNavStyledLink>
+					</SideNavItem>
+					{
+						logged && (
+							<>
+								<SideNavItem>
+									<SideNavStyledLink onClick={() => this.changeRoute('/favourites')} active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
+										<StyledSideNavIcon name="heart" />
+										Favourites
+									</SideNavStyledLink>
+								</SideNavItem>
+								<SideNavItem>
+									<SideNavStyledLink onClick={() => this.changeRoute('/history')} active={this.state.activeRoute === '/history' ? 1 : 0} to="/history">
+										<StyledSideNavIcon name="history" />
+										History
+									</SideNavStyledLink>
+								</SideNavItem>
+							</>
+						)
+					}
+					<SideNavLine>
+						{
+							logged && (
+								<SideNavAddPlaylistButton>
+									<StyledButtonIcon name="plus"/>
+								</SideNavAddPlaylistButton>
+							)
+						}
+					</SideNavLine>
+					{
+						logged && (
+							<>
+								<SideNavItem>
+									<SideNavStyledLink onClick={() => this.changeRoute('/user/playlist/nazwa1')} active={this.state.activeRoute === '/user/playlist/nazwa1' ? 1 : 0} to="/">
+										<StyledSideNavIcon name="folder" />
+										Nazwa1
+									</SideNavStyledLink>
+								</SideNavItem>
+								<SideNavItem>
+									<SideNavStyledLink onClick={() => this.changeRoute('/user/playlist/nazwa2')} active={this.state.activeRoute === '/user/playlist/nazwa1' ? 1 : 0} to="/">
+										<StyledSideNavIcon name="lock" />
+										Nazwa2
+									</SideNavStyledLink>
+								</SideNavItem>
+						</>
+						)
+					}
+				</SideNavList>
 			</SideNavContainer>
 		);
 	}
