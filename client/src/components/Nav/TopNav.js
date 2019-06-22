@@ -11,6 +11,10 @@ const TopNavContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+
+	@media (max-width: 920px) {
+		width: 100%;
+	}
 `
 
 const SearchInputGroup = styled.form`
@@ -18,7 +22,11 @@ const SearchInputGroup = styled.form`
 	margin-left: 40px;
 	width: 400px;
 
-	@media (max-width: 865px) {
+	@media (max-width: 920px) {
+		margin-left: 60px;
+	}
+
+	@media (max-width: 610px) {
 		width: 60%;
 		background: red;
 	}
@@ -45,7 +53,7 @@ const SearchInputIcon = styled(FontAwesome)`
 	color: #BBBBBB;
 	font-size: 22px;
 	position: absolute;
-	top: 13px;
+	top: 14px;
 `
 
 const StyledUploadLink = styled(Link)`
@@ -67,10 +75,37 @@ const StyledUploadIcon = styled(FontAwesome)`
 	margin-right: 10px;
 `
 
+const TopNavHamburger = styled.button`
+	border: none;
+	background: none;
+	cursor: pointer;
+	outline: none;
+	padding: 10px 11px 10px 11px;
+	position: absolute;
+	display: none;
+	transition: background .2s;
+	
+	@media (max-width: 920px) {
+		display: block;
+	}
+
+	&:focus {
+		background: #E7E7E7;
+		border-radius: 30px;
+	}
+`
+
+const StyledHamburgerIcon = styled(FontAwesome)`
+	font-size: 22px;
+`
+
 class TopNav extends Component {
 	render() {
 		return (
 			<TopNavContainer>
+				<TopNavHamburger onClick={this.props.toggleNavMenu}>
+					<StyledHamburgerIcon name="bars"/>
+				</TopNavHamburger>
 				<SearchInputGroup>
 					<SearchInputIcon name="search"/> 
 					<SearchInput placeholder="Search videos..." />

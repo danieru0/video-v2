@@ -7,6 +7,12 @@ import SideNav from '../components/Nav/SideNav/SideNav';
 import { getFrontUserInformations } from '../actions/userAction';
 
 class NavContainer extends Component {
+	constructor() {
+		super();
+		this.state = {
+			mobileMenu: false
+		}
+	}
 
 	componentDidMount() {
 		if (localStorage.getItem('token')) {
@@ -14,11 +20,17 @@ class NavContainer extends Component {
 		}
 	}
 
+	toggleNavMenu = () => {
+		this.setState({
+			mobileMenu: !this.state.mobileMenu
+		});
+	}
+
 	render() {
 		return (
 			<>
-				<SideNav />
-				<TopNav />
+				<SideNav toggleNavMenu={this.toggleNavMenu} mobileMenu={this.state.mobileMenu} />
+				<TopNav toggleNavMenu={this.toggleNavMenu} />
 			</>
 		);
 	}

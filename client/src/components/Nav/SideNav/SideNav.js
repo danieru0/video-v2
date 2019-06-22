@@ -14,6 +14,13 @@ const SideNavContainer = styled.div`
 	border-right: 1px solid #E7E7E7;
 	font-family: 'Lato';
 	overflow-y: auto;
+	transition: transform .3s;
+
+	@media (max-width: 920px) {
+		transform: ${({mobileMenu}) => mobileMenu ? 'translateX(0);' : 'translateX(-100%);'}
+		position: absolute;
+		z-index: 1;
+	}
 `
 
 const SideNavLogo = styled.div`
@@ -116,6 +123,26 @@ const StyledButtonIcon = styled(FontAwesome)`
 	color: #B4B4B4;
 `
 
+const SideNavHamburger = styled.button`
+	border: none;
+	background: #E7E7E7;
+	border-radius: 30px;
+	cursor: pointer;
+	outline: none;
+	padding: 10px 11px 10px 11px;
+	position: absolute;
+	display: none;
+	left: 10px;
+
+	@media (max-width: 920px) {
+		display: block;
+	}
+`
+
+const StyledHamburgerIcon = styled(FontAwesome)`
+	font-size: 22px;
+`
+
 class SideNav extends Component {
 	constructor() {
 		super();
@@ -137,11 +164,14 @@ class SideNav extends Component {
 	}
 
 	render() {
-		const { user } = this.props;
+		const { user, mobileMenu, toggleNavMenu } = this.props;
 		return (
-			<SideNavContainer>
+			<SideNavContainer mobileMenu={mobileMenu} >
 				<Scrollbars>
 					<SideNavLogo>
+						<SideNavHamburger onClick={toggleNavMenu}>
+							<StyledHamburgerIcon name="bars"/>
+						</SideNavHamburger>
 						<StyledLinkLogo to="/">
 							<StyledIconLogo name="play" />
 							<StyledIconText color="#000">Video.</StyledIconText>
