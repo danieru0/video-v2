@@ -17,8 +17,8 @@ class NavContainer extends Component {
 	render() {
 		return (
 			<>
-				<TopNav />
 				<SideNav />
+				<TopNav />
 			</>
 		);
 	}

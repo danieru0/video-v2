@@ -141,63 +141,63 @@ class SideNav extends Component {
 		return (
 			<SideNavContainer>
 				<Scrollbars>
-				<SideNavLogo>
-					<StyledLinkLogo to="/">
-						<StyledIconLogo name="play" />
-						<StyledIconText color="#000">Video.</StyledIconText>
-						<StyledIconText color="#7D7D7D">v2</StyledIconText>
-					</StyledLinkLogo>
-				</SideNavLogo>
-				<User />
-				<SideNavList>
-					<SideNavItem>
-						<SideNavStyledLink onClick={() => this.changeRoute('/')} active={this.state.activeRoute === '/' ? 1 : 0} to="/">
-							<StyledSideNavIcon name="home" />
-							Home
-						</SideNavStyledLink>
-					</SideNavItem>
-					{
-						user && (
-							<>
-								<SideNavItem>
-									<SideNavStyledLink onClick={() => this.changeRoute('/favourites')} active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
-										<StyledSideNavIcon name="heart" />
-										Favourites
-									</SideNavStyledLink>
-								</SideNavItem>
-								<SideNavItem>
-									<SideNavStyledLink onClick={() => this.changeRoute('/history')} active={this.state.activeRoute === '/history' ? 1 : 0} to="/history">
-										<StyledSideNavIcon name="history" />
-										History
-									</SideNavStyledLink>
-								</SideNavItem>
-							</>
-						)
-					}
-					<SideNavLine>
+					<SideNavLogo>
+						<StyledLinkLogo to="/">
+							<StyledIconLogo name="play" />
+							<StyledIconText color="#000">Video.</StyledIconText>
+							<StyledIconText color="#7D7D7D">v2</StyledIconText>
+						</StyledLinkLogo>
+					</SideNavLogo>
+					<User />
+					<SideNavList>
+						<SideNavItem>
+							<SideNavStyledLink onClick={() => this.changeRoute('/')} active={this.state.activeRoute === '/' ? 1 : 0} to="/">
+								<StyledSideNavIcon name="home" />
+								Home
+							</SideNavStyledLink>
+						</SideNavItem>
 						{
 							user && (
-								<SideNavAddPlaylistButton>
-									<StyledButtonIcon name="plus"/>
-								</SideNavAddPlaylistButton>
-							)
-						}
-					</SideNavLine>
-					{
-						user && (
-							user.playlists.map((item, index) => {
-								return (
-									<SideNavItem key={index}>
-										<SideNavStyledLink onClick={() => this.changeRoute(`${user.nick}/playlist/${item.name}`)} active={this.state.activeRoute === `${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
-											<StyledSideNavIcon name={item.status === 'public' ? "folder" : "lock"} />
-											{item.name}
+								<>
+									<SideNavItem>
+										<SideNavStyledLink onClick={() => this.changeRoute('/favourites')} active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
+											<StyledSideNavIcon name="heart" />
+											Favourites
 										</SideNavStyledLink>
 									</SideNavItem>
+									<SideNavItem>
+										<SideNavStyledLink onClick={() => this.changeRoute('/history')} active={this.state.activeRoute === '/history' ? 1 : 0} to="/history">
+											<StyledSideNavIcon name="history" />
+											History
+										</SideNavStyledLink>
+									</SideNavItem>
+								</>
+							)
+						}
+						<SideNavLine>
+							{
+								user && (
+									<SideNavAddPlaylistButton>
+										<StyledButtonIcon name="plus"/>
+									</SideNavAddPlaylistButton>
 								)
-							})
-						)
-					}
-				</SideNavList>
+							}
+						</SideNavLine>
+						{
+							user && (
+								user.playlists.map((item, index) => {
+									return (
+										<SideNavItem key={index}>
+											<SideNavStyledLink onClick={() => this.changeRoute(`${user.nick}/playlist/${item.name}`)} active={this.state.activeRoute === `${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
+												<StyledSideNavIcon name={item.status === 'public' ? "folder" : "lock"} />
+												{item.name}
+											</SideNavStyledLink>
+										</SideNavItem>
+									)
+								})
+							)
+						}
+					</SideNavList>
 				</Scrollbars>
 			</SideNavContainer>
 		);
