@@ -14,6 +14,7 @@ const TopNavContainer = styled.div`
 	position: fixed;
 	top: 0;
 	margin-left: 250px;
+	z-index: 2;
 
 	@media (max-width: 920px) {
 		width: 100%;

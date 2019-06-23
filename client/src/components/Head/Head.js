@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { DateTime } from 'luxon';
+
+import PopularVideo from './PopularVideo';
+import NormalVideo from './NormalVideo';
 
 import { getVideos } from '../../actions/videoAction';
 
@@ -50,53 +51,28 @@ const MostPopular = styled.div`
 	margin-top: 30px;
 `
 
-const PopularVideo = styled(Link)`
-	width: 300px;
-	height: 200px;
-	background: ${({miniature}) => `url(${miniature});`}
-	background-size: cover;
-	background-position: center;
-	position: relative;
-`
-
-const PopularVideoOverlay = styled.div`
+const HeadAllWrapper = styled.div`
 	width: 100%;
-	height: 100%;
-	position: absolute;
-	background: rgba(0,0,0,0.4);
-`
+	margin-top: 60px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 
-const PopularVideoTitle = styled.p`
-	color: #fff;
-	font-size: 18px;
-	font-weight: bold;
-	margin-left: 20px;
-	margin-bottom: 5px;
-`
 
-const PopularVideoInfo = styled.p`
-	color: #fff;
-	font-size: 16px;
-	margin-left: 20px;
-	margin-top: 0;
-	margin-bottom: 5px;
-`
-
-const PopularVideoViews = styled.p`
-	color: #fff;
-	font-size: 16px;
-	margin-left: 20px;
-	margin-top: 0px;
+	p:first-child {
+		width: 100%;
+		margin-bottom: 10px;
+	}
 `
 
 class Head extends Component {
-
 	componentDidMount() {
-		this.props.getVideos({page: 1, limit: 5, sort: "popular"});
+		this.props.getVideos({page: 1, limit: 5, sort: "popular"}, true);
+		this.props.getVideos({page: 1, limit: 10});
 	}
 
 	render() {
-		const { popularVideos } = this.props;
+		const { popularVideos, videos } = this.props;
 		return (
 			<HeadContainer>
 				<HeadWrapper>
@@ -106,22 +82,26 @@ class Head extends Component {
 							{
 								popularVideos && (
 									popularVideos.map((item, index) => {
-										item.createdAt = new Date( Number(item.createdAt) );
-										item.createdAt = DateTime.fromJSDate( item.createdAt);
 										return (
-											<PopularVideo to={`/video/${item._id}`} key={index} miniature={item.miniature}>
-												<PopularVideoOverlay>
-													<PopularVideoTitle>{item.title}</PopularVideoTitle>
-													<PopularVideoInfo>{`${item.author.nick} | ${ item.createdAt.toRelative() }`}</PopularVideoInfo>
-													<PopularVideoViews>{`${item.views} views`}</PopularVideoViews>
-												</PopularVideoOverlay>
-											</PopularVideo>
+											<PopularVideo key={index} id={item._id} title={item.title} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} />
 										)
 									})
 								)
 							}
 						</MostPopular>
 					</HeadMostPopularWrapper>
+					<HeadAllWrapper>
+						<HeadText>All Videos</HeadText>
+						{
+							videos && (
+								videos.map((item, index) => {
+									return (
+										<NormalVideo key={index} title={item.title} id={item._id} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} length={item.length} />
+									)
+								})
+							)
+						}
+					</HeadAllWrapper>
 				</HeadWrapper>
 			</HeadContainer>
 		);
@@ -130,7 +110,8 @@ class Head extends Component {
 
 const mapStateToProps = state => {
 	return {
-		popularVideos: state.videoReducer.popularVideos
+		popularVideos: state.videoReducer.popularVideos,
+		videos: state.videoReducer.videos
 	}
 }
 

@@ -1,5 +1,6 @@
 const initState = {
-	popularVideos: null
+	popularVideos: null,
+	videos: null
 }
 
 const videoReducer = (state = initState, action) => {
@@ -8,6 +9,11 @@ const videoReducer = (state = initState, action) => {
 			return {
 				...state,
 				popularVideos: action.data
+			}
+		case 'UPDATE_VIDEOS':
+			return {
+				...state,
+				videos: action.data
 			}
 		default: return state;
 	}

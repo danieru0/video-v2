@@ -1,7 +1,7 @@
 import axios from 'axios';
 import stringifyObject from 'stringify-object';
 
-export const getVideos = (args) => {
+export const getVideos = (args, updatePopular) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
@@ -18,6 +18,7 @@ export const getVideos = (args) => {
 								title
 								views
 								miniature
+								length
 								author {
 									nick
 								}
@@ -29,10 +30,17 @@ export const getVideos = (args) => {
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			dispatch({
-				type: 'UPDATE_POPULAR_VIDEOS',
-				data: result.data.data.videos
-			});
+			if (updatePopular) {
+				dispatch({
+					type: 'UPDATE_POPULAR_VIDEOS',
+					data: result.data.data.videos
+				});
+			} else {
+				dispatch({
+					type: 'UPDATE_VIDEOS',
+					data: result.data.data.videos
+				})
+			}
 		} catch (err) {
 			throw err;
 		}
