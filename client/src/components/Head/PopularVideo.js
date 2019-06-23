@@ -12,6 +12,10 @@ const PopularVideoContainer = styled(Link)`
 	background-position: center;
 	position: relative;
 
+	&:not(:first-of-type) {
+		margin-left: 30px;
+	}
+
 	&:hover > div {
 		background: rgba(0,0,0,0.3);
 	}

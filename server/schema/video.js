@@ -44,6 +44,7 @@ export default `
 			status: String!
 			path: String!
 			length: String!
+			_id: ID!
 		): Video
 		increaseViews(id: ID!): UpdatedViews
 		addComment(videoid: ID!, text: String!): UserWithComment

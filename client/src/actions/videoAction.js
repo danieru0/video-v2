@@ -46,3 +46,32 @@ export const getVideos = (args, updatePopular) => {
 		}
 	}
 }
+
+export const createVideo = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const modifiedArgs = argsForGraphql.substring(1, argsForGraphql.length - 1);
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							createVideo(${modifiedArgs}) {
+								_id
+							}
+						}
+					`
+				}
+			});
+
+			console.log(result);
+		} catch (err) {
+			throw err;
+		}
+	}
+}

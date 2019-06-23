@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { createVideo } from '../../actions/videoAction';
 
 const UploadContainer = styled.div`
 	width: calc(100% - 250px);
@@ -110,7 +113,7 @@ const UploadFormMiniature = styled.div`
 const Miniature = styled.div`
 	width: 100%;
 	height: 200px;
-	background: url('https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png');
+	background: ${({miniature}) => miniature ? `url(${miniature});` : 'url(https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png);'}
 	background-size: cover;
 	background-position: center;
 `
@@ -149,7 +152,11 @@ class Upload extends Component {
 			description: '',
 			duration: null,
 			inputTitleError: false,
-			progress: 0
+			progress: 0,
+			uploaded: false,
+			status: 'public',
+			miniatureLink: null,
+			miniatureFile: null
 		}
 	}
 
@@ -173,11 +180,22 @@ class Upload extends Component {
 					this.setState({ progress: percentCompleted });
 				}
 			});
+			this.setState({ 
+				uploaded: true,
+				uploadedName: result.data.name.split('.')[0]
+			});
 
-			console.log(result.data.name.split('.')[0]);
+			this.props.createVideo({
+				title: this.state.title.length === 0 ? this.state.title : 'My awesome title', 
+				description: this.state.description,
+				status: this.state.status,
+				path: `/videos/${result.data.name}`,
+				length: this.state.duration,
+				_id: result.data.name.split('.')[0]
+			});
 			
 		} catch (err) {
-			console.log(err);
+			throw err;
 		}
 
 	}
@@ -229,7 +247,7 @@ class Upload extends Component {
 				this.videoRef.current.src = window.URL.createObjectURL(e.dataTransfer.files[0]);
 				this.videoRef.current.onloadedmetadata = () => {
 					this.getDuration();
-					this.uploadVideo();
+					//this.uploadVideo();
 				}
 			} else {
 				alert('Wrong file type!');
@@ -246,7 +264,7 @@ class Upload extends Component {
 				this.videoRef.current.src = window.URL.createObjectURL(e.target.files[0]);
 				this.videoRef.current.onloadedmetadata = () => {
 					this.getDuration();
-					this.uploadVideo();
+					//this.uploadVideo();
 				}
 			} else {
 				alert('Wrong file type!');
@@ -272,6 +290,18 @@ class Upload extends Component {
 		this.setState({ description: e.currentTarget.textContent });
 	}
 
+	handleSelectInput = e => {
+		this.setState({ status: e.target.value });
+	}
+
+	handleMiniatureInputChange = e => {
+		if (e.target.files[0].type === 'image/jpeg') {
+			this.setState({ miniatureLink: window.URL.createObjectURL(e.target.files[0]), miniatureFile: e.target.files[0] });
+		} else {
+			alert('Wrong file type!');
+		}
+	}
+
 	render() {
 		return (
 			<UploadContainer>
@@ -291,13 +321,13 @@ class Upload extends Component {
 									<UploadFormInput error={this.state.inputTitleError ? 1 : 0} onChange={this.handleTitleChange} value={this.state.title} required/>
 									<UploadFormDesc onInput={this.handleDescriptionChange} value={this.state.description} contentEditable={true}/>
 									<UploadSelect>
-										<UploadOption>Public</UploadOption>
-										<UploadOption>Private</UploadOption>
+										<UploadOption onChange={this.handleSelectInput} value="public">Public</UploadOption>
+										<UploadOption onChange={this.handleSelectInput} value="private">Private</UploadOption>
 									</UploadSelect>
 								</UploadFormInformations>
 								<UploadFormMiniature>
-									<Miniature />
-									<MiniatureFileInput type="file" accept="image/jpeg"/>
+									<Miniature miniature={this.state.miniatureLink} />
+									<MiniatureFileInput onChange={this.handleMiniatureInputChange} type="file" accept="image/jpeg"/>
 								</UploadFormMiniature>
 							</UploadFormWrapper>
 							<UploadVideoButton>Save</UploadVideoButton>
@@ -309,4 +339,4 @@ class Upload extends Component {
 	}
 }
 
-export default Upload;
+export default connect(null, { createVideo })(Upload);

@@ -33,6 +33,10 @@ const HeadVideo = styled(Link)`
 	text-decoration: none;
 	position: relative;
 
+	&:not(:first-of-type) {
+		margin-left: 30px;
+	}
+
 	&:hover ${HeadVideoIcon} {
 		background: #1CA47B;
 		color: #fff;
@@ -44,6 +48,7 @@ const HeadVideoMiniature = styled.div`
 	height: 200px;
 	background: ${({miniature}) => `url(${miniature});`}
 	background-size: cover;
+	background-position: center;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 `

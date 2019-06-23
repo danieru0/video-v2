@@ -71,7 +71,8 @@ export default {
 					status: args.status,
 					author: req.userId,
 					path: args.path,
-					length: args.length
+					length: args.length,
+					_id: args._id
 				});
 
 				user.uploadedVideos.push(video);

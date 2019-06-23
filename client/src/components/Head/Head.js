@@ -47,7 +47,6 @@ const HeadText = styled.p`
 const MostPopular = styled.div`
 	width: 100%;
 	display: flex;
-	justify-content: space-between;
 	margin-top: 30px;
 `
 
@@ -56,7 +55,6 @@ const HeadAllWrapper = styled.div`
 	margin-top: 60px;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
 
 
 	p:first-child {
