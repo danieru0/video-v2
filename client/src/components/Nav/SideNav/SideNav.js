@@ -20,7 +20,7 @@ const SideNavContainer = styled.div`
 	@media (max-width: 920px) {
 		transform: ${({mobileMenu}) => mobileMenu ? 'translateX(0);' : 'translateX(-100%);'}
 		position: absolute;
-		z-index: 1;
+		z-index: 3;
 	}
 `
 
