@@ -3,7 +3,7 @@ import fs from 'fs';
 
 module.exports = (app, videoUpload, imageUpload, miniatureUpload) => {
 	app.post('/upload/video', secureUpload, videoUpload.single('video'), (req, res) => {
-		res.status(200).send('File name: ' + req.file.filename);
+		res.status(200).send({name: req.file.filename});
 	});
 
 	app.post('/upload/avatar', secureUpload, imageUpload.single('avatar'), (req, res) => {
@@ -11,7 +11,7 @@ module.exports = (app, videoUpload, imageUpload, miniatureUpload) => {
 	});
 
 	app.post('/upload/miniature', secureUpload, miniatureUpload.single('miniature'), (req, res) => {
-		res.status(200).send('File name: ' + req.file.filename);
+		res.status(200).send({name: req.file.filename});
 	});
 
 	//https://medium.com/@daspinola/video-stream-with-node-js-and-html5-320b3191a6b6 

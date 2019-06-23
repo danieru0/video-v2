@@ -3,21 +3,8 @@ import { Redirect } from 'react-router-dom';
 
 export default function withoutAuth(ComponentToCheck) {
 	class AuthHoc extends Component {
-		constructor() {
-			super();
-			this.state = {
-				token: null
-			}
-		}
-
-		componentDidMount() {
-			this.setState({
-				token: localStorage.getItem('token')
-			});
-		}
-
 		render() {
-			if (this.state.token) {
+			if (localStorage.getItem('token')) {
 				return <Redirect to="/" />
 			}
 			return (
