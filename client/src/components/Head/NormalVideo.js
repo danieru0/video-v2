@@ -32,10 +32,7 @@ const HeadVideo = styled(Link)`
 	box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
 	text-decoration: none;
 	position: relative;
-
-	&:not(:first-of-type) {
-		margin-left: 30px;
-	}
+	margin-right: 30px;
 
 	&:hover ${HeadVideoIcon} {
 		background: #1CA47B;

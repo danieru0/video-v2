@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -200,7 +201,7 @@ class Upload extends Component {
 			miniatureUploading: false,
 			miniatureUploaded: false,
 			saving: false,
-			uploadingText: 'Your video is uplading to server...'
+			uploadingText: 'Your video is uploading to server...'
 		}
 	}
 
@@ -416,6 +417,9 @@ class Upload extends Component {
 	}
 
 	render() {
+		if (this.props.user) {
+			if (!this.props.user.rules.canUpload) return <Redirect to="/" />
+		}
 		return (
 			<UploadContainer>
 				<HiddenVideoPlayer onLoadedMetadata={this.getDuration} ref={this.videoRef} />
@@ -459,4 +463,10 @@ class Upload extends Component {
 	}
 }
 
-export default connect(null, { createVideo, editVideo })(Upload);
+const mapStateToProps = state => {
+	return {
+		user: state.userReducer.user
+	}
+}
+
+export default connect(mapStateToProps, { createVideo, editVideo })(Upload);
