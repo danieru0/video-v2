@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 
 import Loader from '../../shared/Loader/Loader';
 
+import formatDuration from '../../shared/helpers/formatDuration';
+
 import { createVideo, editVideo } from '../../actions/videoAction';
 
 const UploadContainer = styled.div`
@@ -275,18 +277,7 @@ class Upload extends Component {
 	}
 
 	getDuration = () => {
-		let time = Math.floor(this.videoRef.current.duration);
-		let hrs = Math.floor(time / 3600);
-		let mins = Math.floor((time % 3600) / 60);
-		if (mins < 10) mins = '0'+mins;
-		let secs = time % 60;
-		let videoDuration = '';
-		if (hrs > 0) {
-			videoDuration += "" + hrs + ":" + (mins < 10 ? "0" : "");
-		}
-		videoDuration += "" + mins + ":" + (secs < 10 ? "0" : "");
-		videoDuration += "" + secs;
-		this.setState({ duration: videoDuration });
+		this.setState({ duration: formatDuration(this.videoRef.current.duration) });
 	}
 
 	componentDidMount() {
@@ -414,7 +405,6 @@ class Upload extends Component {
 				status: this.state.status,
 				id: this.state.uploadedName.split('.')[0],
 			}
-
 			this.state.miniatureUploaded && (options.miniature = `/miniatures/${this.state.uploadedName.split('.')[0]}.jpg`);
 
 			this.props.editVideo(options);
