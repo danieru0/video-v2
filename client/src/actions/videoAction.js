@@ -104,3 +104,11 @@ export const editVideo = (args) => {
 		}
 	}
 }
+
+export const clearVideos = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_VIDEOS'
+		});
+	}
+}

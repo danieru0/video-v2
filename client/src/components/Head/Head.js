@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import PopularVideo from './PopularVideo';
 import NormalVideo from './NormalVideo';
 
-import { getVideos } from '../../actions/videoAction';
+import { getVideos, clearVideos } from '../../actions/videoAction';
 
 const HeadContainer = styled.div`
 	width: calc(100% - 250px);
+	min-height: calc(100vh - 80px);
 	padding-bottom: 100px;
 	margin-top: 80px;
 	font-family: 'Lato';
@@ -69,6 +70,10 @@ class Head extends Component {
 		this.props.getVideos({page: 1, limit: 10});
 	}
 
+	componentWillUnmount() {
+		this.props.clearVideos();
+	}
+
 	render() {
 		const { popularVideos, videos } = this.props;
 		return (
@@ -113,4 +118,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideos })(Head);
+export default connect(mapStateToProps, { getVideos, clearVideos })(Head);

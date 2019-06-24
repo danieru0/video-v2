@@ -15,6 +15,12 @@ const videoReducer = (state = initState, action) => {
 				...state,
 				videos: action.data
 			}
+		case 'CLEAR_VIDEOS': 
+			return {
+				...state,
+				videos: null,
+				popularVideos: null
+			}
 		default: return state;
 	}
 }

@@ -182,6 +182,10 @@ const UploadStatusText = styled.p`
 	left: 0px;
 `
 
+const HiddenCanvas = styled.canvas`
+	display: none;
+`
+
 class Upload extends Component {
 	constructor() {
 		super();
@@ -207,6 +211,7 @@ class Upload extends Component {
 
 	inputRef = React.createRef();
 	videoRef = React.createRef();
+	canvasRef = React.createRef();
 
 	uploadVideo = async () => {
 		const formData = new FormData();
@@ -267,7 +272,7 @@ class Upload extends Component {
 				_id: result.data.name.split('.')[0],
 			}
 
-			this.state.miniatureUploaded && (options.miniature = `/miniatures/${result.data.uploadedName.split('.')[0]}.jpg`);
+			this.state.miniatureUploaded && (options.miniature = `/miniatures/${result.data.name.split('.')[0]}.jpg`);
 
 			this.props.createVideo(options);
 			
@@ -310,10 +315,13 @@ class Upload extends Component {
 		if (e.dataTransfer.files && e.dataTransfer.files.length === 1) {
 			if (e.dataTransfer.files[0].type === 'video/mp4') {
 				this.setState({ file: e.dataTransfer.files[0] });
-				this.videoRef.current.src = window.URL.createObjectURL(e.dataTransfer.files[0]);
+				this.videoRef.current.src = `${window.URL.createObjectURL(e.dataTransfer.files[0])}#t=3`; 
 				this.videoRef.current.onloadedmetadata = () => {
-					this.getDuration();
-					this.uploadVideo();
+					setTimeout(() => {
+						this.createMiniature();
+						this.getDuration();
+						this.uploadVideo();
+					}, 500)
 				}
 			} else {
 				alert('Wrong file type!');
@@ -323,14 +331,36 @@ class Upload extends Component {
 		}
 	}
 
+	makeMiniatureFile = (dataURL) => {
+		const blobBin = atob(dataURL.split(',')[1]);
+		const array = [];
+		for (var i = 0; i < blobBin.length; i++) {
+			array.push(blobBin.charCodeAt(i));
+		}
+		const file = new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+		return file;
+	}
+
+	createMiniature = () => {
+		const context = this.canvasRef.current.getContext('2d');
+		context.drawImage(this.videoRef.current, 0, 0, 640, 480);
+		this.setState({
+			miniatureLink: this.canvasRef.current.toDataURL('image/jpeg'),
+			miniatureFile: this.makeMiniatureFile(this.canvasRef.current.toDataURL('image/jpeg'))
+		});
+	}
+
 	handleInputChange = e => {
 		if (e.target.files.length === 1) {
 			if (e.target.files[0].type === 'video/mp4') {
 				this.setState({ file: e.target.files[0] });
-				this.videoRef.current.src = window.URL.createObjectURL(e.target.files[0]);
+				this.videoRef.current.src = `${window.URL.createObjectURL(e.target.files[0])}#t=3`; 
 				this.videoRef.current.onloadedmetadata = () => {
-					this.getDuration();
-					this.uploadVideo();
+					setTimeout(() => {
+						this.createMiniature();
+						this.getDuration();
+						this.uploadVideo();
+					}, 500)
 				}
 			} else {
 				alert('Wrong file type!');
@@ -422,7 +452,8 @@ class Upload extends Component {
 		}
 		return (
 			<UploadContainer>
-				<HiddenVideoPlayer onLoadedMetadata={this.getDuration} ref={this.videoRef} />
+				<HiddenVideoPlayer src="" preload="metadata" width="640" height="480" ref={this.videoRef} />
+				<HiddenCanvas width="640" height="480" ref={this.canvasRef} />
 				{
 					this.state.file === null ? (
 						<UploadFilePlace onClick={this.openFileInput} onDragEnter={this.handleDragIn} onDragLeave={this.handleDragOut} onDragOver={this.handleDrag} onDrop={this.handleDrop}>
