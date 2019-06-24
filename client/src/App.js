@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
-import withAuth from './shared/hoc/withAuth';
-import withoutAuth from './shared/hoc/withoutAuth';
+import withAuth from './shared/hocs/withAuth';
+import withoutAuth from './shared/hocs/withoutAuth';
 
 import AuthContainer from './containers/AuthContainer';
 import NavContainer from './containers/NavContainer';

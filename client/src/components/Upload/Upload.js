@@ -4,7 +4,9 @@ import FontAwesome from 'react-fontawesome';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { createVideo } from '../../actions/videoAction';
+import Loader from '../../shared/Loader/Loader';
+
+import { createVideo, editVideo } from '../../actions/videoAction';
 
 const UploadContainer = styled.div`
 	width: calc(100% - 250px);
@@ -57,6 +59,7 @@ const UploadProgressBar = styled.div`
 	background: #fff;
 	border: 1px solid #E7E7E7;
 	margin-top: -500px;
+	position: relative;
 `
 
 const Progress = styled.div`
@@ -107,7 +110,18 @@ const UploadOption = styled.option``
 
 const UploadFormMiniature = styled.div`
 	width: 40%;
-	height: 30px;
+	height: 225px;
+	position: relative;
+`
+
+const FormMiniatureOverlay = styled.div`
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0,0,0,0.3);
+	justify-content: center;
+	align-items: center;
+	display: ${({miniatureUploading}) => miniatureUploading ? 'flex;' : 'none;'}
 `
 
 const Miniature = styled.div`
@@ -136,10 +150,33 @@ const UploadVideoButton = styled.button`
 	display: block;
 	cursor: pointer;
 	outline: none;
+	position: relative;
+`
+
+const UploadVideoOverlay = styled.div`
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.3);
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 5px;
+	display: ${({saving}) => saving ? 'block;' : 'none;'}
 `
 
 const HiddenVideoPlayer = styled.video`
 	display: none;
+`
+
+const UploadStatusText = styled.p`
+	margin: 0;
+	font-size: 18px;
+	font-family: 'Lato';
+	font-weight: bold;
+	letter-spacing: -1px;
+	position: absolute;
+	top: -30px;
+	left: 0px;
 `
 
 class Upload extends Component {
@@ -154,9 +191,14 @@ class Upload extends Component {
 			inputTitleError: false,
 			progress: 0,
 			uploaded: false,
+			uploadedName: null,
 			status: 'public',
 			miniatureLink: null,
-			miniatureFile: null
+			miniatureFile: null,
+			miniatureUploading: false,
+			miniatureUploaded: false,
+			saving: false,
+			uploadingText: 'Your video is uplading to server...'
 		}
 	}
 
@@ -182,17 +224,49 @@ class Upload extends Component {
 			});
 			this.setState({ 
 				uploaded: true,
-				uploadedName: result.data.name.split('.')[0]
+				uploadedName: result.data.name,
+				uploadingText: 'Your video is uploaded!'
 			});
 
-			this.props.createVideo({
+			if (this.state.miniatureFile) {
+				this.setState({
+					miniatureUploading: true
+				});
+				const formData = new FormData();
+				formData.append('miniature', this.state.miniatureFile, this.state.uploadedName.split('.')[0]);
+				try {
+					await axios({
+						url: '/upload/miniature',
+						method: 'post',
+						data: formData,
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							'Authorization': localStorage.getItem('token')
+						}
+					});
+	
+					this.setState({
+						miniatureUploading: false,
+						miniatureUploaded: true
+					});
+	
+				} catch (err) {
+					throw err;
+				}
+			}
+
+			const options = {
 				title: this.state.title.length === 0 ? this.state.title : 'My awesome title', 
 				description: this.state.description,
 				status: this.state.status,
 				path: `/videos/${result.data.name}`,
 				length: this.state.duration,
-				_id: result.data.name.split('.')[0]
-			});
+				_id: result.data.name.split('.')[0],
+			}
+
+			this.state.miniatureUploaded && (options.miniature = `/miniatures/${result.data.uploadedName.split('.')[0]}.jpg`);
+
+			this.props.createVideo(options);
 			
 		} catch (err) {
 			throw err;
@@ -247,7 +321,7 @@ class Upload extends Component {
 				this.videoRef.current.src = window.URL.createObjectURL(e.dataTransfer.files[0]);
 				this.videoRef.current.onloadedmetadata = () => {
 					this.getDuration();
-					//this.uploadVideo();
+					this.uploadVideo();
 				}
 			} else {
 				alert('Wrong file type!');
@@ -264,7 +338,7 @@ class Upload extends Component {
 				this.videoRef.current.src = window.URL.createObjectURL(e.target.files[0]);
 				this.videoRef.current.onloadedmetadata = () => {
 					this.getDuration();
-					//this.uploadVideo();
+					this.uploadVideo();
 				}
 			} else {
 				alert('Wrong file type!');
@@ -302,6 +376,55 @@ class Upload extends Component {
 		}
 	}
 
+	updateUploadedVideo = async () => {
+		if (this.state.saving) return;
+
+		if (this.state.uploaded) {
+			if (this.state.miniatureFile) {
+				this.setState({
+					miniatureUploading: true,
+					saving: true
+				});
+				const formData = new FormData();
+				formData.append('miniature', this.state.miniatureFile, this.state.uploadedName.split('.')[0]);
+				try {
+					await axios({
+						url: '/upload/miniature',
+						method: 'post',
+						data: formData,
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							'Authorization': localStorage.getItem('token')
+						}
+					});
+	
+					this.setState({
+						miniatureUploading: false,
+						miniatureUploaded: true,
+					});
+	
+				} catch (err) {
+					throw err;
+				}
+			}
+
+			const options = {
+				title: this.state.title.length === 0 ? 'My awesome title' : this.state.title, 
+				description: this.state.description,
+				status: this.state.status,
+				id: this.state.uploadedName.split('.')[0],
+			}
+
+			this.state.miniatureUploaded && (options.miniature = `/miniatures/${this.state.uploadedName.split('.')[0]}.jpg`);
+
+			this.props.editVideo(options);
+
+			this.setState({
+				saving: false
+			});
+		}
+	}
+
 	render() {
 		return (
 			<UploadContainer>
@@ -315,22 +438,29 @@ class Upload extends Component {
 						</UploadFilePlace>
 					) : (
 						<UploadProgressBar>
+							<UploadStatusText>{this.state.uploadingText}</UploadStatusText>
 							<Progress progress={this.state.progress} />
 							<UploadFormWrapper>
 								<UploadFormInformations>
 									<UploadFormInput error={this.state.inputTitleError ? 1 : 0} onChange={this.handleTitleChange} value={this.state.title} required/>
 									<UploadFormDesc onInput={this.handleDescriptionChange} value={this.state.description} contentEditable={true}/>
-									<UploadSelect>
-										<UploadOption onChange={this.handleSelectInput} value="public">Public</UploadOption>
-										<UploadOption onChange={this.handleSelectInput} value="private">Private</UploadOption>
+									<UploadSelect onChange={this.handleSelectInput}>
+										<UploadOption value="public">Public</UploadOption>
+										<UploadOption value="private">Private</UploadOption>
 									</UploadSelect>
 								</UploadFormInformations>
 								<UploadFormMiniature>
+									<FormMiniatureOverlay miniatureUploading={this.state.miniatureUploading ? 1 : 0}>
+										<Loader />
+									</FormMiniatureOverlay>
 									<Miniature miniature={this.state.miniatureLink} />
 									<MiniatureFileInput onChange={this.handleMiniatureInputChange} type="file" accept="image/jpeg"/>
 								</UploadFormMiniature>
 							</UploadFormWrapper>
-							<UploadVideoButton>Save</UploadVideoButton>
+							<UploadVideoButton onClick={this.updateUploadedVideo}>
+								Save
+								<UploadVideoOverlay saving={this.state.saving ? 1 : 0}></UploadVideoOverlay>
+							</UploadVideoButton>
 						</UploadProgressBar>
 					)
 				}
@@ -339,4 +469,4 @@ class Upload extends Component {
 	}
 }
 
-export default connect(null, { createVideo })(Upload);
+export default connect(null, { createVideo, editVideo })(Upload);

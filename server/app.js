@@ -32,7 +32,7 @@ const miniatureStorage = multer.diskStorage({
 		cb(null, './miniatures');
 	},
 	filename: (req, file, cb) => {
-		cb(null, mongoose.Types.ObjectId() + '.jpg');
+		cb(null, file.originalname + '.jpg');
 	}
 });
 

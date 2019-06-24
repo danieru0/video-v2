@@ -129,6 +129,7 @@ export default {
 
 				args.title && (selectedVideo.title = args.title);
 				args.description && (selectedVideo.description = args.description);
+				args.status && (selectedVideo.status = args.status);
 				if (args.miniature == 'default') {
 					selectedVideo.miniature = 'https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png';
 				} else if (args.miniature) {

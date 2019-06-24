@@ -50,9 +50,10 @@ export const getVideos = (args, updatePopular) => {
 export const createVideo = (args) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const modifiedArgs = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
 	return async dispatch => {
 		try {
-			const result = await axios({
+			await axios({
 				url: '/graphql',
 				method: 'post',
 				headers: {
@@ -69,7 +70,35 @@ export const createVideo = (args) => {
 				}
 			});
 
-			console.log(result);
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const editVideo = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const modifiedArgs = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							changeVideoInfo(${modifiedArgs}) {
+								_id
+							}
+						}
+					`
+				}
+			});
+
 		} catch (err) {
 			throw err;
 		}
