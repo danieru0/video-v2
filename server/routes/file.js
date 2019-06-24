@@ -16,7 +16,7 @@ module.exports = (app, videoUpload, imageUpload, miniatureUpload) => {
 
 	//https://medium.com/@daspinola/video-stream-with-node-js-and-html5-320b3191a6b6 
 	app.get('/serve/video', (req, res) => {
-		const path = './videos/5d092a1c9cc2f81ee068c089.mp4';
+		const path = `./videos/${req.query.id.substring(1, req.query.id.length-1)}.mp4`;
 		const stat = fs.statSync(path);
 		const fileSize = stat.size;
 		const range = req.headers.range;
