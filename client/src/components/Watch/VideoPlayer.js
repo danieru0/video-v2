@@ -129,7 +129,7 @@ const PlayerInputRangeVolumePath = styled.div`
 	width: 0%;
 	background: #10A074;
 	position: absolute;
-	top: 11px;
+	top: 10px;
 	left: 2px;
 	cursor: pointer;
 `
