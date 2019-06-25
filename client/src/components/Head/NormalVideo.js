@@ -97,7 +97,7 @@ const NormalVideo = ({ id, miniature, title, author, views, createdAt, length })
 		title = title.substring(0, 45)+'...';
 	}
 	return (
-		<HeadVideo to={`/video/${id}`}>
+		<HeadVideo to={`/watch/${id}`}>
 			<HeadVideoIcon name="play" />
 			<HeadVideoMiniature miniature={miniature} />
 			<HeadVideoTitle>{title}</HeadVideoTitle>

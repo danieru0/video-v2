@@ -59,7 +59,7 @@ const PopularVideo = ({ id, miniature, title, author, createdAt, views }) => {
 		title = title.substring(0, 62)+'...';
 	}
 	return (
-		<PopularVideoContainer miniature={miniature} to={`/video/${id}`}>
+		<PopularVideoContainer miniature={miniature} to={`/watch/${id}`}>
 			<PopularVideoOverlay>
 				<PopularVideoTitle>{title}</PopularVideoTitle>
 				<PopularVideoInfo>{`${author} | ${createdAt.toRelative()}`}</PopularVideoInfo>
