@@ -4,20 +4,6 @@ import FontAwesome from 'react-fontawesome';
 import formatDuration from '../../shared/helpers/formatDuration';
 import ReactTooltip from 'react-tooltip';
 
-const VideoContainer = styled.div`
-	width: calc(100% - 250px);
-	height: calc(100vh - 80px);
-	background: #FAFAFA;
-	margin-left: 250px;
-	margin-top: 80px;
-
-	@media (max-width: 920px) {
-		width: 100%;
-		height: 100vh;
-		margin: 0;
-	}
-`
-
 const Player = styled.div`
 	width: 100%;
 	height: 700px;
@@ -204,10 +190,12 @@ class VideoPlayer extends Component {
 		this.playerRef.current.addEventListener('keypress', this.resetTimer);
 		this.playerRef.current.addEventListener('scroll', this.resetTimer, true);
 		this.playerRef.current.addEventListener('dblclick', this.resizePlayer);
+		this.playerRef.current.addEventListener('contextmenu', (e) => e.preventDefault());
 		document.addEventListener('keydown', this.detectButton);
 	}
 
 	componentWillUnmount() {
+		document.removeEventListener('keydown', this.detectButton);
 		this.playerRef.current.removeEventListener('mousemove', this.resetTimer);
 		this.playerRef.current.removeEventListener('mousedown', this.resetTimer);
 		this.playerRef.current.removeEventListener('touchstart', this.resetTimer);
@@ -215,6 +203,7 @@ class VideoPlayer extends Component {
 		this.playerRef.current.removeEventListener('keypress', this.resetTimer);
 		this.playerRef.current.removeEventListener('scroll', this.resetTimer, true);
 		this.playerRef.current.removeEventListener('dblclick', this.resizePlayer);
+		this.playerRef.current.removeEventListener('contextmenu', (e) => e.preventDefault());
 	}
 
 	detectButton = e => {
@@ -347,44 +336,42 @@ class VideoPlayer extends Component {
 	render() {
 		const { id } = this.props;
 		return (
-			<VideoContainer>
-				<Player idle={this.state.idle ? 1: 0} ref={this.playerRef}>
-					<VideoSource onTimeUpdate={this.handleTimeUpdate} onProgress={this.handleProgress} ref={this.videoRef} muted={this.state.muted} controlsList="nodownload" autoPlay src={`/serve/video?id="${id}"`}></VideoSource>
-					<PlayerControlsContainer idle={this.state.idle ? 1 : 0}>
-						<PlayerControlsProgressContainer ref={this.progressContainerRef} onClick={this.handleProgressClick}>
-							<PlayerControlsBuffer ref={this.bufferRef} />
-							<PlayerControlsProgress ref={this.progressRef}/>
-						</PlayerControlsProgressContainer>
-						<PlayerButton data-tip="Play/Pause (space)" margin="0px 10px" onClick={this.togglePause}>
-							{
-								this.state.paused ? (
-									<StyledIcon name="pause"/>
-								) : (
-									<StyledIcon name="play"/>
-								)
-							}
+			<Player idle={this.state.idle ? 1: 0} ref={this.playerRef}>
+				<VideoSource onTimeUpdate={this.handleTimeUpdate} onProgress={this.handleProgress} ref={this.videoRef} muted={this.state.muted} controlsList="nodownload" autoPlay src={`/serve/video?id="${id}"`}></VideoSource>
+				<PlayerControlsContainer idle={this.state.idle ? 1 : 0}>
+					<PlayerControlsProgressContainer ref={this.progressContainerRef} onClick={this.handleProgressClick}>
+						<PlayerControlsBuffer ref={this.bufferRef} />
+						<PlayerControlsProgress ref={this.progressRef}/>
+					</PlayerControlsProgressContainer>
+					<PlayerButton data-tip="Play/Pause (space)" margin="0px 10px" onClick={this.togglePause}>
+						{
+							this.state.paused ? (
+								<StyledIcon name="pause"/>
+							) : (
+								<StyledIcon name="play"/>
+							)
+						}
+					</PlayerButton>
+					<PlayerButton data-tip="Mute/Unmute (m)" onClick={this.toggleMute} margin="0px 40px">
+						{
+							this.state.muted ? (
+								<StyledIcon name="volume-mute"/>	
+							) : (
+								<StyledIcon name="volume-up"/>
+							)
+						}
 						</PlayerButton>
-						<PlayerButton data-tip="Mute/Unmute (m)" onClick={this.toggleMute} margin="0px 40px">
-							{
-								this.state.muted ? (
-									<StyledIcon name="volume-mute"/>	
-								) : (
-									<StyledIcon name="volume-up"/>
-								)
-							}
-							</PlayerButton>
-						<PlayerInputRangeContainer>
-							<PlayerInputRangeVolumePath onClick={this.changeInputRange} ref={this.volumePathRef}/>
-							<PlayerInputRangeVolume ref={this.volumeRangeRef} onChange={this.handleVolumeRangeChange} step="0.01" min="0" max="1" type="range"/>
-						</PlayerInputRangeContainer>
-						<PlayerLength ref={this.timeRef} />
-						<PlayerButton data-tip="Resize (f)" onClick={this.resizePlayer} right>
-							<StyledIcon name="expand"/>
-						</PlayerButton>
-					</PlayerControlsContainer>
-				</Player>
+					<PlayerInputRangeContainer>
+						<PlayerInputRangeVolumePath onClick={this.changeInputRange} ref={this.volumePathRef}/>
+						<PlayerInputRangeVolume ref={this.volumeRangeRef} onChange={this.handleVolumeRangeChange} step="0.01" min="0" max="1" type="range"/>
+					</PlayerInputRangeContainer>
+					<PlayerLength ref={this.timeRef} />
+					<PlayerButton data-tip="Resize (f)" onClick={this.resizePlayer} right>
+						<StyledIcon name="expand"/>
+					</PlayerButton>
+				</PlayerControlsContainer>
 				<ReactTooltip place="bottom" effect="solid"/>
-			</VideoContainer>
+			</Player>
 		);
 	}
 }

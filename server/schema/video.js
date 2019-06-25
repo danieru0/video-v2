@@ -5,7 +5,6 @@ export default `
 		description: String!
 		views: Int!
 		likes: Int!
-		dislikes: Int!
 		miniature: String!
 		status: String!
 		length: String!
@@ -32,8 +31,11 @@ export default `
 			author: ID,
 			title: String,
 			sort: String,
-			id: ID
+			id: ID,
 		): [Video]
+		getVideo(
+			id: ID!
+		): Video
 	}
 
 	extend type Mutation {

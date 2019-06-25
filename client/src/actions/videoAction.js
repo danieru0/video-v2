@@ -105,6 +105,60 @@ export const editVideo = (args) => {
 	}
 }
 
+export const getVideoInformations = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				data: {
+					query: `
+						query {
+							getVideo(${query}) {
+								title
+								_id
+								views
+								description
+								createdAt
+								likes
+								author {
+									nick
+									profile {
+										avatar
+									}
+								}
+								comments {
+									text
+									author {
+										nick
+										profile {
+											avatar
+										}
+									}
+								}
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+		
+			dispatch({
+				type: 'UPDATE_SINGLE_VIDEO',
+				data: result.data.data.getVideo
+			})
+		} catch (err) {
+			dispatch({
+				type: 'UPDATE_WATCH_VIDEO_ERROR',
+				data: err
+			})
+		}
+	}
+}
+
 export const clearVideos = () => {
 	return dispatch => {
 		dispatch({

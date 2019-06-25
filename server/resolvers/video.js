@@ -54,6 +54,26 @@ export default {
 			} catch (err) {
 				throw err;
 			}
+		},
+		getVideo: async (parent, args, req) => {
+			try {
+				const video = await Video.findById(args.id);
+				if (!video) throw new Error('Video not found!');
+
+				if (video.status === 'private') {
+					if (req.userId) {
+						if (req.userId === video.author) {
+							return video;
+						} else {
+							throw new Error('Video is private!');
+						}
+					}
+				}
+
+				return video;
+			} catch (err) {
+				throw err;
+			}
 		}
 	},
 	Mutation: {
