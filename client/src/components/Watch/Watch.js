@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import Textarea from 'react-textarea-autosize';
 
 import { getVideoInformations } from '../../actions/videoAction';
+import { makeComment } from '../../actions/userAction';
 
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';
 
 const WatchContainer = styled.div`
 	width: calc(100% - 250px);
-	min-height: calc(100vh - 80px);
+	min-height: calc(200vh - 80px);
 	display: block;
 	overflow: auto;
 	background: #FAFAFA;
@@ -165,11 +167,67 @@ const ShowMoreBtn = styled.button`
 	text-transform: uppercase;
 `
 
+const UserCommentContainer = styled.div`
+	position: relative;
+	display: flex;
+	min-height: 50px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	width: 660px;
+`
+
+const UserAvatarComment = styled.img`
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	align-self: flex-start;
+`
+
+const CommentTextArea = styled(Textarea)`
+	border: none;
+	border-bottom: ${({commenterror}) => commenterror ? '1px solid red' : '1px solid black'};
+	outline: none;
+	width: 600px;
+	background: none;
+	padding-top: 20px;
+	resize: none;
+	font-size: 14px;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-bottom: 17px;
+	min-height: 20px;
+	padding: 0;
+	font-family: 'Lato';
+`
+
+const CommentAddButton = styled.button`
+	width: 70px;
+	height: 30px;
+	background: #E7E7E7;
+	color: #fff;
+	font-family: 'Lato';
+	cursor: pointer;
+	border: none;
+	margin-left: auto;
+	margin-right: 7px;
+	margin-top: -8px;
+	outline: none;
+	transition: background .3s;
+
+	&:hover {
+		background: #10A074;
+	}
+`
+
 class Watch extends Component {
 	constructor() {
 		super();
 		this.state = {
-			descMore: false
+			descMore: false,
+			typing: false,
+			comment: '',
+			commentError: false
 		}
 	}
 
@@ -183,16 +241,48 @@ class Watch extends Component {
 		});
 	}
 
+	handleCommentTyping = e => {
+		this.setState({
+			typing: !this.state.typing,
+		});
+	}
+
+	handleCommentChange = e => {
+		this.setState({
+			comment: e.target.value
+		});
+	}
+
+	addComment = () => {
+		if (this.state.comment) {
+			if (this.state.comment.trim().length > 0) {
+				this.setState({
+					commentError: false
+				});
+				this.props.makeComment(this.props.match.params.id, this.state.comment);
+			} else {
+				this.setState({
+					commentError: true
+				});
+			}
+		} else {
+			this.setState({
+				commentError: true
+			});
+		}
+	}
+
 	render() {
-		let { watchVideoError, singleVideo } = this.props;
+		let { watchVideoError, singleVideo, user } = this.props;
 		if (singleVideo) {
 			singleVideo.createdAt = new Date( Number(singleVideo.createdAt) );
 			singleVideo.createdAt = DateTime.fromJSDate( singleVideo.createdAt );
+			console.log(singleVideo.comments);
 		}
 		return (
 			<WatchContainer>
 				{
-					singleVideo && <VideoPlayer id={this.props.match.params.id} />
+					singleVideo && <VideoPlayer typing={this.state.typing} id={this.props.match.params.id} />
 				}
 				{
 					watchVideoError && <WatchError error={watchVideoError}/>
@@ -224,6 +314,11 @@ class Watch extends Component {
 								}
 							</ShowMoreBtn>
 							<VideoLine />
+							<UserCommentContainer>
+								<UserAvatarComment alt="" src={user.profile.avatar} />
+								<CommentTextArea value={this.state.comment} onChange={this.handleCommentChange} commenterror={this.state.commentError ? 1 : 0} placeholder="Add comment..." onBlur={this.handleCommentTyping} onFocus={this.handleCommentTyping}></CommentTextArea>
+								<CommentAddButton onClick={this.addComment}>Add</CommentAddButton>
+							</UserCommentContainer>
 						</WatchWrapper>	
 					)
 				}
@@ -236,8 +331,9 @@ class Watch extends Component {
 const mapStateToProps = state => {
 	return {
 		watchVideoError: state.videoReducer.watchVideoError,
-		singleVideo: state.videoReducer.singleVideo
+		singleVideo: state.videoReducer.singleVideo,
+		user: state.userReducer.user
 	}
 }
 
-export default connect(mapStateToProps, { getVideoInformations })(Watch);
+export default connect(mapStateToProps, { getVideoInformations, makeComment })(Watch);

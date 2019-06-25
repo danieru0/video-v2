@@ -49,3 +49,30 @@ export const getFrontUserInformations = () => {
 		}
 	}
 }
+
+export const makeComment = (id, text) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							addComment(videoid: "${id}", text: "${text}") {
+								text
+							}
+						}
+					`
+				}
+			})
+
+			console.log(result);
+		} catch (err) {
+			throw err;
+		}
+	}
+}

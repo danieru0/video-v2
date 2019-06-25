@@ -207,23 +207,25 @@ class VideoPlayer extends Component {
 	}
 
 	detectButton = e => {
-		switch(e.keyCode) {
-			case 32:
-				this.togglePause();
-				break;
-			case 70:
-				this.resizePlayer();
-				break;
-			case 39:
-				this.videoRef.current.currentTime += 3;
-				break;
-			case 37:
-				this.videoRef.current.currentTime -= 3;
-				break;
-			case 77:
-				this.toggleMute();
-				break;
-			default: return;
+		if (!this.props.typing) {
+			switch(e.keyCode) {
+				case 32:
+					this.togglePause();
+					break;
+				case 70:
+					this.resizePlayer();
+					break;
+				case 39:
+					this.videoRef.current.currentTime += 3;
+					break;
+				case 37:
+					this.videoRef.current.currentTime -= 3;
+					break;
+				case 77:
+					this.toggleMute();
+					break;
+				default: return;
+			}
 		}
 	}
 
