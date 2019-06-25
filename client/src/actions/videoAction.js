@@ -132,6 +132,7 @@ export const getVideoInformations = (args) => {
 								}
 								comments {
 									text
+									createdAt
 									author {
 										nick
 										profile {

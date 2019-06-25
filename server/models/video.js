@@ -45,6 +45,10 @@ const videoSchema = new Schema({
 			ref: 'User'
 		},
 		text: String,
+		createdAt: {
+			type: Date,
+			default: Date.now
+		}
 	}],
 	createdAt: {
 		type: Date,

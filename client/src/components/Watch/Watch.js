@@ -220,6 +220,45 @@ const CommentAddButton = styled.button`
 	}
 `
 
+const CommentContainer = styled.div`
+	display: flex;
+	width: 600px;
+	margin: 10px 0px;
+`
+
+const CommentLink = styled(Link)`
+	text-decoration: none;
+`
+
+const CommentAvatar = styled.img`
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+`
+
+const CommentWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+`
+
+const CommentAuthor = styled.p`
+	font-size: 16px;
+	margin: 0;
+	color: #000;
+`
+
+const CommentDate = styled.span`
+	font-size: 16px;
+	color: #BBBBBB;
+	margin-left: 2px;
+`
+
+const CommentText = styled.div`
+	font-size: 14px;
+	margin-top: 2px;
+`
+
 class Watch extends Component {
 	constructor() {
 		super();
@@ -257,7 +296,8 @@ class Watch extends Component {
 		if (this.state.comment) {
 			if (this.state.comment.trim().length > 0) {
 				this.setState({
-					commentError: false
+					commentError: false,
+					comment: ''
 				});
 				this.props.makeComment(this.props.match.params.id, this.state.comment);
 			} else {
@@ -277,7 +317,6 @@ class Watch extends Component {
 		if (singleVideo) {
 			singleVideo.createdAt = new Date( Number(singleVideo.createdAt) );
 			singleVideo.createdAt = DateTime.fromJSDate( singleVideo.createdAt );
-			console.log(singleVideo.comments);
 		}
 		return (
 			<WatchContainer>
@@ -319,6 +358,30 @@ class Watch extends Component {
 								<CommentTextArea value={this.state.comment} onChange={this.handleCommentChange} commenterror={this.state.commentError ? 1 : 0} placeholder="Add comment..." onBlur={this.handleCommentTyping} onFocus={this.handleCommentTyping}></CommentTextArea>
 								<CommentAddButton onClick={this.addComment}>Add</CommentAddButton>
 							</UserCommentContainer>
+							{
+								singleVideo.comments.length > 0 && (
+									singleVideo.comments.map((item, index) => {
+										item.createdAt = new Date( Number(item.createdAt) );
+										item.createdAt = DateTime.fromJSDate( item.createdAt );
+										return (
+											<CommentContainer key={index}>
+												<CommentLink to={`/user/${item.author.nick}`}>
+													<CommentAvatar alt="" src={item.author.profile.avatar}/>
+												</CommentLink>
+												<CommentWrapper>
+													<CommentLink to={`/user/${item.author.nick}`}>
+														<CommentAuthor>
+															{item.author.nick}
+															<CommentDate>{item.createdAt.toRelativeCalendar()}</CommentDate>
+														</CommentAuthor>
+													</CommentLink>
+													<CommentText>{item.text}</CommentText>
+												</CommentWrapper>
+											</CommentContainer>
+										)
+									})
+								)
+							}
 						</WatchWrapper>	
 					)
 				}

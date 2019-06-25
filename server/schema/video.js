@@ -18,6 +18,7 @@ export default `
 		_id: ID!
 		text: String!
 		author: User!
+		createdAt: String!
 	}
 
 	type UpdatedViews {
