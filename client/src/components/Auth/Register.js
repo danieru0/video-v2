@@ -7,7 +7,9 @@ import Loader from '../../shared/Loader/Loader';
 
 const RegisterBackground = styled.div`
 	width: calc(100% - 250px);
-	height: 100vh;
+	margin-left: 250px;
+	height: calc(100vh - 80px);
+	margin-top: 80px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

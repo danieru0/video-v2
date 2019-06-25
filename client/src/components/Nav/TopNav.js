@@ -115,10 +115,14 @@ class TopNav extends Component {
 					<SearchInputIcon name="search"/> 
 					<SearchInput placeholder="Search videos..." />
 				</SearchInputGroup>
-				<StyledUploadLink to="/upload">
-					<StyledUploadIcon name="upload" />
-					Upload
-				</StyledUploadLink>
+				{
+					localStorage.getItem('token') && (
+						<StyledUploadLink to="/upload">
+							<StyledUploadIcon name="upload" />
+							Upload
+						</StyledUploadLink>
+					)
+				}
 			</TopNavContainer>
 		);
 	}

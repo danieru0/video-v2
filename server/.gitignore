@@ -2,3 +2,5 @@
 package-lock.json
 nodemon.json
 secret.js
+/videos
+/miniatures

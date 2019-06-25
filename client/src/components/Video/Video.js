@@ -21,6 +21,9 @@ const Player = styled.div`
 	width: 100%;
 	height: 700px;
 	position: relative;
+	overflow: hidden;
+	
+	cursor: ${({idle}) => idle ? 'none': 'default'};
 `
 
 const VideoSource = styled.video`
@@ -37,6 +40,9 @@ const PlayerControlsContainer = styled.div`
 	background: rgba(0,0,0,0.8);
 	position: absolute;
 	bottom: 0;
+	transition: transform .3s;
+
+	transform: ${({idle}) => idle ? 'translateY(93%)' : 'translateY(0)'};
 `
 
 const PlayerControlsProgressContainer = styled.div`
@@ -151,12 +157,15 @@ const PlayerLength = styled.p`
 	user-select: none;
 `
 
+let timeout;
+
 class Video extends Component {
 	constructor() {
 		super();
 		this.state = {
 			paused: false,
-			muted: false
+			muted: false,
+			idle: false
 		}
 	}
 
@@ -174,7 +183,30 @@ class Video extends Component {
 			this.videoRef.current.volume = parseFloat(localStorage.getItem('volume'));
 			this.volumePathRef.current.style.width = parseFloat(localStorage.getItem('volume')) * 100 + "%";
 			this.volumeRangeRef.current.value = parseFloat(localStorage.getItem('volume')); 
+		} else {
+			this.volumePathRef.current.style.width = 50 + "%";
 		}
+		this.playerRef.current.addEventListener('mousemove', this.resetTimer);
+		this.playerRef.current.addEventListener('mousedown', this.resetTimer);
+		this.playerRef.current.addEventListener('touchstart', this.resetTimer);
+		this.playerRef.current.addEventListener('click', this.resetTimer);
+		this.playerRef.current.addEventListener('keypress', this.resetTimer);
+		this.playerRef.current.addEventListener('scroll', this.resetTimer, true);
+	}
+
+	idle = () => {
+		this.setState({
+			idle: true
+		});
+	}
+
+	resetTimer = () => {
+		this.setState({
+			idle: false
+		}, () => {
+			clearTimeout(timeout);
+			timeout = setTimeout(this.idle, 4500);
+		});
 	}
 
 	handleProgress = () => {
@@ -271,9 +303,9 @@ class Video extends Component {
 	render() {
 		return (
 			<VideoContainer>
-				<Player ref={this.playerRef}>
+				<Player idle={this.state.idle ? 1: 0} ref={this.playerRef}>
 					<VideoSource onTimeUpdate={this.handleTimeUpdate} onProgress={this.handleProgress} ref={this.videoRef} muted={this.state.muted} controlsList="nodownload" autoPlay src={`/serve/video?id="${this.props.match.params.id}"`}></VideoSource>
-					<PlayerControlsContainer>
+					<PlayerControlsContainer idle={this.state.idle ? 1 : 0}>
 						<PlayerControlsProgressContainer ref={this.progressContainerRef} onClick={this.handleProgressClick}>
 							<PlayerControlsBuffer ref={this.bufferRef} />
 							<PlayerControlsProgress ref={this.progressRef}/>
