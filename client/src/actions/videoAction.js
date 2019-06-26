@@ -146,7 +146,9 @@ export const getVideoInformations = (args) => {
 				}
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
-		
+
+			result.data.data.getVideo.comments.reverse();
+
 			dispatch({
 				type: 'UPDATE_SINGLE_VIDEO',
 				data: result.data.data.getVideo

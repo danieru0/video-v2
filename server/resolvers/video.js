@@ -5,11 +5,11 @@ export default {
 	Video: {
 		author: async (parent, args, req) => {
 			const video = await Video.findById(parent._id).populate('author');
-
+	
 			return video.author;
 		},
 		comments: async (parent, args) => {
-			const video = await Video.findById(parent._id).populate('comments.author');
+			const video = await Video.findById(parent._id).populate('comments.author'); 
 
 			return video.comments;
 		}

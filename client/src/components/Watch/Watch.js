@@ -11,10 +11,11 @@ import { makeComment } from '../../actions/userAction';
 
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';
+import Comment from './Comment';
 
 const WatchContainer = styled.div`
 	width: calc(100% - 250px);
-	min-height: calc(200vh - 80px);
+	min-height: calc(100vh - 80px);
 	display: block;
 	overflow: auto;
 	background: #FAFAFA;
@@ -80,6 +81,7 @@ const SaveButton = styled.button`
 	float: right;
 	font-size: 28px;
 	margin-top: -41px;
+	color: #616161;
 
 	&:hover ${StyledIcon} {
 		color: #10A074;
@@ -99,6 +101,7 @@ const LikeButton = styled.button`
 	float: right;
 	margin-top: -44px;
 	margin-right: 40px;
+	color: #616161;
 
 	&:hover {
 		color: #10A074;
@@ -153,6 +156,14 @@ const VideoDescription = styled.div`
 	max-height: ${({descMore}) => descMore ? 'auto' : '40px'}; 
 	white-space: pre;
 	overflow: hidden;
+
+	@media (max-width: 680px) {
+		width: 80%;
+	}
+
+	@media (max-width: 546px) {
+		white-space: pre-wrap;
+	}
 `
 
 const ShowMoreBtn = styled.button`
@@ -165,6 +176,7 @@ const ShowMoreBtn = styled.button`
 	font-family: 'Lato';
 	font-size: 16px;
 	text-transform: uppercase;
+	color: #616161;
 `
 
 const UserCommentContainer = styled.div`
@@ -175,6 +187,10 @@ const UserCommentContainer = styled.div`
 	flex-wrap: wrap;
 	margin-top: 20px;
 	width: 660px;
+
+	@media (max-width: 1064px) {
+		width: 100%;
+	}
 `
 
 const UserAvatarComment = styled.img`
@@ -194,11 +210,23 @@ const CommentTextArea = styled(Textarea)`
 	resize: none;
 	font-size: 14px;
 	margin-top: 10px;
-	margin-left: 10px;
+	margin-left: 15px;
 	margin-bottom: 17px;
 	min-height: 20px;
 	padding: 0;
 	font-family: 'Lato';
+
+	&:focus {
+		border-bottom: 1px solid #10A074;
+	}
+
+	@media (max-width: 1064px) {
+		width: 70%;
+	}
+
+	@media (max-width: 590px) {
+		width: 60%;
+	}
 `
 
 const CommentAddButton = styled.button`
@@ -218,45 +246,6 @@ const CommentAddButton = styled.button`
 	&:hover {
 		background: #10A074;
 	}
-`
-
-const CommentContainer = styled.div`
-	display: flex;
-	width: 600px;
-	margin: 10px 0px;
-`
-
-const CommentLink = styled(Link)`
-	text-decoration: none;
-`
-
-const CommentAvatar = styled.img`
-	width: 42px;
-	height: 42px;
-	border-radius: 50%;
-`
-
-const CommentWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-left: 10px;
-`
-
-const CommentAuthor = styled.p`
-	font-size: 16px;
-	margin: 0;
-	color: #000;
-`
-
-const CommentDate = styled.span`
-	font-size: 16px;
-	color: #BBBBBB;
-	margin-left: 2px;
-`
-
-const CommentText = styled.div`
-	font-size: 14px;
-	margin-top: 2px;
 `
 
 class Watch extends Component {
@@ -300,6 +289,16 @@ class Watch extends Component {
 					comment: ''
 				});
 				this.props.makeComment(this.props.match.params.id, this.state.comment);
+				this.props.singleVideo.comments.unshift({
+					author: {
+						nick: this.props.user.nick,
+						profile: {
+							avatar: this.props.user.profile.avatar
+						}
+					},
+					text: this.state.comment,
+					createdAt: Date.now
+				})
 			} else {
 				this.setState({
 					commentError: true
@@ -364,20 +363,7 @@ class Watch extends Component {
 										item.createdAt = new Date( Number(item.createdAt) );
 										item.createdAt = DateTime.fromJSDate( item.createdAt );
 										return (
-											<CommentContainer key={index}>
-												<CommentLink to={`/user/${item.author.nick}`}>
-													<CommentAvatar alt="" src={item.author.profile.avatar}/>
-												</CommentLink>
-												<CommentWrapper>
-													<CommentLink to={`/user/${item.author.nick}`}>
-														<CommentAuthor>
-															{item.author.nick}
-															<CommentDate>{item.createdAt.toRelativeCalendar()}</CommentDate>
-														</CommentAuthor>
-													</CommentLink>
-													<CommentText>{item.text}</CommentText>
-												</CommentWrapper>
-											</CommentContainer>
+											<Comment key={index} nick={item.author.nick} date={item.createdAt.toRelativeCalendar()} avatar={item.author.profile.avatar} text={item.text} />
 										)
 									})
 								)

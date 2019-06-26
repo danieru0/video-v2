@@ -53,7 +53,7 @@ export const getFrontUserInformations = () => {
 export const makeComment = (id, text) => {
 	return async dispatch => {
 		try {
-			const result = await axios({
+			await axios({
 				url: '/graphql',
 				method: 'post',
 				headers: {
@@ -70,7 +70,6 @@ export const makeComment = (id, text) => {
 				}
 			})
 
-			console.log(result);
 		} catch (err) {
 			throw err;
 		}
