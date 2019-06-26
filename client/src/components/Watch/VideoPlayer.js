@@ -196,11 +196,12 @@ class VideoPlayer extends Component {
 
 	componentWillUnmount() {
 		document.removeEventListener('keydown', this.detectButton);
+		this.playerRef.current.removeEventListener('keypress', this.resetTimer);
 		this.playerRef.current.removeEventListener('mousemove', this.resetTimer);
 		this.playerRef.current.removeEventListener('mousedown', this.resetTimer);
 		this.playerRef.current.removeEventListener('touchstart', this.resetTimer);
+		clearTimeout(timeout);
 		this.playerRef.current.removeEventListener('click', this.resetTimer);
-		this.playerRef.current.removeEventListener('keypress', this.resetTimer);
 		this.playerRef.current.removeEventListener('scroll', this.resetTimer, true);
 		this.playerRef.current.removeEventListener('dblclick', this.resizePlayer);
 		this.playerRef.current.removeEventListener('contextmenu', (e) => e.preventDefault());

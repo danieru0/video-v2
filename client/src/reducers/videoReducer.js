@@ -33,6 +33,11 @@ const videoReducer = (state = initState, action) => {
 				...state,
 				watchVideoError: action.data
 			}
+		case 'CLEAR_SINGLE_VIDEO':
+			return {
+				...state,
+				singleVideo: null
+			}
 		default: return state;
 	}
 }

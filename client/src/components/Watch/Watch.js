@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Textarea from 'react-textarea-autosize';
 
-import { getVideoInformations } from '../../actions/videoAction';
+import { getVideoInformations, clearSingleVideo, increaseViews } from '../../actions/videoAction';
 import { makeComment } from '../../actions/userAction';
 
 import VideoPlayer from './VideoPlayer';
@@ -187,6 +187,7 @@ const UserCommentContainer = styled.div`
 	flex-wrap: wrap;
 	margin-top: 20px;
 	width: 660px;
+	padding-bottom: 20px;
 
 	@media (max-width: 1064px) {
 		width: 100%;
@@ -261,6 +262,11 @@ class Watch extends Component {
 
 	componentDidMount() {
 		this.props.getVideoInformations({ id: this.props.match.params.id });
+		this.props.increaseViews(this.props.match.params.id);
+	}
+
+	componentWillUnmount() {
+		this.props.clearSingleVideo();
 	}
 
 	toggleDescription = () => {
@@ -385,4 +391,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideoInformations, makeComment })(Watch);
+export default connect(mapStateToProps, { getVideoInformations, makeComment, clearSingleVideo, increaseViews })(Watch);

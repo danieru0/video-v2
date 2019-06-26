@@ -162,10 +162,36 @@ export const getVideoInformations = (args) => {
 	}
 }
 
+export const increaseViews = id => {
+	return async dispatch => {
+		await axios({
+			url: '/graphql',
+			method: 'post',
+			data: {
+				query: `
+					mutation {
+						increaseViews(id: "${id}") {
+							views
+						}
+					}
+				`
+			}
+		});
+	}
+}
+
 export const clearVideos = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_VIDEOS'
+		});
+	}
+}
+
+export const clearSingleVideo = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_SINGLE_VIDEO'
 		});
 	}
 }
