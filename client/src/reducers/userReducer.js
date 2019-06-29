@@ -1,5 +1,6 @@
 const initState = {
-	user: null
+	user: null,
+	isLiked: null
 }
 
 const userReducer = (state = initState, action) => {
@@ -8,6 +9,11 @@ const userReducer = (state = initState, action) => {
 			return {
 				...state,
 				user: {...state.user, ...action.data}
+			}
+		case 'UPDATE_IS_LIKED':
+			return {
+				...state,
+				isLiked: action.data
 			}
 		default: return state;
 	}

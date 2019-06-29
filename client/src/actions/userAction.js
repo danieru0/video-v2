@@ -75,3 +75,66 @@ export const makeComment = (id, text) => {
 		}
 	}
 }
+
+export const toggleLike = (id, boolean) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							toggleLikeVideo(id: "${id}", boolean: ${boolean}) {
+								result
+							}
+						}
+					`
+				}
+			})
+
+			if (!result.data.errors) {
+				dispatch({
+					type: 'UPDATE_IS_LIKED',
+					data: result.data.data.toggleLikeVideo.result
+				});
+			}
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const checkIfLiked = id => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							checkIfUserLikedVideo(id: "${id}") {
+								result
+							}
+						}
+					`
+				}
+			});
+			if (!result.data.errors) {
+				dispatch({
+					type: 'UPDATE_IS_LIKED',
+					data: result.data.data.checkIfUserLikedVideo.result
+				});
+			}
+		} catch (err) {
+			throw err;
+		}
+	}
+}

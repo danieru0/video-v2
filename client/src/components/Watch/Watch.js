@@ -8,7 +8,7 @@ import Textarea from 'react-textarea-autosize';
 import Linkify from 'react-linkify';
 
 import { getVideoInformations, clearSingleVideo, increaseViews } from '../../actions/videoAction';
-import { makeComment } from '../../actions/userAction';
+import { makeComment, checkIfLiked, toggleLike } from '../../actions/userAction';
 
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';
@@ -102,7 +102,7 @@ const LikeButton = styled.button`
 	float: right;
 	margin-top: -44px;
 	margin-right: 40px;
-	color: #616161;
+	color: ${({isLiked}) => isLiked ? '#10A074' : '#616161'};
 
 	&:hover {
 		color: #10A074;
@@ -265,6 +265,7 @@ class Watch extends Component {
 	componentDidMount() {
 		this.props.getVideoInformations({ id: this.props.match.params.id });
 		this.props.increaseViews(this.props.match.params.id);
+		this.props.checkIfLiked(this.props.match.params.id);
 	}
 
 	componentWillUnmount() {
@@ -320,8 +321,13 @@ class Watch extends Component {
 		}
 	}
 
+	toggleLike = () => {
+		this.props.toggleLike(this.props.match.params.id, !this.props.isLiked);
+		this.props.isLiked ? this.props.singleVideo.likes -= 1 : this.props.singleVideo.likes += 1;
+	}
+
 	render() {
-		let { watchVideoError, singleVideo, user } = this.props;
+		let { watchVideoError, singleVideo, user, isLiked } = this.props;
 		if (singleVideo) {
 			singleVideo.createdAt = new Date( Number(singleVideo.createdAt) );
 			singleVideo.createdAt = DateTime.fromJSDate( singleVideo.createdAt );
@@ -341,12 +347,12 @@ class Watch extends Component {
 							<VideoViews>{`${singleVideo.views} views`}</VideoViews>
 							<VideoLine />
 							{
-								user && (
+								isLiked !== null && (
 									<>
 										<SaveButton>
 											<StyledIcon name="folder-plus" />
 										</SaveButton>
-										<LikeButton>
+										<LikeButton isLiked={isLiked ? 1 : 0} onClick={this.toggleLike}>
 											<StyledIcon name="thumbs-up"/>
 											{singleVideo.likes}
 										</LikeButton>
@@ -408,8 +414,9 @@ const mapStateToProps = state => {
 	return {
 		watchVideoError: state.videoReducer.watchVideoError,
 		singleVideo: state.videoReducer.singleVideo,
-		user: state.userReducer.user
+		user: state.userReducer.user,
+		isLiked: state.userReducer.isLiked,
 	}
 }
 
-export default connect(mapStateToProps, { getVideoInformations, makeComment, clearSingleVideo, increaseViews })(Watch);
+export default connect(mapStateToProps, { getVideoInformations, makeComment, clearSingleVideo, increaseViews, checkIfLiked, toggleLike })(Watch);
