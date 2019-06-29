@@ -5,6 +5,7 @@ import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Textarea from 'react-textarea-autosize';
+import Linkify from 'react-linkify';
 
 import { getVideoInformations, clearSingleVideo, increaseViews } from '../../actions/videoAction';
 import { makeComment } from '../../actions/userAction';
@@ -154,7 +155,8 @@ const VideoDescription = styled.div`
 	width: 500px;
 	min-height: 40px;
 	max-height: ${({descMore}) => descMore ? 'auto' : '40px'}; 
-	white-space: pre;
+	white-space: pre-line;
+	word-break: break-all;
 	overflow: hidden;
 
 	@media (max-width: 680px) {
@@ -278,6 +280,7 @@ class Watch extends Component {
 	handleCommentTyping = e => {
 		this.setState({
 			typing: !this.state.typing,
+			commentError: false
 		});
 	}
 
@@ -337,13 +340,19 @@ class Watch extends Component {
 							<VideoTitle>{singleVideo.title}</VideoTitle>
 							<VideoViews>{`${singleVideo.views} views`}</VideoViews>
 							<VideoLine />
-							<SaveButton>
-								<StyledIcon name="folder-plus" />
-							</SaveButton>
-							<LikeButton>
-								<StyledIcon name="thumbs-up"/>
-								{singleVideo.likes}
-							</LikeButton>
+							{
+								user && (
+									<>
+										<SaveButton>
+											<StyledIcon name="folder-plus" />
+										</SaveButton>
+										<LikeButton>
+											<StyledIcon name="thumbs-up"/>
+											{singleVideo.likes}
+										</LikeButton>
+									</>
+								)
+							}
 							<AuthorLink to={`/user/${singleVideo.author.nick}`}>
 								<AuthorAvatar alt="" src={singleVideo.author.profile.avatar}/>
 								<AuthorInfoWrapper>
@@ -351,17 +360,29 @@ class Watch extends Component {
 									<AuthorDate>{singleVideo.createdAt.toString().split('T')[0]}</AuthorDate>
 								</AuthorInfoWrapper>
 							</AuthorLink>
-							<VideoDescription descMore={this.state.descMore ? 1 : 0}>{singleVideo.description}</VideoDescription>
-							<ShowMoreBtn onClick={this.toggleDescription}>
-								{
-									this.state.descMore ? 'Show less' : 'Show more'
-								}
-							</ShowMoreBtn>
+							<Linkify>
+								<VideoDescription descMore={this.state.descMore ? 1 : 0}>{singleVideo.description}</VideoDescription>
+							</Linkify>
+							{
+								singleVideo.description.length > 118 && (
+									<ShowMoreBtn onClick={this.toggleDescription}>
+										{
+											this.state.descMore ? 'Show less' : 'Show more'
+										}
+									</ShowMoreBtn>
+								)
+							}
 							<VideoLine />
 							<UserCommentContainer>
-								<UserAvatarComment alt="" src={user.profile.avatar} />
-								<CommentTextArea value={this.state.comment} onChange={this.handleCommentChange} commenterror={this.state.commentError ? 1 : 0} placeholder="Add comment..." onBlur={this.handleCommentTyping} onFocus={this.handleCommentTyping}></CommentTextArea>
-								<CommentAddButton onClick={this.addComment}>Add</CommentAddButton>
+								{
+									user && (
+										<>
+											<UserAvatarComment alt="" src={user.profile.avatar} />
+											<CommentTextArea value={this.state.comment} onChange={this.handleCommentChange} commenterror={this.state.commentError ? 1 : 0} placeholder="Add comment..." onBlur={this.handleCommentTyping} onFocus={this.handleCommentTyping}></CommentTextArea>
+											<CommentAddButton onClick={this.addComment}>Add</CommentAddButton>
+										</>
+									)
+								}
 							</UserCommentContainer>
 							{
 								singleVideo.comments.length > 0 && (
