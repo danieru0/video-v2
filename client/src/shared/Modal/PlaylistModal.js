@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+import { createPlaylist } from '../../actions/playlistAction';
 
 import Modal from './Modal';
 
@@ -68,19 +71,31 @@ const ModalButton = styled.button`
 	}
 `
 
-const PlaylistModal = ({onExit}) => {
+const PlaylistModal = ({onExit, createPlaylist}) => {
+	const [ name, changeName ] = useState(false);
+
+	const handleInputChange = e => {
+		changeName(e.target.value);
+	}
+
+	const handleCreateClick = () => {
+		if (name.length > 1) {
+			createPlaylist(name);
+			onExit();
+		}
+	}
 	return (
 		<Modal onExit={onExit}>
 			<ModalWrapper>
 				<ModalTitle>Create playlist</ModalTitle>
-				<ModalInput placeholder="Playlist name..."/>
+				<ModalInput onChange={handleInputChange} placeholder="Playlist name..."/>
 				<ModalButtons>
 					<ModalButton onClick={onExit}>Cancel</ModalButton>
-					<ModalButton>Create</ModalButton>
+					<ModalButton onClick={handleCreateClick}>Create</ModalButton>
 				</ModalButtons>
 			</ModalWrapper>
 		</Modal>
 	);
 };
 
-export default PlaylistModal;
+export default connect(null, { createPlaylist })(PlaylistModal);

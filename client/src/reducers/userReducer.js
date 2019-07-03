@@ -15,6 +15,14 @@ const userReducer = (state = initState, action) => {
 				...state,
 				isLiked: action.data
 			}
+		case 'UPDATE_PLAYLISTS':
+			return {
+				...state,
+				user: {
+					...state.user,
+					playlists: action.data
+				}
+			}
 		default: return state;
 	}
 }
