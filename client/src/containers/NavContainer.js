@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import TopNav from '../components/Nav/TopNav';
 import SideNav from '../components/Nav/SideNav/SideNav';
@@ -41,12 +42,13 @@ class NavContainer extends Component {
 	}
 
 	render() {
+		const WithRouterSideNav = withRouter(props => <SideNav {...props}/>)
 		return (
 			<>
 				{
 					this.state.playlistModal && <PlaylistModal onExit={this.hidePlaylistModal} />
 				}
-				<SideNav openPlaylistModal={this.openPlaylistModal} toggleNavMenu={this.toggleNavMenu} mobileMenu={this.state.mobileMenu} />
+				<WithRouterSideNav openPlaylistModal={this.openPlaylistModal} toggleNavMenu={this.toggleNavMenu} mobileMenu={this.state.mobileMenu} />
 				<TopNav toggleNavMenu={this.toggleNavMenu} />
 			</>
 		);

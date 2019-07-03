@@ -162,8 +162,17 @@ class SideNav extends Component {
 
 	componentDidMount() {
 		this.setState({
-			activeRoute: window.location.pathname
+			activeRoute: this.props.location.pathname
 		});
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.location.pathname !== this.props.location.pathname) {
+			console.log(this.props.location.pathname);
+			this.setState({
+				activeRoute: this.props.location.pathname
+			});	
+		}
 	}
 
 	changeRoute = route => {
@@ -190,7 +199,7 @@ class SideNav extends Component {
 					<User />
 					<SideNavList>
 						<SideNavItem>
-							<SideNavStyledLink onClick={() => this.changeRoute('/')} active={this.state.activeRoute === '/' ? 1 : 0} to="/">
+							<SideNavStyledLink active={this.state.activeRoute === '/' ? 1 : 0} to="/">
 								<StyledSideNavIcon name="home" />
 								Home
 							</SideNavStyledLink>
@@ -199,13 +208,13 @@ class SideNav extends Component {
 							user && (
 								<>
 									<SideNavItem>
-										<SideNavStyledLink onClick={() => this.changeRoute('/favourites')} active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
+										<SideNavStyledLink active={this.state.activeRoute === '/favourites' ? 1 : 0} to="/favourites">
 											<StyledSideNavIcon name="heart" />
 											Favourites
 										</SideNavStyledLink>
 									</SideNavItem>
 									<SideNavItem>
-										<SideNavStyledLink onClick={() => this.changeRoute('/history')} active={this.state.activeRoute === '/history' ? 1 : 0} to="/history">
+										<SideNavStyledLink active={this.state.activeRoute === '/history' ? 1 : 0} to="/history">
 											<StyledSideNavIcon name="history" />
 											History
 										</SideNavStyledLink>
@@ -227,7 +236,7 @@ class SideNav extends Component {
 								user.playlists.map((item, index) => {
 									return (
 										<SideNavItem key={index}>
-											<SideNavStyledLink onClick={() => this.changeRoute(`${user.nick}/playlist/${item.name}`)} active={this.state.activeRoute === `${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
+											<SideNavStyledLink active={this.state.activeRoute === `/${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
 												<StyledSideNavIcon name={item.status === 'public' ? "folder" : "lock"} />
 												{item.name}
 											</SideNavStyledLink>
