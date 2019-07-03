@@ -117,6 +117,14 @@ const SideNavAddPlaylistButton = styled.button`
 	right: 10px;
 	top: -15px;
 	outline: none;
+
+	&:hover {
+		background: #10A074;
+		border: 2px solid transparent;
+		.fa {
+			color: #fff;
+		}
+	}
 `
 
 const StyledButtonIcon = styled(FontAwesome)`
@@ -155,17 +163,17 @@ class SideNav extends Component {
 	componentDidMount() {
 		this.setState({
 			activeRoute: window.location.pathname
-		})
+		});
 	}
 
 	changeRoute = route => {
 		this.setState({
 			activeRoute: route
-		})
+		});
 	}
 
 	render() {
-		const { user, mobileMenu, toggleNavMenu } = this.props;
+		const { user, mobileMenu, toggleNavMenu, openPlaylistModal } = this.props;
 		return (
 			<SideNavContainer mobileMenu={mobileMenu} >
 				<Scrollbars>
@@ -208,7 +216,7 @@ class SideNav extends Component {
 						<SideNavLine>
 							{
 								user && (
-									<SideNavAddPlaylistButton>
+									<SideNavAddPlaylistButton onClick={openPlaylistModal}>
 										<StyledButtonIcon name="plus"/>
 									</SideNavAddPlaylistButton>
 								)
