@@ -33,3 +33,32 @@ export const createPlaylist = (name) => {
 		}
 	}
 }
+
+export const addVideoToPlaylist = (playlistid, videoid) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							addVideoToPlaylist(playlistid: "${playlistid}", videoid: "${videoid}") {
+								name
+							}
+						}
+					`
+				}
+			});
+
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			console.log('added');
+		} catch (err) {
+			throw err;
+		}
+	}
+}

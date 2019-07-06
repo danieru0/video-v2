@@ -17,6 +17,7 @@ export const getFrontUserInformations = () => {
 								playlists {
 									name
 									status
+									id
 								}
 								profile {
 									avatar

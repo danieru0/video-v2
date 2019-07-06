@@ -168,7 +168,6 @@ class SideNav extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.location.pathname !== this.props.location.pathname) {
-			console.log(this.props.location.pathname);
 			this.setState({
 				activeRoute: this.props.location.pathname
 			});	

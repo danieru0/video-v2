@@ -13,6 +13,7 @@ import { makeComment, checkIfLiked, toggleLike } from '../../actions/userAction'
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';
 import Comment from './Comment';
+import SaveModal from '../../shared/Modal/SaveModal';
 
 const WatchContainer = styled.div`
 	width: calc(100% - 250px);
@@ -258,7 +259,8 @@ class Watch extends Component {
 			descMore: false,
 			typing: false,
 			comment: '',
-			commentError: false
+			commentError: false,
+			saveModal: true
 		}
 	}
 
@@ -326,6 +328,18 @@ class Watch extends Component {
 		this.props.isLiked ? this.props.singleVideo.likes -= 1 : this.props.singleVideo.likes += 1;
 	}
 
+	showSaveModal = () => {
+		this.setState({
+			saveModal: true
+		});
+	}
+
+	hideSaveModal = () => {
+		this.setState({
+			saveModal: false
+		});
+	}
+
 	render() {
 		let { watchVideoError, singleVideo, user, isLiked } = this.props;
 		if (singleVideo) {
@@ -341,6 +355,9 @@ class Watch extends Component {
 					watchVideoError && <WatchError error={watchVideoError}/>
 				}
 				{
+					this.state.saveModal && <SaveModal videoid={this.props.match.params.id} onExit={this.hideSaveModal}/>
+				}
+				{
 					singleVideo && (
 						<WatchWrapper>
 							<VideoTitle>{singleVideo.title}</VideoTitle>
@@ -349,7 +366,7 @@ class Watch extends Component {
 							{
 								isLiked !== null && (
 									<>
-										<SaveButton>
+										<SaveButton onClick={this.showSaveModal}>
 											<StyledIcon name="folder-plus" />
 										</SaveButton>
 										<LikeButton isLiked={isLiked ? 1 : 0} onClick={this.toggleLike}>

@@ -13,7 +13,7 @@ class NavContainer extends Component {
 		super();
 		this.state = {
 			mobileMenu: false,
-			playlistModal: true
+			playlistModal: false
 		}
 	}
 
