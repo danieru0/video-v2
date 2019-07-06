@@ -27,7 +27,12 @@ export const createPlaylist = (name) => {
 			dispatch({
 				type: 'UPDATE_PLAYLISTS',
 				data: result.data.data.createPlaylist
-			})
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Playlist created!',
+				alertType: 'normal'
+			});
 		} catch (err) {
 			throw err;
 		}
@@ -56,7 +61,11 @@ export const addVideoToPlaylist = (playlistid, videoid) => {
 
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			console.log('added');
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Video added to playlist!',
+				alertType: 'normal'
+			});
 		} catch (err) {
 			throw err;
 		}

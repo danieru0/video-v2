@@ -9,12 +9,14 @@ import NavContainer from './containers/NavContainer';
 import Head from './components/Head/Head';
 import Upload from './components/Upload/Upload';
 import Watch from './components/Watch/Watch';
+import Alert from './components/Alert/Alert';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
 	return (
 		<BrowserRouter>
 			<div className="App">
+				<Alert />
 				<NavContainer />
 				<Switch>
 					<Route exact path="/" component={Head}/>

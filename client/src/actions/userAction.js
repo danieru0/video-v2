@@ -69,7 +69,13 @@ export const makeComment = (id, text) => {
 						}
 					`
 				}
-			})
+			});
+
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Comment has beed created!',
+				alertType: 'normal'
+			});
 
 		} catch (err) {
 			throw err;
@@ -101,6 +107,20 @@ export const toggleLike = (id, boolean) => {
 				dispatch({
 					type: 'UPDATE_IS_LIKED',
 					data: result.data.data.toggleLikeVideo.result
+				});
+			}
+
+			if (result.data.data.toggleLikeVideo.result) {
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: 'Video has been liked!',
+					alertType: 'normal'
+				});
+			} else {
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: 'Video has been unliked!',
+					alertType: 'normal'
 				});
 			}
 		} catch (err) {

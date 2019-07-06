@@ -70,6 +70,12 @@ export const createVideo = (args) => {
 				}
 			});
 
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Video has been created!',
+				alertType: 'normal'
+			});	
+
 		} catch (err) {
 			throw err;
 		}
@@ -98,6 +104,12 @@ export const editVideo = (args) => {
 					`
 				}
 			});
+
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Video has been edited!',
+				alertType: 'normal'
+			});	
 
 		} catch (err) {
 			throw err;

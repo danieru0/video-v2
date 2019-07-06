@@ -260,7 +260,7 @@ class Watch extends Component {
 			typing: false,
 			comment: '',
 			commentError: false,
-			saveModal: true
+			saveModal: false
 		}
 	}
 
