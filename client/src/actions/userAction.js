@@ -1,4 +1,61 @@
 import axios from 'axios';
+import stringifyObject from 'stringify-object';
+
+const CancelToken = axios.CancelToken;
+let cancel;
+
+export const cancelUsersRequest = () => {
+	return dispatch => {
+		cancel();
+	}
+}
+
+export const getUsers = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				cancelToken: new CancelToken(function executor(c) {
+					cancel = c;
+				}),
+				data: {
+					query: `
+						query {
+							users(${query}) {
+								nick
+								profile {
+									avatar
+								}
+							}
+						}
+					`
+				},
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_USERS',
+				data: result.data.data.users
+			});
+		} catch (err) {
+			if (!axios.isCancel) {
+				throw err;
+			}
+		}
+	}
+}
+
+export const clearUsers = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_USERS'
+		});
+	}
+}
 
 export const getFrontUserInformations = () => {
 	return async dispatch => {

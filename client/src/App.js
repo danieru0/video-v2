@@ -10,6 +10,7 @@ import Head from './components/Head/Head';
 import Upload from './components/Upload/Upload';
 import Watch from './components/Watch/Watch';
 import Alert from './components/Alert/Alert';
+import Search from './components/Search/Search';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -24,6 +25,7 @@ function App() {
 					<Route path="/register" render={props => <AuthContainerWithoutAuth type="register" {...props}/> }/>
 					<Route path="/upload" component={withAuth(Upload)}/>
 					<Route path="/watch/:id" component={Watch}/>
+					<Route path="/search" component={Search}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

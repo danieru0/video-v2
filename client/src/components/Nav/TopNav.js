@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 
 const TopNavContainer = styled.div`
 	background: #FAFAFA;
@@ -105,6 +106,32 @@ const StyledHamburgerIcon = styled(FontAwesome)`
 `
 
 class TopNav extends Component {
+	constructor() {
+		super();
+		this.state = {
+			searchValue: null,
+			redirect: false
+		}
+	}
+
+	handleSearchChange = e => {
+		this.setState({
+			searchValue: e.target.value
+		});
+	}
+
+	handleSearchEnter = e => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			let parsed = queryString.parse(window.location.search);
+			if (parsed.title) {
+				this.props.history.push(`/search?title=${this.state.searchValue}&sort=${parsed.sort}&type=${parsed.type}`);
+			} else {
+				this.props.history.push(`/search?title=${this.state.searchValue}&sort=popular&type=videos`);
+			}
+		}
+	}
+
 	render() {
 		return (
 			<TopNavContainer>
@@ -113,7 +140,7 @@ class TopNav extends Component {
 				</TopNavHamburger>
 				<SearchInputGroup>
 					<SearchInputIcon name="search"/> 
-					<SearchInput placeholder="Search videos..." />
+					<SearchInput onKeyPress={this.handleSearchEnter} onChange={this.handleSearchChange} spellCheck={false} placeholder="Search videos..." />
 				</SearchInputGroup>
 				{
 					localStorage.getItem('token') && (
@@ -128,4 +155,4 @@ class TopNav extends Component {
 	}
 }
 
-export default TopNav;
+export default withRouter(TopNav);

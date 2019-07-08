@@ -1,5 +1,6 @@
 const initState = {
 	user: null,
+	users: null,
 	isLiked: null
 }
 
@@ -22,6 +23,16 @@ const userReducer = (state = initState, action) => {
 					...state.user,
 					playlists: action.data
 				}
+			}
+		case 'UPDATE_USERS':
+			return {
+				...state,
+				users: action.data
+			}
+		case 'CLEAR_USERS':
+			return {
+				...state,
+				users: null
 			}
 		default: return state;
 	}

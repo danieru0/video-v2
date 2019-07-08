@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import PopularVideo from './PopularVideo';
-import NormalVideo from './NormalVideo';
+import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
 import { getVideos, clearVideos } from '../../actions/videoAction';
 

@@ -55,7 +55,8 @@ const userSchema = new Schema({
 		},
 		description: {
 			type: String,
-			required: false
+			required: true,
+			default: ''
 		},
 		joined: {
 			type: Date,

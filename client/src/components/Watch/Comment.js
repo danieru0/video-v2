@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const CommentContainer = styled.div`
 	display: flex;
@@ -68,5 +69,12 @@ const Comment = ({nick, avatar, date, text}) => {
 		</CommentContainer>	
 	);
 };
+
+Comment.propTypes = {
+	avatar: PropTypes.string.isRequired,
+	nick: PropTypes.string.isRequired,
+	date: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired
+}
 
 export default Comment;

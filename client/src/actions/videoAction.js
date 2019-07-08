@@ -1,6 +1,15 @@
 import axios from 'axios';
 import stringifyObject from 'stringify-object';
 
+const CancelToken = axios.CancelToken;
+let cancel;
+
+export const cancelVideosRequest = () => {
+	return dispatch => {
+		cancel();
+	}
+}
+
 export const getVideos = (args, updatePopular) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
@@ -10,6 +19,9 @@ export const getVideos = (args, updatePopular) => {
 			const result = await axios({
 				url: '/graphql',
 				method: 'post',
+				cancelToken: new CancelToken(function executor(c) {
+					cancel = c;
+				}),
 				data: {
 					query: `
 						query {
@@ -42,7 +54,9 @@ export const getVideos = (args, updatePopular) => {
 				})
 			}
 		} catch (err) {
-			throw err;
+			if (!axios.isCancel) {
+				throw err;
+			}
 		}
 	}
 }
