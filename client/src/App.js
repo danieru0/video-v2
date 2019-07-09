@@ -11,6 +11,7 @@ import Upload from './components/Upload/Upload';
 import Watch from './components/Watch/Watch';
 import Alert from './components/Alert/Alert';
 import Search from './components/Search/Search';
+import Favourites from './components/Favourites/Favourites';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -26,6 +27,7 @@ function App() {
 					<Route path="/upload" component={withAuth(Upload)}/>
 					<Route path="/watch/:id" component={Watch}/>
 					<Route path="/search" component={Search}/>
+					<Route path="/favourites" component={withAuth(Favourites)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

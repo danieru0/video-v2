@@ -115,10 +115,10 @@ class Search extends Component {
 				parsed.page = 1;
 				parsed.limit = 10;
 				if (parsed.type === 'videos') {
-					this.props.cancelUsersRequest();
+					if (parsedPrev.type === 'users') this.props.cancelUsersRequest();
 					this.getVideosFunction(parsed);
 				} else if (parsed.type === 'users') {
-					this.props.cancelVideosRequest();
+					if (parsedPrev.type === 'videos') this.props.cancelVideosRequest();
 					this.getUsersFunction(parsed);
 				}
 			}

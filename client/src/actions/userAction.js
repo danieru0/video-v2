@@ -108,6 +108,55 @@ export const getFrontUserInformations = () => {
 	}
 }
 
+export const getUserFavouritesVideos = () => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							me {
+								likedVideos {
+									_id
+									title
+									views
+									miniature
+									length
+									author {
+										nick
+									}
+									createdAt
+								}
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_FAVOURITES_VIDEOS',
+				data: result.data.data.me.likedVideos
+			});
+		} catch(err) {
+			throw err;
+		}
+	}
+}
+
+export const clearUserFavouritesVideos = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_FAVOURITES_VIDEOS'
+		});
+	}
+}
+
 export const makeComment = (id, text) => {
 	return async dispatch => {
 		try {
