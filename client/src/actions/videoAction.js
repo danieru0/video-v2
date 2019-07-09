@@ -22,6 +22,9 @@ export const getVideos = (args, updatePopular) => {
 				cancelToken: new CancelToken(function executor(c) {
 					cancel = c;
 				}),
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
 				data: {
 					query: `
 						query {

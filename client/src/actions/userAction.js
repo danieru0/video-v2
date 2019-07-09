@@ -265,3 +265,28 @@ export const checkIfLiked = id => {
 		}
 	}
 }
+
+export const addVideoToHistory = id => {
+	return async dispatch => {
+		try {
+			await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							addVideoToHistory(id: "${id}") {
+								_id
+							}
+						}
+					`
+				}
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}

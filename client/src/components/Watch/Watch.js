@@ -8,7 +8,7 @@ import Textarea from 'react-textarea-autosize';
 import Linkify from 'react-linkify';
 
 import { getVideoInformations, clearSingleVideo, increaseViews } from '../../actions/videoAction';
-import { makeComment, checkIfLiked, toggleLike } from '../../actions/userAction';
+import { makeComment, checkIfLiked, toggleLike, addVideoToHistory } from '../../actions/userAction';
 
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';
@@ -268,6 +268,7 @@ class Watch extends Component {
 		this.props.getVideoInformations({ id: this.props.match.params.id });
 		this.props.increaseViews(this.props.match.params.id);
 		this.props.checkIfLiked(this.props.match.params.id);
+		this.props.addVideoToHistory(this.props.match.params.id);
 	}
 
 	componentWillUnmount() {
@@ -436,4 +437,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideoInformations, makeComment, clearSingleVideo, increaseViews, checkIfLiked, toggleLike })(Watch);
+export default connect(mapStateToProps, { getVideoInformations, makeComment, clearSingleVideo, increaseViews, checkIfLiked, toggleLike, addVideoToHistory })(Watch);
