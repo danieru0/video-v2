@@ -12,6 +12,7 @@ import Watch from './components/Watch/Watch';
 import Alert from './components/Alert/Alert';
 import Search from './components/Search/Search';
 import Favourites from './components/Favourites/Favourites';
+import History from './components/History/History';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -28,6 +29,7 @@ function App() {
 					<Route path="/watch/:id" component={Watch}/>
 					<Route path="/search" component={Search}/>
 					<Route path="/favourites" component={withAuth(Favourites)}/>
+					<Route path="/history" component={withAuth(History)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

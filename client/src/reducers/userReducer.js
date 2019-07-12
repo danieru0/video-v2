@@ -1,7 +1,9 @@
 const initState = {
 	user: null,
 	users: null,
-	isLiked: null
+	isLiked: null,
+	historyVideos: null,
+	historySearch: null
 }
 
 const userReducer = (state = initState, action) => {
@@ -33,6 +35,26 @@ const userReducer = (state = initState, action) => {
 			return {
 				...state,
 				users: null
+			}
+		case 'UPDATE_HISTORY_VIDEOS':
+			return {
+				...state,
+				historyVideos: action.data
+			}
+		case 'CLEAR_HISTORY_VIDEOS':
+			return {
+				...state,
+				historyVideos: null
+			}
+		case 'UPDATE_HISTORY_SEARCH':
+			return {
+				...state,
+				historySearch: action.data
+			}
+		case 'CLEAR_HISTORY_SEARCH':
+			return {
+				...state,
+				historyVideos: null
 			}
 		default: return state;
 	}

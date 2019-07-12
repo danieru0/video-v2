@@ -149,10 +149,112 @@ export const getUserFavouritesVideos = () => {
 	}
 }
 
+export const getUserHistoryVideos = () => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				cancelToken: new CancelToken(function executor(c) {
+					cancel = c;
+				}),
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							me {
+								history {
+									videos {
+										_id
+										title
+										views
+										miniature
+										length
+										author {
+											nick
+										}
+										createdAt
+									}
+								}
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_HISTORY_VIDEOS',
+				data: result.data.data.me.history.videos
+			});
+		} catch (err) {
+			if (!axios.isCancel) {
+				throw err;
+			}
+		}
+	}
+}
+
+export const getUserHistorySearch = () => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				cancelToken: new CancelToken(function executor(c) {
+					cancel = c;
+				}),
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							me {
+								history {
+									search
+								}
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_HISTORY_SEARCH',
+				data: result.data.data.me.history.search
+			});
+		} catch (err) {
+			if (!axios.isCancel) {
+				throw err;
+			}
+		}
+	}
+}
+
 export const clearUserFavouritesVideos = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_FAVOURITES_VIDEOS'
+		});
+	}
+}
+
+export const clearUserHistoryVideos = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_HISTORY_VIDEOS'
+		});
+	}
+}
+
+export const clearUserHistorySearch = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_HISTORY_SEARCH'
 		});
 	}
 }
