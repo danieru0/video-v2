@@ -54,7 +54,7 @@ const userReducer = (state = initState, action) => {
 		case 'CLEAR_HISTORY_SEARCH':
 			return {
 				...state,
-				historyVideos: null
+				historySearch: null
 			}
 		default: return state;
 	}
