@@ -187,7 +187,7 @@ export const getUserHistoryVideos = () => {
 
 			dispatch({
 				type: 'UPDATE_HISTORY_VIDEOS',
-				data: result.data.data.me.history.videos
+				data: result.data.data.me.history.videos.reverse()
 			});
 		} catch (err) {
 			if (!axios.isCancel) {
@@ -225,7 +225,7 @@ export const getUserHistorySearch = () => {
 
 			dispatch({
 				type: 'UPDATE_HISTORY_SEARCH',
-				data: result.data.data.me.history.search
+				data: result.data.data.me.history.search.reverse()
 			});
 		} catch (err) {
 			if (!axios.isCancel) {

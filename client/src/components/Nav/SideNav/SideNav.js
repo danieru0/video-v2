@@ -18,8 +18,7 @@ const SideNavContainer = styled.div`
 	position: fixed;
 
 	@media (max-width: 920px) {
-		transform: ${({mobileMenu}) => mobileMenu ? 'translateX(0);' : 'translateX(-100%);'}
-		position: absolute;
+		transform: ${({mobileMenu}) => mobileMenu ? 'translateX(0)' : 'translateX(-100%)'};
 		z-index: 3;
 	}
 `

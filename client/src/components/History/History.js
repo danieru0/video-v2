@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { getUserHistoryVideos, getUserHistorySearch, clearUserHistoryVideos, clearUserHistorySearch, cancelUsersRequest } from '../../actions/userAction';
 
+import NormalVideo from '../../shared/NormalVideo/NormalVideo';
+
 const HistoryContainer = styled.div`
 	width: calc(100% - 250px);
 	min-height: calc(100vh - 80px);	
@@ -29,6 +31,20 @@ const HistoryOptionsWrapper = styled.div`
 	font-family: 'Lato';
 	padding-left: 40px;
 	padding-top: 40px;
+
+	@media (max-width: 1450px) {
+		width: 300px;
+	}
+
+	@media (max-width: 685px) {
+		width: 200px;
+	}
+
+	@media (max-width: 600px) {
+		top: 0px;
+		width: 100%;
+		height: 250px;
+	}
 `
 
 const HistoryOptionsText = styled.p`
@@ -86,9 +102,51 @@ const HistoryOptionsRadio = styled.input`
 	}
 `
 
-const HistoryVideosWrapper = styled.div`
+const HistoryWrapper = styled.div`
 	width: calc(100% - 500px);
-	height: 100%;
+
+	@media (max-width: 1450px) {
+		width: calc(100% - 300px);
+	}
+
+	@media (max-width: 685px) {
+		width: calc(100% - 200px);
+	}
+
+	@media (max-width: 600px) {
+		width: 100%;
+		margin-top: 250px;
+	}
+`
+
+const HistoryVidoes = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	padding: 0px 30px;
+
+	@media (max-width: 1246px) {
+		justify-content: center;
+	}
+`
+
+const HistorySearch = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 20px 50px;
+`
+
+const HistorySearchText = styled.p`
+	margin: 10px 0px;
+	font-size: 'Lato';
+	font-size: 18px;
+	background: #fff;
+	min-height: 50px;
+	display: flex;
+	align-items: center;
+	padding: 0px 20px;
+	word-break: break-all;
 `
 
 class History extends Component {
@@ -101,6 +159,11 @@ class History extends Component {
 
 	componentDidMount() {
 		this.props.getUserHistoryVideos();
+	}
+
+	componentWillUnmount() {
+		this.props.clearUserHistorySearch();
+		this.props.clearUserHistoryVideos();
 	}
 
 	handleTypeChange = type => {
@@ -118,6 +181,7 @@ class History extends Component {
 	}
 
 	render() {
+		const { historyVideos, historySearch } = this.props;
 		return (
 			<HistoryContainer>
 				<HistoryOptionsWrapper>
@@ -133,9 +197,38 @@ class History extends Component {
 						<HistoryOptionsCheckmark className="checkmark"/>
 					</HistoryOptionsLabel>
 				</HistoryOptionsWrapper>
-				<HistoryVideosWrapper>
-					
-				</HistoryVideosWrapper>
+				<HistoryWrapper>
+					{
+						this.state.type === 'videos' && (
+							<HistoryVidoes>
+								{
+									historyVideos && (
+										historyVideos.map((item, index) => {
+											return (
+												<NormalVideo key={index} title={item.title} id={item._id} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} length={item.length} />
+											)
+										})
+									)
+								}
+							</HistoryVidoes>
+						)
+					}
+					{
+						this.state.type === 'search' && (
+							<HistorySearch>
+								{
+									historySearch && (
+										historySearch.map((item, index) => {
+											return (
+												<HistorySearchText key={index}>{item}</HistorySearchText>
+											)
+										})
+									)
+								}
+							</HistorySearch>
+						)
+					}
+				</HistoryWrapper>
 			</HistoryContainer>
 		);
 	}
