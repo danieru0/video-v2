@@ -92,9 +92,7 @@ export default {
 					"playlists.$.status": args.status
 				}, { new: true });
 
-				const updatedPlaylist = await User.findOne({ _id: req.userId, "playlists._id": args.playlistid }, { "playlists.$": 1 });
-
-				return updatedPlaylist.playlists[0];
+				return result.playlists;
 
 			} catch (err) {
 				throw err;

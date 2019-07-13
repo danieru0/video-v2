@@ -11,6 +11,6 @@ export default `
 		removePlaylist(id: ID!): [Playlist]
 		addVideoToPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
 		removeVideoFromPlaylist(playlistid: ID!, videoid: ID!): [Playlist]
-		changePlaylistStatus(playlistid: ID!, status: String!): Playlist
+		changePlaylistStatus(playlistid: ID!, status: String!): [Playlist]
 	}
 `

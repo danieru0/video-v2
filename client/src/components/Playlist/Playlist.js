@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getUserPlaylist } from '../../actions/playlistAction';
+import { getUserPlaylist, changePlaylistStatus } from '../../actions/playlistAction';
 
 const PlaylistContainer = styled.div`
 	width: calc(100% - 250px);
@@ -56,18 +56,84 @@ const InformationsStatus = styled.p`
 	}
 `
 
+const InformationsLine = styled.div`
+	width: 80%;
+	height: 1px;
+	background: #ddd;
+	align-self: center;
+	margin: 15px 0px;
+`
+
+const ButtonsWrapper = styled.div`
+	width: 80%;
+	align-self: center;
+	display: flex;
+	justify-content: flex-end;
+`
+
+const InformationsButton = styled.button`
+	color: #10A074;
+	background: none;
+	border: none;
+	outline: none;
+	padding: 10px 10px;
+	font-size: 18px;
+	text-transform: uppercase;
+	letter-spacing: -1px;
+	cursor: pointer;
+
+	&:focus,
+	&:hover {
+		background: rgba(0,0,0,0.1);
+	}
+`
+
+const InformationsLabel = styled.label`
+	margin-left: 36px;
+	margin-top: 20px;
+`
+
+const InformationsStatusSelect = styled.select`
+	margin-left: 6px;
+`
+const InformationStatusOption = styled.option``
+
 const PlaylistVideos = styled.div`
 	flex-grow: 1;
 	height: 100%;
 `
 
 class Playlist extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			edit: true,
+			newStatus: null
+		}
+	}
+
 	componentDidMount() {
 		this.props.getUserPlaylist(this.props.match.params.user, this.props.match.params.id);
 	}
 
+	toggleEdit = () => {
+		this.setState({
+			edit: !this.state.edit
+		});
+	}
+
+	setNewStatus = e => {
+		this.setState({
+			newStatus: e.target.value
+		});
+	}
+
+	saveSettings = () => {
+		this.props.changePlaylistStatus(this.props.playlistInfo.id, this.state.newStatus);
+	}
+
 	render() {
-		const { playlistInfo } = this.props;
+		const { playlistInfo, authenticated } = this.props;
 		return (
 			<PlaylistContainer>
 				<PlaylistInformations>
@@ -75,8 +141,38 @@ class Playlist extends Component {
 						playlistInfo && (
 							<>
 								<InformationsImage src={playlistInfo.videos[0].miniature} alt=""/>
-								<InformationsTitle>{playlistInfo.name}</InformationsTitle>
-								<InformationsStatus>{playlistInfo.status}</InformationsStatus>
+								{
+									this.state.edit ? (
+										<>
+											<InformationsLabel>
+												Status: 
+												<InformationsStatusSelect defaultValue={playlistInfo.status} onChange={this.setNewStatus}>
+													<InformationStatusOption value="public">Public</InformationStatusOption>
+													<InformationStatusOption value="private">Private</InformationStatusOption>													
+												</InformationsStatusSelect>
+											</InformationsLabel>
+										</>
+									) : (
+										<>
+											<InformationsTitle>{playlistInfo.name}</InformationsTitle>
+											<InformationsStatus>{this.state.newStatus ? this.state.newStatus : playlistInfo.status}</InformationsStatus>
+										</>
+									)
+								}
+								{
+									authenticated && (
+										<>
+											<InformationsLine />
+											<ButtonsWrapper>
+												<InformationsButton>Delete</InformationsButton>
+												<InformationsButton onClick={this.toggleEdit}>{this.state.edit ? 'Cancel' : 'Edit'}</InformationsButton>
+												{
+													this.state.edit && <InformationsButton onClick={this.saveSettings}>Save</InformationsButton>
+												}
+											</ButtonsWrapper>
+										</>
+									)
+								}
 							</>
 						)
 					}
@@ -95,4 +191,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUserPlaylist })(Playlist);
+export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus })(Playlist);

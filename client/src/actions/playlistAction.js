@@ -85,6 +85,7 @@ export const getUserPlaylist = (nick, playlistId) => {
 								playlists(id: "${playlistId}") {
 									status
 									name
+									id
 									videos {
 										_id
 										title
@@ -108,6 +109,45 @@ export const getUserPlaylist = (nick, playlistId) => {
 			dispatch({
 				type: 'UPDATE_PLAYLIST_INFO',
 				data: result.data.data.users[0].playlists[0]
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const changePlaylistStatus = (playlistId, status) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							changePlaylistStatus(playlistid: "${playlistId}", status: "${status}") {
+								status
+								name
+								id
+							}
+						}
+					`
+				}
+			});
+
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_PLAYLISTS',
+				data: result.data.data.changePlaylistStatus
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Playlist has been updated!',
+				alertType: 'normal'
 			});
 		} catch (err) {
 			throw err;
