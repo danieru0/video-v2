@@ -44,7 +44,7 @@ export default function withPlaylistAuth(ComponentToCheck) {
 							return <ComponentToCheck authenticated={false} {...this.props} />
 						}
 					} else {
-						return <ComponentToCheck authenticated={true} {...this.props} />
+						return <ComponentToCheck {...this.props} />
 					}
 				}
 			} else {

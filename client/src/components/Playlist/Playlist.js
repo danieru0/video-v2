@@ -107,7 +107,7 @@ class Playlist extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			edit: true,
+			edit: false,
 			newStatus: null
 		}
 	}
@@ -142,7 +142,7 @@ class Playlist extends Component {
 							<>
 								<InformationsImage src={playlistInfo.videos[0].miniature} alt=""/>
 								{
-									this.state.edit ? (
+									this.state.edit && authenticated === undefined ? (
 										<>
 											<InformationsLabel>
 												Status: 
@@ -160,7 +160,7 @@ class Playlist extends Component {
 									)
 								}
 								{
-									authenticated && (
+									authenticated === undefined && (
 										<>
 											<InformationsLine />
 											<ButtonsWrapper>
