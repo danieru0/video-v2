@@ -155,10 +155,56 @@ export const changePlaylistStatus = (playlistId, status) => {
 	}
 }
 
+export const removePlaylist = id => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							removePlaylist(id: "${id}") {
+								status
+								name
+								id
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_PLAYLISTS',
+				data: result.data.data.removePlaylist
+			});
+			dispatch({
+				type: 'SET_PLAYLIST_REMOVED',
+				data: true
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Playlist has been removed!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
 export const clearPlaylistInfo = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_PLAYLIST_INFO'
+		});
+		dispatch({
+			type: 'SET_PLAYLIST_REMOVED',
+			data: null
 		});
 	}
 }

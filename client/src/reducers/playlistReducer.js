@@ -1,5 +1,6 @@
 const initState = {
-	playlistInfo: null
+	playlistInfo: null,
+	playlistRemoved: null
 }
 
 const playlistReducer = (state = initState, action) => {
@@ -13,6 +14,11 @@ const playlistReducer = (state = initState, action) => {
 			return {
 				...state,
 				playlistInfo: null
+			}
+		case 'SET_PLAYLIST_REMOVED':
+			return {
+				...state,
+				playlistRemoved: action.data
 			}
 		default: return state;
 	}

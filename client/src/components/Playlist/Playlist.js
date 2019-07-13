@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo } from '../../actions/playlistAction';
+import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist } from '../../actions/playlistAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
@@ -179,8 +180,19 @@ class Playlist extends Component {
 		this.props.changePlaylistStatus(this.props.playlistInfo.id, this.state.newStatus);
 	}
 
+	handleDeletePlaylist = () => {
+		if (window.confirm('Are you sure')) {
+			this.props.removePlaylist(this.props.match.params.id);
+		}
+	}
+
 	render() {
-		const { playlistInfo, authenticated } = this.props;
+		const { playlistInfo, authenticated, playlistRemoved } = this.props;
+
+		if (playlistRemoved) {
+			return <Redirect to="/"/>
+		}
+
 		return (
 			<PlaylistContainer>
 				<PlaylistInformations>
@@ -211,7 +223,7 @@ class Playlist extends Component {
 										<>
 											<InformationsLine />
 											<ButtonsWrapper>
-												<InformationsButton>Delete</InformationsButton>
+												<InformationsButton onClick={this.handleDeletePlaylist}>Delete</InformationsButton>
 												<InformationsButton onClick={this.toggleEdit}>{this.state.edit ? 'Cancel' : 'Edit'}</InformationsButton>
 												{
 													this.state.edit && <InformationsButton onClick={this.saveSettings}>Save</InformationsButton>
@@ -242,8 +254,9 @@ class Playlist extends Component {
 
 const mapStateToProps = state => {
 	return {
-		playlistInfo: state.playlistReducer.playlistInfo
+		playlistInfo: state.playlistReducer.playlistInfo,
+		playlistRemoved: state.playlistReducer.playlistRemoved
 	}
 }
 
-export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo })(Playlist);
+export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist })(Playlist);
