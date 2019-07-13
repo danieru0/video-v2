@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getUserPlaylist, changePlaylistStatus } from '../../actions/playlistAction';
+import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo } from '../../actions/playlistAction';
+
+import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
 const PlaylistContainer = styled.div`
 	width: calc(100% - 250px);
@@ -17,6 +19,10 @@ const PlaylistContainer = styled.div`
 		width: 100%;
 		margin-left: 0px;
 	}
+
+	@media (max-width: 562px) {
+		flex-direction: column;
+	}
 `
 
 const PlaylistInformations = styled.div`
@@ -27,12 +33,31 @@ const PlaylistInformations = styled.div`
 	flex-direction: column;
 	padding: 30px 0px;
 	font-family: 'Lato';
+	flex-shrink: 0;
+
+	@media (max-width: 990px) {
+		width: 300px;
+	}
+
+	@media (max-width: 665px) {
+		width: 200px;
+		padding: 0;
+	}
+
+	@media (max-width: 562px) {
+		width: 100%;
+		height: 150px;
+	}
 `
 
 const InformationsImage = styled.img`
 	width: 80%;
 	height: 220px;
 	align-self: center;
+
+	@media (max-width: 665px) {
+		display: none;
+	}
 `
 
 const InformationsTitle = styled.p`
@@ -69,6 +94,10 @@ const ButtonsWrapper = styled.div`
 	align-self: center;
 	display: flex;
 	justify-content: flex-end;
+
+	@media (max-width: 665px) {
+		flex-wrap: wrap;
+	}
 `
 
 const InformationsButton = styled.button`
@@ -101,6 +130,13 @@ const InformationStatusOption = styled.option``
 const PlaylistVideos = styled.div`
 	flex-grow: 1;
 	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	padding-left: 30px;
+
+	@media (max-width: 562px) {
+		justify-content: center;
+	}
 `
 
 class Playlist extends Component {
@@ -114,6 +150,17 @@ class Playlist extends Component {
 
 	componentDidMount() {
 		this.props.getUserPlaylist(this.props.match.params.user, this.props.match.params.id);
+	}
+
+	componentWillUnmount() {
+		this.props.clearPlaylistInfo();
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.match.params.id !== this.props.match.params.id) {
+			this.props.clearPlaylistInfo();
+			this.props.getUserPlaylist(this.props.match.params.user, this.props.match.params.id);
+		}
 	}
 
 	toggleEdit = () => {
@@ -140,7 +187,7 @@ class Playlist extends Component {
 					{
 						playlistInfo && (
 							<>
-								<InformationsImage src={playlistInfo.videos[0].miniature} alt=""/>
+								<InformationsImage src={playlistInfo.videos[0] ? playlistInfo.videos[0].miniature : 'https://i.pinimg.com/originals/34/99/d1/3499d12f28a741f0063ee8f2bbd711d9.jpg'} alt=""/>
 								{
 									this.state.edit && authenticated === undefined ? (
 										<>
@@ -178,7 +225,15 @@ class Playlist extends Component {
 					}
 				</PlaylistInformations>
 				<PlaylistVideos>
-						
+					{
+						playlistInfo && playlistInfo.videos.length !== 0 && (
+							playlistInfo.videos.map((item, index) => {
+								return (
+									<NormalVideo key={index} title={item.title} id={item._id} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} length={item.length}/>
+								)
+							})
+						)
+					}
 				</PlaylistVideos>
 			</PlaylistContainer>
 		);
@@ -191,4 +246,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus })(Playlist);
+export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo })(Playlist);

@@ -154,3 +154,11 @@ export const changePlaylistStatus = (playlistId, status) => {
 		}
 	}
 }
+
+export const clearPlaylistInfo = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_PLAYLIST_INFO'
+		});
+	}
+}
