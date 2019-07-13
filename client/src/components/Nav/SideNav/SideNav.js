@@ -234,7 +234,7 @@ class SideNav extends Component {
 								user.playlists.map((item, index) => {
 									return (
 										<SideNavItem key={index}>
-											<SideNavStyledLink active={this.state.activeRoute === `/${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.name}`}>
+											<SideNavStyledLink active={this.state.activeRoute === `/${user.nick}/playlist/${item.name}` ? 1 : 0} to={`/${user.nick}/playlist/${item.id}`}>
 												<StyledSideNavIcon name={item.status === 'public' ? "folder" : "lock"} />
 												{item.name}
 											</SideNavStyledLink>

@@ -3,6 +3,7 @@ import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 import withAuth from './shared/hocs/withAuth';
 import withoutAuth from './shared/hocs/withoutAuth';
+import withPlaylistAuth from './shared/hocs/withPlaylistAuth';
 
 import AuthContainer from './containers/AuthContainer';
 import NavContainer from './containers/NavContainer';
@@ -13,6 +14,7 @@ import Alert from './components/Alert/Alert';
 import Search from './components/Search/Search';
 import Favourites from './components/Favourites/Favourites';
 import History from './components/History/History';
+import Playlist from './components/Playlist/Playlist';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -30,6 +32,7 @@ function App() {
 					<Route path="/search" component={Search}/>
 					<Route path="/favourites" component={withAuth(Favourites)}/>
 					<Route path="/history" component={withAuth(History)}/>
+					<Route path="/:user/playlist/:id" component={withPlaylistAuth(Playlist)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

@@ -71,3 +71,46 @@ export const addVideoToPlaylist = (playlistid, videoid) => {
 		}
 	}
 }
+
+export const getUserPlaylist = (nick, playlistId) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				data: {
+					query: `
+						query {
+							users(nick: "${nick}", page: 1, limit: 1) {
+								playlists(id: "${playlistId}") {
+									status
+									name
+									videos {
+										_id
+										title
+										views
+										miniature
+										length
+										author {
+											nick
+										}
+										createdAt
+									}
+								}
+							}
+						}
+					`
+				}
+			});
+
+			result.data.data.users[0].playlists[0].videos.reverse();
+
+			dispatch({
+				type: 'UPDATE_PLAYLIST_INFO',
+				data: result.data.data.users[0].playlists[0]
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
