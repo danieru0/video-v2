@@ -20,6 +20,15 @@ const playlistReducer = (state = initState, action) => {
 				...state,
 				playlistRemoved: action.data
 			}
+		case 'REMOVE_VIDEO':
+			const newPlaylistInfoVideos = state.playlistInfo.videos.filter(video => video._id !== action.data);
+			return {
+				...state,
+				playlistInfo: {
+					...state.playlistInfo,
+					videos: newPlaylistInfoVideos
+				}
+			}
 		default: return state;
 	}
 }

@@ -90,12 +90,26 @@ const HeadVideoLength = styled.div`
 	border-radius: 20px;
 `
 
-const NormalVideo = ({ id, miniature, title, author, views, createdAt, length }) => {
+const DeleteButton = styled.button`
+	position: absolute;
+	right: -12px;
+	bottom: -10px;
+	font-size: 20px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	outline: none;
+`
+
+const DeleteButtonIcon = styled(FontAwesome)``
+
+const NormalVideo = ({ id, miniature, title, author, views, createdAt, length, deleteButton, onDeleteButtonClick }) => {
 	createdAt = new Date( Number(createdAt) );
 	createdAt = DateTime.fromJSDate( createdAt );
 	if (title.length > 47) {
 		title = title.substring(0, 45)+'...';
 	}
+
 	return (
 		<HeadVideo to={`/watch/${id}`}>
 			<HeadVideoIcon name="play" />
@@ -104,6 +118,13 @@ const NormalVideo = ({ id, miniature, title, author, views, createdAt, length })
 			<HeadVideoAuthor>{`By ${author}`}</HeadVideoAuthor>
 			<HeadVideoInfo>{`${views} views | ${createdAt.toRelative()}`}</HeadVideoInfo>
 			<HeadVideoLength>{length}</HeadVideoLength>
+			{
+				deleteButton && (
+					<DeleteButton onClick={onDeleteButtonClick}>
+						<DeleteButtonIcon name="times"/>
+					</DeleteButton>
+				)
+			}
 		</HeadVideo>
 	);
 };

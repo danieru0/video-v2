@@ -197,6 +197,42 @@ export const removePlaylist = id => {
 	}
 }
 
+export const removeVideoFromPlaylist = (playlistId, videoId) => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							removeVideoFromPlaylist(playlistid: "${playlistId}", videoid: "${videoId}") {
+								name
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'REMOVE_VIDEO',
+				data: videoId
+			})
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'video removed from playlist!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
 export const clearPlaylistInfo = () => {
 	return dispatch => {
 		dispatch({

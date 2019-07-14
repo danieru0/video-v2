@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist } from '../../actions/playlistAction';
+import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist, removeVideoFromPlaylist } from '../../actions/playlistAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
@@ -178,16 +178,22 @@ class Playlist extends Component {
 
 	saveSettings = () => {
 		this.props.changePlaylistStatus(this.props.playlistInfo.id, this.state.newStatus);
+		this.props.playlistInfo.status = this.state.newStatus;
 	}
 
 	handleDeletePlaylist = () => {
-		if (window.confirm('Are you sure')) {
+		if (window.confirm('Are you sure?')) {
 			this.props.removePlaylist(this.props.match.params.id);
 		}
 	}
 
+	removeVideo = (e, id) => {
+		e.preventDefault();
+		this.props.removeVideoFromPlaylist(this.props.playlistInfo.id, id);
+	}
+
 	render() {
-		const { playlistInfo, authenticated, playlistRemoved } = this.props;
+		let { playlistInfo, authenticated, playlistRemoved } = this.props;
 
 		if (playlistRemoved) {
 			return <Redirect to="/"/>
@@ -214,7 +220,7 @@ class Playlist extends Component {
 									) : (
 										<>
 											<InformationsTitle>{playlistInfo.name}</InformationsTitle>
-											<InformationsStatus>{this.state.newStatus ? this.state.newStatus : playlistInfo.status}</InformationsStatus>
+											<InformationsStatus>{playlistInfo.status}</InformationsStatus>
 										</>
 									)
 								}
@@ -241,7 +247,7 @@ class Playlist extends Component {
 						playlistInfo && playlistInfo.videos.length !== 0 && (
 							playlistInfo.videos.map((item, index) => {
 								return (
-									<NormalVideo key={index} title={item.title} id={item._id} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} length={item.length}/>
+									<NormalVideo onDeleteButtonClick={(e) => this.removeVideo(e, item._id)} deleteButton key={index} title={item.title} id={item._id} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} length={item.length}/>
 								)
 							})
 						)
@@ -259,4 +265,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist })(Playlist);
+export default connect(mapStateToProps, { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist, removeVideoFromPlaylist })(Playlist);
