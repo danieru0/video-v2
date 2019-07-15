@@ -20,6 +20,10 @@ const Description = styled.div`
 	margin-top: 15px;
 	word-break: break-all;
 	white-space: pre-line;
+
+	@media (max-width: 570px) {
+		width: 80%;
+	}
 `
 
 const Line = styled.div`

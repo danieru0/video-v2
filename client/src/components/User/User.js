@@ -47,6 +47,10 @@ const UserWrapper = styled.div`
 	width: 1200px;
 	margin: 0 auto;
 	z-index: 1;
+
+	@media (max-width: 1490px) {
+		width: 80%;
+	}
 `
 
 const UserMenuContainer = styled.div`

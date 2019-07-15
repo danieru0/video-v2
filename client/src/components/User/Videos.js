@@ -8,6 +8,10 @@ const VideosContainer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	padding: 20px 0px;
+
+	@media (max-width: 600px) {
+		justify-content: center;
+	}
 `
 
 const Video = styled(Link)`
@@ -17,7 +21,7 @@ const Video = styled(Link)`
 	flex-direction: column;
 	font-family: 'Lato';
 	text-decoration: none;
-	margin: 0px 5px;
+	margin: 10px 5px;
 `
 
 const Miniature = styled.img`

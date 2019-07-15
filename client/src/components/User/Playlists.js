@@ -7,6 +7,10 @@ const PlaylistsContainer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	padding: 20px 0px;
+
+	@media (max-width: 550px) {
+		justify-content: center;
+	}
 `
 
 const Playlist = styled(Link)`
@@ -19,7 +23,7 @@ const Playlist = styled(Link)`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 0px 10px;
+	margin: 10px 10px;
 `
 
 const Name = styled.p`
