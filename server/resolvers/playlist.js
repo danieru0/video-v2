@@ -3,15 +3,23 @@ import Video from '../models/video';
 
 export default {
 	User: {
-		playlists: async (parent, args) => {
+		playlists: async (parent, args, req) => {
 			if (args.id) {
 				const user = await User.find({_id: parent._id, "playlists._id": args.id}, { "playlists.$": 1 }).populate({
 					path: "playlists.videos"
 				});
 				return user[0].playlists;			
 			} else {
-				const user = await User.findById(parent._id).populate('playlists.videos');
-				return user.playlists;
+				let user = await User.findById(parent._id).populate('playlists.videos');
+				if (req.userId) {
+					if (user._id != req.userId) {
+						return user.playlists.filter(playlist => playlist.status !== 'private');
+					} else {
+						return user.playlists;
+					}
+				} else {
+					return user.playlists.filter(playlist => playlist.status !== 'private');
+				}
 			}
 		}
 	},

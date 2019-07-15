@@ -7,6 +7,7 @@ import { getUsers, clearUserProfile } from '../../actions/userAction';
 import { getVideos, clearVideosProfile } from '../../actions/videoAction';
 
 import Videos from './Videos';
+import Playlists from './Playlists';
 
 const UserContainer = styled.div`
 	width: calc(100% - 250px);
@@ -135,7 +136,9 @@ class User extends Component {
 	returnPageComponent = (page, props) => {
 		switch(page) {
 			case undefined:
-				return <Videos {...props} />
+				return <Videos videos={props.videos} />
+			case 'playlists':
+				return <Playlists playlists={props.playlists} user={props.user}/>
 			default: return null;
 		}
 	}
@@ -176,7 +179,7 @@ class User extends Component {
 									</UserMenuList>
 								</UserMenuContainer>
 								{
-									this.returnPageComponent(match.params.page, { videos: videosProfile })
+									this.returnPageComponent(match.params.page, { videos: videosProfile, playlists: userProfile[0].playlists, user: match.params.user })
 								}
 							</UserWrapper>
 						</>

@@ -28,6 +28,10 @@ export const getUsers = (args, profile) => {
 								description
 								joined
 							}
+							playlists {
+								name
+								id
+							}
 						}
 					}
 				`
