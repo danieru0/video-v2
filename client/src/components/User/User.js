@@ -8,6 +8,7 @@ import { getVideos, clearVideosProfile } from '../../actions/videoAction';
 
 import Videos from './Videos';
 import Playlists from './Playlists';
+import Informations from './Informations';
 
 const UserContainer = styled.div`
 	width: calc(100% - 250px);
@@ -139,6 +140,8 @@ class User extends Component {
 				return <Videos videos={props.videos} />
 			case 'playlists':
 				return <Playlists playlists={props.playlists} user={props.user}/>
+			case 'informations':
+				return <Informations description={props.description} />
 			default: return null;
 		}
 	}
@@ -179,7 +182,7 @@ class User extends Component {
 									</UserMenuList>
 								</UserMenuContainer>
 								{
-									this.returnPageComponent(match.params.page, { videos: videosProfile, playlists: userProfile[0].playlists, user: match.params.user })
+									this.returnPageComponent(match.params.page, { videos: videosProfile, playlists: userProfile[0].playlists, user: match.params.user, description: userProfile[0].profile.description })
 								}
 							</UserWrapper>
 						</>
