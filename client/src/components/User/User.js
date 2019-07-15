@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getUsers } from '../../actions/userAction';
-import { getVideos } from '../../actions/videoAction';
+import { getUsers, clearUserProfile } from '../../actions/userAction';
+import { getVideos, clearVideosProfile } from '../../actions/videoAction';
 
 import Videos from './Videos';
 
@@ -114,9 +114,14 @@ class User extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.users !== this.props.users) {
-			this.props.getVideos({ author: this.props.users[0]._id, page: 1, limit: 20, sort: 'newest' });
+		if (prevProps.userProfile !== this.props.userProfile) {
+			this.props.getVideos({ author: this.props.userProfile[0]._id, page: 1, limit: 20, sort: 'newest' }, false, true);
 		}
+	}
+
+	componentWillUnmount() {
+		this.props.clearUserProfile();
+		this.props.clearVideosProfile();
 	}
 
 	updatePage = page => {
@@ -136,26 +141,26 @@ class User extends Component {
 	}
 
 	render() {
-		let { users, match, videos } = this.props;
-		if (users) {
-			users[0].profile.joined = new Date( Number(users[0].profile.joined) );
-			users[0].profile.joined = DateTime.fromJSDate( users[0].profile.joined );
+		let { userProfile, match, videosProfile } = this.props;
+		if (userProfile) {
+			userProfile[0].profile.joined = new Date( Number(userProfile[0].profile.joined) );
+			userProfile[0].profile.joined = DateTime.fromJSDate( userProfile[0].profile.joined );
 		}
 
 		return (
 			<UserContainer>
 				{
-					users && (
+					userProfile && (
 						<>
-							<UserBackground backgroundImg={users[0].profile.background}/>
+							<UserBackground backgroundImg={userProfile[0].profile.background}/>
 							<UserMenuBackground />
 							<UserWrapper>
 								<UserMenuContainer>
 									<UserInfoWrapper>
-										<UserAvatar alt="" src={users[0].profile.avatar} />
+										<UserAvatar alt="" src={userProfile[0].profile.avatar} />
 										<UserInfo>
-											<UserNick>{users[0].nick}</UserNick>
-											<UserDate>{users[0].profile.joined.toString().split('T')[0]}</UserDate>
+											<UserNick>{userProfile[0].nick}</UserNick>
+											<UserDate>{userProfile[0].profile.joined.toString().split('T')[0]}</UserDate>
 										</UserInfo>
 									</UserInfoWrapper>
 									<UserMenuList>
@@ -171,7 +176,7 @@ class User extends Component {
 									</UserMenuList>
 								</UserMenuContainer>
 								{
-									this.returnPageComponent(match.params.page, { videos: videos })
+									this.returnPageComponent(match.params.page, { videos: videosProfile })
 								}
 							</UserWrapper>
 						</>
@@ -184,9 +189,9 @@ class User extends Component {
 
 const mapStateToProps = state => {
 	return {
-		users: state.userReducer.users,
-		videos: state.videoReducer.videos
+		userProfile: state.userReducer.userProfile,
+		videosProfile: state.videoReducer.videosProfile
 	}
 }
 
-export default connect(mapStateToProps, { getUsers, getVideos })(User);
+export default connect(mapStateToProps, { getUsers, getVideos, clearUserProfile, clearVideosProfile })(User);

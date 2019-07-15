@@ -1,6 +1,7 @@
 const initState = {
 	user: null,
 	users: null,
+	userProfile: null,
 	isLiked: null,
 	historyVideos: null,
 	historySearch: null
@@ -55,6 +56,16 @@ const userReducer = (state = initState, action) => {
 			return {
 				...state,
 				historySearch: null
+			}
+		case 'UPDATE_USER_PROFILE':
+			return {
+				...state,
+				userProfile: action.data
+			}
+		case 'CLEAR_USER_PROFILE':
+			return {
+				...state,
+				userProfile: action.data
 			}
 		default: return state;
 	}

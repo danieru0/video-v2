@@ -10,13 +10,13 @@ export const cancelUsersRequest = () => {
 	}
 }
 
-export const getUsers = (args, allInfo) => {
+export const getUsers = (args, profile) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
 	return async dispatch => {
 		try {
-			const queryData = allInfo ? (
+			const queryData = profile ? (
 				`
 					query {
 						users(${query}) {
@@ -55,10 +55,17 @@ export const getUsers = (args, allInfo) => {
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			dispatch({
-				type: 'UPDATE_USERS',
-				data: result.data.data.users
-			});
+			if (profile) {
+				dispatch({
+					type: 'UPDATE_USER_PROFILE',
+					data: result.data.data.users 
+				});
+			} else {
+				dispatch({
+					type: 'UPDATE_USERS',
+					data: result.data.data.users
+				});
+			}
 		} catch (err) {
 			if (!axios.isCancel) {
 				throw err;
@@ -71,6 +78,14 @@ export const clearUsers = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_USERS'
+		});
+	}
+}
+
+export const clearUserProfile = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_USER_PROFILE'
 		});
 	}
 }

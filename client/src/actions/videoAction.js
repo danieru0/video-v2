@@ -10,7 +10,7 @@ export const cancelVideosRequest = () => {
 	}
 }
 
-export const getVideos = (args, updatePopular) => {
+export const getVideos = (args, updatePopular, profile) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
@@ -51,10 +51,17 @@ export const getVideos = (args, updatePopular) => {
 					data: result.data.data.videos
 				});
 			} else {
-				dispatch({
-					type: 'UPDATE_VIDEOS',
-					data: result.data.data.videos
-				})
+				if (profile) {
+					dispatch({
+						type: 'UPDATE_PROFILE_VIDEOS',
+						data: result.data.data.videos
+					});
+				} else {
+					dispatch({
+						type: 'UPDATE_VIDEOS',
+						data: result.data.data.videos
+					})
+				}
 			}
 		} catch (err) {
 			if (!axios.isCancel) {
@@ -213,6 +220,14 @@ export const clearVideos = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_VIDEOS'
+		});
+	}
+}
+
+export const clearVideosProfile = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_PROFILE_VIDEOS'
 		});
 	}
 }
