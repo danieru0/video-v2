@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, withRouter } from 'react-router-dom';
 
 import withAuth from './shared/hocs/withAuth';
 import withoutAuth from './shared/hocs/withoutAuth';
@@ -15,6 +15,7 @@ import Search from './components/Search/Search';
 import Favourites from './components/Favourites/Favourites';
 import History from './components/History/History';
 import Playlist from './components/Playlist/Playlist';
+import User from './components/User/User';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -33,6 +34,7 @@ function App() {
 					<Route path="/favourites" component={withAuth(Favourites)}/>
 					<Route path="/history" component={withAuth(History)}/>
 					<Route path="/:user/playlist/:id" component={withPlaylistAuth(Playlist)}/>
+					<Route path="/user/:user/:page?" component={withRouter(User)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

@@ -143,13 +143,13 @@ class User extends Component {
 							user ? (
 								<>
 									<UserDropdownItem>
-										<StyledDropdownLink to={`/${user.nick}`}>
+										<StyledDropdownLink to={`/user/${user.nick}`}>
 											<StyledDropdownIcon name="user" />
 											Your account
 										</StyledDropdownLink>
 									</UserDropdownItem>
 									<UserDropdownItem>
-										<StyledDropdownLink to={`/${user.nick}/videos`}>
+										<StyledDropdownLink to={`/videos`}>
 											<StyledDropdownIcon name="play" />
 											Your videos
 										</StyledDropdownLink>

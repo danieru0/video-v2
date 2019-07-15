@@ -10,12 +10,39 @@ export const cancelUsersRequest = () => {
 	}
 }
 
-export const getUsers = (args) => {
+export const getUsers = (args, allInfo) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
 	return async dispatch => {
 		try {
+			const queryData = allInfo ? (
+				`
+					query {
+						users(${query}) {
+							nick
+							_id
+							profile {
+								background
+								avatar
+								description
+								joined
+							}
+						}
+					}
+				`
+			) : (
+				`
+					query {
+						users(${query}) {
+							nick
+							profile {
+								avatar
+							}
+						}
+					}
+				`
+			)
 			const result = await axios({
 				url: '/graphql',
 				method: 'post',
@@ -23,16 +50,7 @@ export const getUsers = (args) => {
 					cancel = c;
 				}),
 				data: {
-					query: `
-						query {
-							users(${query}) {
-								nick
-								profile {
-									avatar
-								}
-							}
-						}
-					`
+					query: queryData
 				},
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
