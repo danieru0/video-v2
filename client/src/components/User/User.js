@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
 import { getUsers, clearUserProfile } from '../../actions/userAction';
-import { getVideos, clearVideosProfile } from '../../actions/videoAction';
+import { clearVideosProfile } from '../../actions/videoAction';
 
 import Videos from './Videos';
 import Playlists from './Playlists';
@@ -100,7 +100,7 @@ const UserMenuItem = styled.li`
 `
 
 const UserMenuButton = styled.button`
-	font-size: 14px;
+	font-size: 16px;
 	font-family: 'Lato';
 	text-transform: uppercase;
 	padding: 10px 30px;
@@ -112,6 +112,10 @@ const UserMenuButton = styled.button`
 	letter-spacing: -1px;
 	color: ${({isActive}) => isActive ? '#606060' : ' #727272'};
 	border-bottom: ${({isActive}) => isActive && '2px solid #606060'};
+
+	&:focus {
+		background: #E1E1E1;
+	}
 `
 
 class User extends Component {
@@ -120,8 +124,10 @@ class User extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.userProfile !== this.props.userProfile) {
-			this.props.getVideos({ author: this.props.userProfile[0]._id, page: 1, limit: 20, sort: 'newest' }, false, true);
+		if (prevProps.match.params.user !== this.props.match.params.user) {
+			this.props.clearUserProfile();
+			this.props.clearVideosProfile();
+			this.props.getUsers({ nick: this.props.match.params.user, page: 1, limit: 1 }, true);
 		}
 	}
 
@@ -152,6 +158,7 @@ class User extends Component {
 
 	render() {
 		let { userProfile, match, videosProfile } = this.props;
+		console.log(videosProfile);
 		if (userProfile) {
 			userProfile[0].profile.joined = new Date( Number(userProfile[0].profile.joined) );
 			userProfile[0].profile.joined = DateTime.fromJSDate( userProfile[0].profile.joined );
@@ -204,4 +211,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUsers, getVideos, clearUserProfile, clearVideosProfile })(User);
+export default connect(mapStateToProps, { getUsers, clearUserProfile, clearVideosProfile })(User);
