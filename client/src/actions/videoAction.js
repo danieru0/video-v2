@@ -10,7 +10,7 @@ export const cancelVideosRequest = () => {
 	}
 }
 
-export const getVideos = (args, updatePopular, profile) => {
+export const getVideos = (args, updatePopular, type) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
@@ -34,6 +34,9 @@ export const getVideos = (args, updatePopular, profile) => {
 								views
 								miniature
 								length
+								likes
+								status
+								description
 								author {
 									nick
 								}
@@ -51,16 +54,24 @@ export const getVideos = (args, updatePopular, profile) => {
 					data: result.data.data.videos
 				});
 			} else {
-				if (profile) {
-					dispatch({
-						type: 'UPDATE_PROFILE_VIDEOS',
-						data: result.data.data.videos
-					});
-				} else {
-					dispatch({
-						type: 'UPDATE_VIDEOS',
-						data: result.data.data.videos
-					})
+				switch(type) {
+					case 'profile':
+						dispatch({
+							type: 'UPDATE_PROFILE_VIDEOS',
+							data: result.data.data.videos
+						});
+						break;
+					case 'user':
+						dispatch({
+							type: 'UPDATE_USER_VIDEOS',
+							data: result.data.data.videos
+						});
+						break;
+					default:
+						dispatch({
+							type: 'UPDATE_VIDEOS',
+							data: result.data.data.videos
+						});
 				}
 			}
 		} catch (err) {
@@ -236,6 +247,14 @@ export const clearSingleVideo = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_SINGLE_VIDEO'
+		});
+	}
+}
+
+export const clearUserVideos = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_USER_VIDEOS'
 		});
 	}
 }

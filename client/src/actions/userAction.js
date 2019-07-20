@@ -66,7 +66,7 @@ export const getUsers = (args, profile) => {
 					type: 'UPDATE_USER_PROFILE',
 					data: result.data.data.users 
 				});
-				dispatch( getVideos({ author: result.data.data.users[0]._id, page: 1, limit: 20, sort: 'newest' }, false, true) )
+				dispatch( getVideos({ author: result.data.data.users[0]._id, page: 1, limit: 20, sort: 'newest' }, false, 'profile') )
 			} else {
 				dispatch({
 					type: 'UPDATE_USERS',
@@ -110,6 +110,7 @@ export const getFrontUserInformations = () => {
 					query: `
 						query {
 							me {
+								_id
 								nick
 								playlists {
 									name

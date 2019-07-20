@@ -16,6 +16,7 @@ import Favourites from './components/Favourites/Favourites';
 import History from './components/History/History';
 import Playlist from './components/Playlist/Playlist';
 import User from './components/User/User';
+import Videos from './components/Videos/Videos';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -35,6 +36,7 @@ function App() {
 					<Route path="/history" component={withAuth(History)}/>
 					<Route path="/:user/playlist/:id" component={withPlaylistAuth(Playlist)}/>
 					<Route path="/user/:user/:page?" component={withRouter(User)}/>
+					<Route path="/videos" component={withAuth(Videos)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>

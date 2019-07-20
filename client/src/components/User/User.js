@@ -158,7 +158,6 @@ class User extends Component {
 
 	render() {
 		let { userProfile, match, videosProfile } = this.props;
-		console.log(videosProfile);
 		if (userProfile) {
 			userProfile[0].profile.joined = new Date( Number(userProfile[0].profile.joined) );
 			userProfile[0].profile.joined = DateTime.fromJSDate( userProfile[0].profile.joined );
