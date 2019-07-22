@@ -168,7 +168,8 @@ const UploadVideoOverlay = styled.div`
 `
 
 const HiddenVideoPlayer = styled.video`
-	display: none;
+	position: absolute;
+	visibility: hidden;
 `
 
 const UploadStatusText = styled.p`
@@ -183,7 +184,8 @@ const UploadStatusText = styled.p`
 `
 
 const HiddenCanvas = styled.canvas`
-	display: none;
+	position: absolute;
+	visibility: hidden;
 `
 
 class Upload extends Component {

@@ -260,7 +260,9 @@ class Edit extends Component {
 	remove = () => {
 		if (window.confirm('Are you sure?')) {
 			this.props.removeVideo(this.props.match.params.id);
-			this.props.history.push('/');
+			window.setTimeout(() => {
+				this.props.history.push('/');
+			}, 500);
 		}
 	}
 
