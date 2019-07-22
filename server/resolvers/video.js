@@ -187,9 +187,9 @@ export default {
 
 				await Video.findByIdAndRemove(args.id);
 				user.uploadedVideos.pull(args.id);
-				const result = await user.save();
+				await user.save();
 
-				return result;
+				return true
 			} catch (err) {
 				throw err;
 			}

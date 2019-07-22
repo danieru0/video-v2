@@ -36,7 +36,7 @@ export default `
 	}
 
 	type Result {
-		result: Boolean!
+		result: Boolean
 	}
 
 	extend type Query {

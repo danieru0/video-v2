@@ -86,6 +86,7 @@ class Head extends Component {
 								popularVideos && (
 									popularVideos.map((item, index) => {
 										return (
+											item &&
 											<PopularVideo key={index} id={item._id} title={item.title} miniature={item.miniature} author={item.author.nick} createdAt={item.createdAt} views={item.views} />
 										)
 									})

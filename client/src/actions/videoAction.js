@@ -123,6 +123,38 @@ export const createVideo = (args) => {
 	}
 }
 
+export const removeVideo = id => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							removeVideo(id: "${id}") {
+								result
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Video has been removed!',
+				alertType: 'normal'
+			});	
+		} catch(err) {
+			throw err;
+		}		
+	}
+}
+
 export const editVideo = (args) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const modifiedArgs = argsForGraphql.substring(1, argsForGraphql.length - 1);

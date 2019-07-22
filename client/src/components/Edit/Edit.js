@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import Loader from '../../shared/Loader/Loader';
 
-import { getVideos, editVideo, clearEditVideo } from '../../actions/videoAction';
+import { getVideos, editVideo, clearEditVideo, removeVideo } from '../../actions/videoAction';
 import Axios from 'axios';
 
 const EditContainer = styled.div`
@@ -256,6 +257,13 @@ class Edit extends Component {
 		})
 	}
 
+	remove = () => {
+		if (window.confirm('Are you sure?')) {
+			this.props.removeVideo(this.props.match.params.id);
+			this.props.history.push('/');
+		}
+	}
+
 	render() {
 		const { videoEdit } = this.props;
 		return (
@@ -282,7 +290,7 @@ class Edit extends Component {
 							</EditFormWrapper>
 							<EditButtonsWrapper saving={this.state.saving ? 1 : 0}>
 								<EditVideoButton onClick={this.save}>Save</EditVideoButton>
-								<EditVideoButton>Delete</EditVideoButton>
+								<EditVideoButton onClick={this.remove}>Delete</EditVideoButton>
 							</EditButtonsWrapper>
 						</>
 					)
@@ -299,4 +307,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideos, editVideo, clearEditVideo })(Edit);
+export default connect(mapStateToProps, { getVideos, editVideo, clearEditVideo, removeVideo })(withRouter(Edit));
