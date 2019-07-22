@@ -67,6 +67,12 @@ export const getVideos = (args, updatePopular, type) => {
 							data: result.data.data.videos
 						});
 						break;
+					case 'edit':
+						dispatch({
+							type: 'UPDATE_EDIT_VIDEO',
+							data: result.data.data.videos
+						});
+						break;
 					default:
 						dispatch({
 							type: 'UPDATE_VIDEOS',
@@ -255,6 +261,14 @@ export const clearUserVideos = () => {
 	return dispatch => {
 		dispatch({
 			type: 'CLEAR_USER_VIDEOS'
+		});
+	}
+}
+
+export const clearEditVideo = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_EDIT_VIDEO'
 		});
 	}
 }

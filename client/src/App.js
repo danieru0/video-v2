@@ -4,6 +4,7 @@ import { Route, BrowserRouter, Switch, withRouter } from 'react-router-dom';
 import withAuth from './shared/hocs/withAuth';
 import withoutAuth from './shared/hocs/withoutAuth';
 import withPlaylistAuth from './shared/hocs/withPlaylistAuth';
+import withEditAuth from './shared/hocs/withEditAuth';
 
 import AuthContainer from './containers/AuthContainer';
 import NavContainer from './containers/NavContainer';
@@ -17,6 +18,7 @@ import History from './components/History/History';
 import Playlist from './components/Playlist/Playlist';
 import User from './components/User/User';
 import Videos from './components/Videos/Videos';
+import Edit from './components/Edit/Edit';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -37,6 +39,7 @@ function App() {
 					<Route path="/:user/playlist/:id" component={withPlaylistAuth(Playlist)}/>
 					<Route path="/user/:user/:page?" component={withRouter(User)}/>
 					<Route path="/videos" component={withAuth(Videos)}/>
+					<Route path="/edit/:id" component={withEditAuth(withAuth(Edit))}/>
 				</Switch>
 			</div>
 		</BrowserRouter>
