@@ -90,3 +90,8 @@ export const signUp = (nick, email, password) => {
 		}
 	}
 }
+
+export const signOut = () => {
+	localStorage.removeItem('token');
+	window.location.reload();
+}

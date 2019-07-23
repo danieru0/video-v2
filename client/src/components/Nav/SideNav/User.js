@@ -4,6 +4,8 @@ import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { signOut } from '../../../actions/authAction';
+
 const UserContainer = styled.div`
 	width: 200px;
 	height: 60px;
@@ -127,6 +129,11 @@ class User extends Component {
 		this.setState({dropdown: boolean});
 	}
 
+	logOut = e => {
+		e.preventDefault();
+		signOut();
+	}
+
 	render() {
 		const { user } = this.props;
 		return (
@@ -161,7 +168,7 @@ class User extends Component {
 										</StyledDropdownLink>
 									</UserDropdownItem>
 									<UserDropdownItem>
-										<StyledDropdownLink to="#">
+										<StyledDropdownLink onClick={this.logOut} to="#">
 											<StyledDropdownIcon name="sign-out-alt" />
 											Sign out
 										</StyledDropdownLink>
