@@ -119,6 +119,8 @@ export const getFrontUserInformations = () => {
 								}
 								profile {
 									avatar
+									description
+									background
 								}
 								email
 								playlists {
@@ -325,7 +327,6 @@ export const makeComment = (id, text) => {
 				message: 'Comment has beed created!',
 				alertType: 'normal'
 			});
-
 		} catch (err) {
 			throw err;
 		}
@@ -430,6 +431,52 @@ export const addVideoToHistory = id => {
 			});
 		} catch (err) {
 			throw err;
+		}
+	}
+}
+
+export const changeProfileInfo = args => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							changeProfileInfo(${query}) {
+								background
+								avatar
+								description
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_PROFILE',
+				data: result.data.data.changeProfileInfo
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Profile saved!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			if (err === 'Not authenticated!') {
+				localStorage.removeItem('token');
+				window.location = '/login';
+			} else {
+				throw err;
+			}
 		}
 	}
 }

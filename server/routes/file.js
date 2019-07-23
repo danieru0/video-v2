@@ -1,7 +1,7 @@
 import secureUpload from '../middlewares/secureUpload';
 import fs from 'fs';
 
-module.exports = (app, videoUpload, imageUpload, miniatureUpload) => {
+module.exports = (app, videoUpload, imageUpload, miniatureUpload, backgroundUpload) => {
 	app.post('/upload/video', secureUpload, videoUpload.single('video'), (req, res) => {
 		res.status(200).send({name: req.file.filename});
 	});
@@ -11,6 +11,10 @@ module.exports = (app, videoUpload, imageUpload, miniatureUpload) => {
 	});
 
 	app.post('/upload/miniature', secureUpload, miniatureUpload.single('miniature'), (req, res) => {
+		res.status(200).send({name: req.file.filename});
+	});
+
+	app.post('/upload/background', secureUpload, backgroundUpload.single('background'), (req, res) => {
 		res.status(200).send({name: req.file.filename});
 	});
 

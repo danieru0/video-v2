@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import axios from 'axios';
+
+import { changeProfileInfo } from '../../actions/userAction';
+
+import Loader from '../../shared/Loader/Loader';
 
 const SettingsContainer = styled.div`
 	width: calc(100% - 250px);
@@ -7,6 +13,7 @@ const SettingsContainer = styled.div`
 	margin-left: 250px;
 	margin-top: 80px;
 	font-family: 'Lato';
+	position: relative;
 
 	@media (max-width: 920px) {
 		width: 100%;
@@ -20,6 +27,7 @@ const SettingsWrapper = styled.div`
 	margin: 0px auto;
 	margin-top: 100px;
 	display: flex;
+	position: relative;
 
 	@media (max-width: 1600px) {
 		width: 100%;
@@ -64,7 +72,7 @@ const SettingsContent = styled.div`
 const SettingsBackground = styled.div`
 	width: 100%;
 	height: 150px;
-	background: url('https://png.pngtree.com/thumb_back/fw800/back_pic/00/14/65/3256657136926fa.jpg');
+	background: ${({image}) => image ? `url(${image})` : 'none'};
 	background-size: cover;
 	background-repeat: no-repeat;
 `
@@ -108,30 +116,158 @@ const SettingsButton = styled.button`
 	margin-bottom: 30px;
 `
 
+const SettingsOverlay = styled.div`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.4);
+	top: 0;
+	left: 0;
+	z-index: 1;
+	justify-content: center;
+	align-items: center;
+	display: ${({saving}) => saving ? 'flex' : 'none'};
+`
+
 class Settings extends Component {
+	constructor() {
+		super();
+		this.state = {
+			avatarLink: null,
+			avatarFile: null,
+			backgroundLink: null,
+			backgroundFile: null,
+			saving: false,
+			desc: null
+		}
+	}
+
+	handleBackground = e => {
+		if (e.target.files[0]) {
+			if (e.target.files[0].type === 'image/jpeg') {
+				this.setState({
+					backgroundLink: window.URL.createObjectURL(e.target.files[0]),
+					backgroundFile: e.target.files[0]
+				});
+			} else {
+				alert('Wrong file type!');
+			}
+		}
+	}
+
+	handleAvatar = e => {
+		if (e.target.files[0]) {
+			if (e.target.files[0].type === 'image/jpeg') {
+				this.setState({
+					avatarLink: window.URL.createObjectURL(e.target.files[0]),
+					avatarFile: e.target.files[0]
+				});
+			} else {
+				alert('Wrong file type!');
+			}
+		}
+	}
+
+	handleDescription = e => {
+		this.setState({
+			desc: e.target.value
+		});
+	}
+
+	save = async () => {
+		if (this.state.saving) return;
+
+		this.setState({
+			saving: true
+		});
+
+		if (this.state.backgroundFile) {
+			const formData = new FormData();
+			formData.append('background', this.state.backgroundFile, this.props.user._id);
+			try {
+				await axios({
+					url: '/upload/background',
+					method: 'post',
+					data: formData,
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						'Authorization': localStorage.getItem('token')
+					}
+				});
+			} catch (err) {
+				throw err;
+			}
+		}
+
+		if (this.state.avatarFile) {
+			const formData = new FormData();
+			formData.append('avatar', this.state.avatarFile, this.props.user._id);
+			try {
+				await axios({
+					url: '/upload/avatar',
+					method: 'post',
+					data: formData,
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						'Authorization': localStorage.getItem('token')
+					}
+				});
+			} catch (err) {
+				throw err;
+			}
+		}
+
+		const options = {};
+		this.state.desc && (options.description = this.state.desc);
+		this.state.backgroundFile && (options.background = `/backgrounds/${this.props.user._id}.jpg`);
+		this.state.avatarFile && (options.avatar = `/avatars/${this.props.user._id}.jpg`);
+
+		this.props.changeProfileInfo(options);
+		this.setState({
+			saving: false
+		});
+		window.location.reload();
+	}
+
 	render() {
+		const { user } = this.props;
 		return (
 			<SettingsContainer>
-				<SettingsWrapper>
-					<SettingsInfo>
-						<SettingsAvatar alt="" src="https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png" />
-						<SettingsInfoText>elosik</SettingsInfoText>
-						<SettingsInfoText>elosik@onet.pl</SettingsInfoText>
-					</SettingsInfo>
-					<SettingsContent>
-						<SettingsBackground />
-						<SettingsFile type="file" />
-						<SettingsLine />
-						<SettingsAvatar alt="" src="https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png"/>
-						<SettingsFile type="file" />
-						<SettingsLine />
-						<SettingsDesc placeholder="Description..."></SettingsDesc>
-					</SettingsContent>
-				</SettingsWrapper>
-				<SettingsButton>save</SettingsButton>
+				<SettingsOverlay saving={this.state.saving ? 1 : 0}>
+					<Loader />
+				</SettingsOverlay>
+				{
+					user && (
+						<>
+							<SettingsWrapper>
+								<SettingsInfo>
+									<SettingsAvatar alt="" src={user.profile.avatar} />
+									<SettingsInfoText>{user.nick}</SettingsInfoText>
+									<SettingsInfoText>{user.email}</SettingsInfoText>
+								</SettingsInfo>
+								<SettingsContent>
+									<SettingsBackground image={this.state.backgroundLink ? this.state.backgroundLink : user.profile.background}/>
+									<SettingsFile onChange={this.handleBackground} type="file" />
+									<SettingsLine />
+									<SettingsAvatar alt="" src={this.state.avatarLink ? this.state.avatarLink : user.profile.avatar}/>
+									<SettingsFile onChange={this.handleAvatar} type="file" />
+									<SettingsLine />
+									<SettingsDesc onChange={this.handleDescription} defaultValue={user.profile.description} placeholder="Description..."></SettingsDesc>
+								</SettingsContent>
+							</SettingsWrapper>
+							<SettingsButton onClick={this.save}>Save</SettingsButton>
+						</>
+					)
+				}
 			</SettingsContainer>
 		);
 	}
 }
 
-export default Settings;
+const mapStateToProps = state => {
+	return {
+		user: state.userReducer.user
+	}
+}
+
+export default connect(mapStateToProps, { changeProfileInfo })(Settings);

@@ -4,3 +4,5 @@ nodemon.json
 secret.js
 /videos
 /miniatures
+/backgrounds
+/avatars

@@ -27,6 +27,14 @@ const userReducer = (state = initState, action) => {
 					playlists: action.data
 				}
 			}
+		case 'UPDATE_PROFILE':
+			return {
+				...state,
+				user: {
+					...state.user,
+					profile: action.data
+				}
+			}
 		case 'UPDATE_USERS':
 			return {
 				...state,

@@ -35,10 +35,19 @@ const miniatureStorage = multer.diskStorage({
 		cb(null, file.originalname + '.jpg');
 	}
 });
+const backgroundStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './backgrounds');
+	},
+	filename: (req, file, cb) => {
+		cb(null, file.originalname + '.jpg');
+	}
+});
 
 const videoUpload = multer({ storage: videoStorage });
 const avatarUpload = multer({ storage: avatarStorage });
 const miniatureUpload = multer({ storage: miniatureStorage });
+const backgroundUpload = multer({ storage: backgroundStorage });
 
 const app = express();
 const connectedSchema = makeExecutableSchema({
@@ -50,11 +59,12 @@ app.use(cors());
 
 app.use('/avatars', express.static(__dirname + '/avatars'));
 app.use('/miniatures', express.static(__dirname + '/miniatures'));
+app.use('/backgrounds', express.static(__dirname + '/backgrounds'));
 
 app.use(bodyParser.json());
 app.use(isAuth);
 
-require('./routes/file')(app, videoUpload, avatarUpload, miniatureUpload);
+require('./routes/file')(app, videoUpload, avatarUpload, miniatureUpload, backgroundUpload);
 
 app.use('/graphql', graphqlHttp({
 	schema: connectedSchema,
