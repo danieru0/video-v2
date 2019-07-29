@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link, withRouter } from 'react-router-dom';
 
+import Home from './Home';
+
 const AdminContainer = styled.div`
 	width: 100%;
 	height: 100vh;
@@ -107,7 +109,7 @@ const TopNavRightWrapper = styled.div`
 	margin-right: 30px;
 `
 
-const TopNavButton = styled.button`
+const TopNavLogOut = styled.button`
 	margin-top: 6px;
 	border: none;
 	background: none;
@@ -121,21 +123,51 @@ const TopNavButton = styled.button`
 	}
 `
 
+const TopNavBackLink = styled(Link)`
+	text-decoration: none;
+	color: #938897;
+	font-size: 17px;
+	margin-right: 5px;
+	outline: none;
+
+	&:hover {
+		color: #1DC7EA;
+	}
+`
+
+const AdminContent = styled.div`
+	width: calc(100% - 260px);
+	height: calc(100% - 60px);
+	margin-left: 260px;
+	margin-top: 60px;
+`
+
 class Admin extends Component {
 
-	goBack = () => {
-		this.props.history.push('/');
-	}
-	
 	render() {
 		const { match } = this.props;
+		let content;
+
+		switch(match.params.page) {
+			case undefined:
+				content = <Home />;
+				break;
+			case 'users':
+				content = 'elo';
+				break;
+			case 'videos':
+				content = 'le';
+				break;
+			default: return null;
+		}
+
 		return (
 			<AdminContainer>
 				<AdminTopNav>
 					<TopNavPageTitle>{match.params.page ? match.params.page : 'Home'}</TopNavPageTitle>
 					<TopNavRightWrapper>
-						<TopNavButton onClick={this.goBack}>Go back</TopNavButton>
-						<TopNavButton>Log out</TopNavButton>
+						<TopNavBackLink to="/">Go back</TopNavBackLink>
+						<TopNavLogOut>Log out</TopNavLogOut>
 					</TopNavRightWrapper>
 				</AdminTopNav>
 				<AdminSideNav>
@@ -165,6 +197,11 @@ class Admin extends Component {
 						</SideNavMenu>
 					</SideNavWrapper>
 				</AdminSideNav>
+				<AdminContent>
+					{
+						content
+					}
+				</AdminContent>
 			</AdminContainer>
 		);
 	}
