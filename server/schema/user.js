@@ -9,6 +9,7 @@ export default `
 		playlists(id: ID): [Playlist]
 		likedVideos(id: ID): [Video]
 		history: History
+		isAdmin: Boolean
 	}
 
 	type History {

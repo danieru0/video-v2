@@ -13,13 +13,33 @@ class NavContainer extends Component {
 		super();
 		this.state = {
 			mobileMenu: false,
-			playlistModal: false
+			playlistModal: false,
+			admin: false
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.location.pathname !== this.props.location.pathname) {
+			if (this.props.location.pathname.split('/')[1] === 'admin') {
+				this.setState({
+					admin: true
+				});
+			} else {
+				this.setState({
+					admin: false
+				});	
+			}
 		}
 	}
 
 	componentDidMount() {
 		if (localStorage.getItem('token')) {
 			this.props.getFrontUserInformations();
+		}
+		if (this.props.location.pathname.split('/')[1] === 'admin') {
+			this.setState({
+				admin: true
+			});
 		}
 	}
 
@@ -48,11 +68,18 @@ class NavContainer extends Component {
 				{
 					this.state.playlistModal && <PlaylistModal onExit={this.hidePlaylistModal} />
 				}
-				<WithRouterSideNav openPlaylistModal={this.openPlaylistModal} toggleNavMenu={this.toggleNavMenu} mobileMenu={this.state.mobileMenu} />
-				<TopNav toggleNavMenu={this.toggleNavMenu} />
+				{
+					this.state.admin || (
+						<>
+							<WithRouterSideNav openPlaylistModal={this.openPlaylistModal} toggleNavMenu={this.toggleNavMenu} mobileMenu={this.state.mobileMenu} />
+							<TopNav toggleNavMenu={this.toggleNavMenu} />
+						</>
+					)
+				}
+
 			</>
 		);
 	}
 }
 
-export default connect(null, { getFrontUserInformations })(NavContainer);
+export default connect(null, { getFrontUserInformations })(withRouter(NavContainer));

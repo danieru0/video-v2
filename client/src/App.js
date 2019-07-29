@@ -5,6 +5,7 @@ import withAuth from './shared/hocs/withAuth';
 import withoutAuth from './shared/hocs/withoutAuth';
 import withPlaylistAuth from './shared/hocs/withPlaylistAuth';
 import withEditAuth from './shared/hocs/withEditAuth';
+import withAdminAuth from './shared/hocs/withAdminAuth';
 
 import AuthContainer from './containers/AuthContainer';
 import NavContainer from './containers/NavContainer';
@@ -20,6 +21,7 @@ import User from './components/User/User';
 import Videos from './components/Videos/Videos';
 import Edit from './components/Edit/Edit';
 import Settings from './components/Settings/Settings';
+import Admin from './components/Admin/Admin';
 
 function App() {
 	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
@@ -42,6 +44,7 @@ function App() {
 					<Route path="/videos" component={withAuth(Videos)}/>
 					<Route path="/edit/:id" component={withEditAuth(withAuth(Edit))}/>
 					<Route path="/settings" component={withAuth(Settings)}/>
+					<Route path="/admin/:page?" component={withAdminAuth(Admin)}/>
 				</Switch>
 			</div>
 		</BrowserRouter>
