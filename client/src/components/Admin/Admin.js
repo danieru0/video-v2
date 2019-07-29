@@ -4,6 +4,7 @@ import FontAwesome from 'react-fontawesome';
 import { Link, withRouter } from 'react-router-dom';
 
 import Home from './Home';
+import Users from './Users';
 
 const AdminContainer = styled.div`
 	width: 100%;
@@ -153,7 +154,7 @@ class Admin extends Component {
 				content = <Home />;
 				break;
 			case 'users':
-				content = 'elo';
+				content = <Users />;
 				break;
 			case 'videos':
 				content = 'le';
