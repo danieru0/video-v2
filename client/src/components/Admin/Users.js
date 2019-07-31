@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { getUsers } from '../../actions/adminAction';
 
+import Loader from '../../shared/Loader/Loader';
+
 const UsersContainer = styled.div`
 	width: 100%;
 	height: 100%;
@@ -13,6 +15,7 @@ const UsersContainer = styled.div`
 
 const Table = styled.table`
 	border-collapse: collapse;
+	table-layout:fixed;
 `
 
 const Thead = styled.thead`
@@ -41,6 +44,7 @@ const Tbody = styled.tbody`
 	}
 
 	tr {
+		border-bottom: 1px solid grey;
 		&:hover {
 			cursor: pointer;
 			background: rgba(0,0,0,.075);
@@ -54,21 +58,115 @@ const MoreInfoContainer = styled.tr``;
 
 const MoreInfoWrapper = styled.td`
 	padding: 0 !important;
-	height: ${({active}) => active ? '50px' : '0px'};
-	transition: height .3s;
+	overflow: hidden;
 `
 
 const MoreInfoContent = styled.div`
+	height: ${({active}) => active ? '500px' : '0px'};
+	width: 100%;
+	transition: height .3s;
+	background: #fff;
+	display: flex;
+`
+
+const MoreInfoLeft = styled.div`
+	width: 300px;
+	height: 100%;
+	border-right: 1px solid black;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	padding-right: 15px;
+	padding-top: 10px;
+	font-family: 'Lato';
+`
+
+const Avatar = styled.img`
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	border: 1px solid black;
+`
+
+const Nick = styled.p`
+	margin: 0;
+	font-size: 20px;
+`
+
+const MoreInfoLeftText = styled.p`
+	margin: 0;
+	font-size: 16px;
+`
+
+const MoreInfoMiddle = styled.div`
+	flex: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+`
+
+const Background = styled.img`
+	width: 100%;
+	height: 150px;
+`
+
+const MiddleButton = styled.button`
+	width: 70px;
+	height: 30px;
+	cursor: pointer;
+	margin-bottom: 10px;
+`;
+
+const MiddleAvatar = styled.img`
+	width: 84px;
+	height: 84px;
+	border-radius: 50%;
+	border: 1px solid grey;
+`
+
+const MiddleTextArea = styled.textarea`
+	resize: none;
+	height: 150px;
+`
+
+const MoreInfoRight = styled.div`
+	width: 600px;
+	height: 100%;
+	border-left: 1px solid black;
+	display: flex;
+	flex-direction: column;
+	padding: 100px 30px;
+`
+
+const MoreInfoRightLabel = styled.label`
+	height: 30px;
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+`
+
+const MoreInfoRightCheckbox = styled.input`
+	margin: 0px;
+	margin-top: 4px;
+	margin-left: 15px;
+`
+
+const LoaderWrapper = styled.div`
 	width: 100%;
 	height: 100%;
-	background: #fff;
+	background: rgba(0,0,0,0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
 class Users extends Component {
 	constructor() {
 		super();
 		this.state = {
-			activeUser: null
+			activeUser: null,
+			activeUserId: null
 		}
 	}
 
@@ -86,13 +184,17 @@ class Users extends Component {
 		} else {
 			e.currentTarget.after(this.moreInfoRef.current);
 			this.setState({
-				activeUser: e.currentTarget.id
+				activeUser: e.currentTarget.id,
+				activeUserId: e.currentTarget.id
 			});
+			if (this.state.activeUserId !== e.currentTarget.id) {
+				this.props.getUsers({ page: 1, limit: 1, id: e.currentTarget.id }, true);
+			}
 		}
 	}
 
 	render() {
-		const { users } = this.props;
+		const { users, oneUser } = this.props;
 		return (
 			<UsersContainer className="usersContainer">
 				<Table>
@@ -109,8 +211,50 @@ class Users extends Component {
 					</Thead>
 					<Tbody>
 						<MoreInfoContainer>
-							<MoreInfoWrapper active={this.state.activeUser ? 1 : 0} colSpan="7" ref={this.moreInfoRef}>
-								<MoreInfoContent></MoreInfoContent>
+							<MoreInfoWrapper colSpan="7" ref={this.moreInfoRef}>
+								<MoreInfoContent active={this.state.activeUser ? 1 : 0}>
+									{
+										oneUser ? (
+											<>
+												<MoreInfoLeft>
+													<Avatar alt="" src={oneUser[0].profile.avatar}/>
+													<Nick>{oneUser[0].nick}</Nick>
+													<MoreInfoLeftText>{oneUser[0].email}</MoreInfoLeftText>
+													<MoreInfoLeftText>{oneUser[0].profile.joined}</MoreInfoLeftText>
+												</MoreInfoLeft>
+												<MoreInfoMiddle>
+													<Background alt="" src={oneUser[0].profile.background}/>
+													<MiddleButton>Remove</MiddleButton>
+													<MiddleAvatar alt="" src={oneUser[0].profile.avatar}/>
+													<MiddleButton>Remove</MiddleButton>
+													<MiddleTextArea defaultValue={oneUser[0].profile.description} disabled></MiddleTextArea>
+													<MiddleButton>Remove</MiddleButton>
+												</MoreInfoMiddle>
+												<MoreInfoRight>
+													<MoreInfoRightLabel>
+														isAdmin: <MoreInfoRightCheckbox defaultChecked={oneUser[0].isAdmin} type="checkbox"/>
+													</MoreInfoRightLabel>
+													<MoreInfoRightLabel>
+														canUpload: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canUpload} type="checkbox"/>
+													</MoreInfoRightLabel>
+													<MoreInfoRightLabel>
+														canComment: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canComment} type="checkbox"/>
+													</MoreInfoRightLabel>
+													<MoreInfoRightLabel>
+														canUseSettings: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canUseSettings} type="checkbox"/>
+													</MoreInfoRightLabel>
+													<MoreInfoRightLabel>
+														canEditVideos: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canEditVideos} type="checkbox"/>
+													</MoreInfoRightLabel>
+												</MoreInfoRight>
+											</>
+										) : (
+											<LoaderWrapper>
+												<Loader />
+											</LoaderWrapper>
+										)
+									}
+								</MoreInfoContent>
 							</MoreInfoWrapper>
 						</MoreInfoContainer>
 						{
@@ -139,7 +283,8 @@ class Users extends Component {
 
 const mapStateToProps = state => {
 	return {
-		users: state.adminReducer.users
+		users: state.adminReducer.users,
+		oneUser: state.adminReducer.oneUser
 	}
 }
 
