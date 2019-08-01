@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getUsers, changeProfileInfo } from '../../actions/adminAction';
+import { getUsers, changeProfileInfo, changeRules } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -169,7 +169,13 @@ class Users extends Component {
 		super();
 		this.state = {
 			activeUser: null,
-			activeUserId: null
+			activeUserId: null,
+			isAdmin: null,
+			canUpload: null,
+			canComment: null,
+			canUseSettings: null,
+			canEditVideos: null,
+			ruleChanged: false
 		}
 	}
 
@@ -182,7 +188,8 @@ class Users extends Component {
 	showMore = e => {
 		if (e.currentTarget.id === this.state.activeUser) {
 			this.setState({
-				activeUser: null
+				activeUser: null,
+				ruleChanged: false
 			});
 		} else {
 			e.currentTarget.after(this.moreInfoRef.current);
@@ -206,6 +213,23 @@ class Users extends Component {
 
 	removeDescription = () => {
 		this.props.changeProfileInfo({id: this.state.activeUserId, description: ''});
+	}
+
+	updateRules = e => {
+		this.setState({
+			[e.target.id]: e.target.checked,
+			ruleChanged: true
+		});
+	}
+
+	saveRules = () => {
+		let query = {};
+		query.id = this.state.activeUserId;
+		this.state.canComment !== null && (query.canComment = this.state.canComment);
+		this.state.canEditVideos !== null && (query.canEditVideos = this.state.canEditVideos);
+		this.state.canUpload !== null && (query.canUpload = this.state.canUpload);
+		this.state.canUseSettings !== null && (query.canUseSettings = this.state.canUseSettings);
+		this.props.changeRules(query);
 	}
 
 	render() {
@@ -251,20 +275,23 @@ class Users extends Component {
 												</MoreInfoMiddle>
 												<MoreInfoRight>
 													<MoreInfoRightLabel>
-														isAdmin: <MoreInfoRightCheckbox defaultChecked={oneUser.isAdmin} type="checkbox"/>
+														isAdmin: <MoreInfoRightCheckbox onClick={this.updateRules} id="isAdmin" defaultChecked={oneUser.isAdmin} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canUpload: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canUpload} type="checkbox"/>
+														canUpload: <MoreInfoRightCheckbox onClick={this.updateRules} id="canUpload" defaultChecked={oneUser.rules.canUpload} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canComment: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canComment} type="checkbox"/>
+														canComment: <MoreInfoRightCheckbox onClick={this.updateRules} id="canComment" defaultChecked={oneUser.rules.canComment} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canUseSettings: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canUseSettings} type="checkbox"/>
+														canUseSettings: <MoreInfoRightCheckbox onClick={this.updateRules} id="canUseSettings" defaultChecked={oneUser.rules.canUseSettings} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canEditVideos: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canEditVideos} type="checkbox"/>
+														canEditVideos: <MoreInfoRightCheckbox onClick={this.updateRules} id="canEditVideos" defaultChecked={oneUser.rules.canEditVideos} type="checkbox"/>
 													</MoreInfoRightLabel>
+													{
+														this.state.ruleChanged && <MiddleButton onClick={this.saveRules}>save</MiddleButton>
+													}
 												</MoreInfoRight>
 											</>
 										) : (
@@ -307,4 +334,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUsers, changeProfileInfo })(Users);
+export default connect(mapStateToProps, { getUsers, changeProfileInfo, changeRules })(Users);

@@ -80,7 +80,7 @@ export const getUsers = (args, showMore) => {
 	}
 }
 
-export const changeProfileInfo = (args) => {
+export const changeProfileInfo = args => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 	return async dispatch => {
@@ -109,6 +109,43 @@ export const changeProfileInfo = (args) => {
 				type: 'UPDATE_ONE_USER_PROFILE',
 				data: result.data.data.adminChangeProfileInfo
 			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Saved!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const changeRules = args => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							adminSetRules(${query}) {
+								canComment
+								canUseSettings
+								canEditVideos
+								canUpload
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
 			dispatch({
 				type: 'SHOW_ALERT',
 				message: 'Saved!',
