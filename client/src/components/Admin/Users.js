@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { DateTime } from 'luxon';
 
-import { getUsers } from '../../actions/adminAction';
+import { getUsers, changeProfileInfo } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -20,7 +21,7 @@ const Table = styled.table`
 
 const Thead = styled.thead`
 	tr {
-		background: #fff;
+		background: #FAFAFA;
 	}
 
 	th {
@@ -54,7 +55,9 @@ const Tbody = styled.tbody`
 
 const Td = styled.td``
 
-const MoreInfoContainer = styled.tr``;
+const MoreInfoContainer = styled.tr`
+	border-bottom: none !important;
+`;
 
 const MoreInfoWrapper = styled.td`
 	padding: 0 !important;
@@ -193,8 +196,24 @@ class Users extends Component {
 		}
 	}
 
+	removeBackground = () => {
+		this.props.changeProfileInfo({id: this.state.activeUserId, background: 'https://png.pngtree.com/thumb_back/fw800/back_pic/00/14/65/3256657136926fa.jpg'});
+	}
+
+	removeAvatar = () => {
+		this.props.changeProfileInfo({id: this.state.activeUserId, avatar: 'https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png'});
+	}
+
+	removeDescription = () => {
+		this.props.changeProfileInfo({id: this.state.activeUserId, description: ''});
+	}
+
 	render() {
 		const { users, oneUser } = this.props;
+		if (oneUser) {
+			oneUser.profile.joined = new Date( Number(oneUser.profile.joined) );
+			oneUser.profile.joined = DateTime.fromJSDate( oneUser.profile.joined );
+		}
 		return (
 			<UsersContainer className="usersContainer">
 				<Table>
@@ -217,34 +236,34 @@ class Users extends Component {
 										oneUser ? (
 											<>
 												<MoreInfoLeft>
-													<Avatar alt="" src={oneUser[0].profile.avatar}/>
-													<Nick>{oneUser[0].nick}</Nick>
-													<MoreInfoLeftText>{oneUser[0].email}</MoreInfoLeftText>
-													<MoreInfoLeftText>{oneUser[0].profile.joined}</MoreInfoLeftText>
+													<Avatar alt="" src={oneUser.profile.avatar}/>
+													<Nick>{oneUser.nick}</Nick>
+													<MoreInfoLeftText>{oneUser.email}</MoreInfoLeftText>
+													<MoreInfoLeftText>{oneUser.profile.joined.toString().split('T')[0]}</MoreInfoLeftText>
 												</MoreInfoLeft>
 												<MoreInfoMiddle>
-													<Background alt="" src={oneUser[0].profile.background}/>
-													<MiddleButton>Remove</MiddleButton>
-													<MiddleAvatar alt="" src={oneUser[0].profile.avatar}/>
-													<MiddleButton>Remove</MiddleButton>
-													<MiddleTextArea defaultValue={oneUser[0].profile.description} disabled></MiddleTextArea>
-													<MiddleButton>Remove</MiddleButton>
+													<Background alt="" src={oneUser.profile.background}/>
+													<MiddleButton onClick={this.removeBackground}>Remove</MiddleButton>
+													<MiddleAvatar alt="" src={oneUser.profile.avatar}/>
+													<MiddleButton onClick={this.removeAvatar}>Remove</MiddleButton>
+													<MiddleTextArea value={oneUser.profile.description} disabled></MiddleTextArea>
+													<MiddleButton onClick={this.removeDescription}>Remove</MiddleButton>
 												</MoreInfoMiddle>
 												<MoreInfoRight>
 													<MoreInfoRightLabel>
-														isAdmin: <MoreInfoRightCheckbox defaultChecked={oneUser[0].isAdmin} type="checkbox"/>
+														isAdmin: <MoreInfoRightCheckbox defaultChecked={oneUser.isAdmin} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canUpload: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canUpload} type="checkbox"/>
+														canUpload: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canUpload} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canComment: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canComment} type="checkbox"/>
+														canComment: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canComment} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canUseSettings: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canUseSettings} type="checkbox"/>
+														canUseSettings: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canUseSettings} type="checkbox"/>
 													</MoreInfoRightLabel>
 													<MoreInfoRightLabel>
-														canEditVideos: <MoreInfoRightCheckbox defaultChecked={oneUser[0].rules.canEditVideos} type="checkbox"/>
+														canEditVideos: <MoreInfoRightCheckbox defaultChecked={oneUser.rules.canEditVideos} type="checkbox"/>
 													</MoreInfoRightLabel>
 												</MoreInfoRight>
 											</>
@@ -288,4 +307,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUsers })(Users);
+export default connect(mapStateToProps, { getUsers, changeProfileInfo })(Users);

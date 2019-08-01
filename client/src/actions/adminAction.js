@@ -7,7 +7,6 @@ export const getUsers = (args, showMore) => {
 
 	return async dispatch => {
 		try {
-
 			if (showMore) {
 				dispatch({
 					type: 'CLEAR_ONE_USER'
@@ -77,6 +76,46 @@ export const getUsers = (args, showMore) => {
 			}
 		} catch (err) {
 
+		}
+	}
+}
+
+export const changeProfileInfo = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							adminChangeProfileInfo(${query}) {
+								background
+								avatar
+								description
+								joined
+							}
+						}
+					`
+				}
+			});
+
+			dispatch({
+				type: 'UPDATE_ONE_USER_PROFILE',
+				data: result.data.data.adminChangeProfileInfo
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Saved!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
 		}
 	}
 }

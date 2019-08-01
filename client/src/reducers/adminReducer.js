@@ -13,7 +13,15 @@ const adminReducer = (state = initState, action) => {
 		case 'UPDATE_ONE_USER':
 			return {
 				...state,
-				oneUser: action.data
+				oneUser: action.data[0]
+			}
+		case 'UPDATE_ONE_USER_PROFILE':
+			return {
+				...state,
+				oneUser: {
+					...state.oneUser,
+					profile: action.data
+				}
 			}
 		case 'CLEAR_ONE_USER':
 			return {
