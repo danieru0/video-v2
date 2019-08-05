@@ -156,3 +156,57 @@ export const changeRules = args => {
 		}
 	}
 }
+
+export const getHistory = args => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+	return async dispatch => {
+		try {
+			let result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							users(${query}) {
+								history {
+									videos {
+										_id
+										title
+										views
+										miniature
+										length
+										author {
+											nick
+										}
+										createdAt
+									}
+									search
+								}
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_HISTORY',
+				data: result.data.data.users[0].history
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const clearHistory = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_HISTORY'
+		});
+	}
+}

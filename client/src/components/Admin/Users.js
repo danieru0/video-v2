@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { getUsers, changeProfileInfo, changeRules } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
+import HistoryModal from '../../shared/Modal/HistoryModal';
 
 const UsersContainer = styled.div`
 	width: 100%;
@@ -101,6 +102,17 @@ const MoreInfoLeftText = styled.p`
 	font-size: 16px;
 `
 
+const MoreInfoLeftButton = styled.button`
+	background: none;
+	border: none;
+	font-family: 'Lato';
+	cursor: pointer;
+	margin: 0;
+	font-size: 16px;
+	outline: none;
+	padding: 0;
+`
+
 const MoreInfoMiddle = styled.div`
 	flex: 1;
 	height: 100%;
@@ -175,7 +187,8 @@ class Users extends Component {
 			canComment: null,
 			canUseSettings: null,
 			canEditVideos: null,
-			ruleChanged: false
+			ruleChanged: false,
+			historyModal: false
 		}
 	}
 
@@ -230,13 +243,25 @@ class Users extends Component {
 		this.state.canUpload !== null && (query.canUpload = this.state.canUpload);
 		this.state.canUseSettings !== null && (query.canUseSettings = this.state.canUseSettings);
 
-		if (query.length > 1) {
+		if (Object.keys(query).length > 1) {
 			this.props.changeRules(query);
 		}
 
 		if (this.state.isAdmin !== null) {
 			this.props.changeProfileInfo({ id: this.state.activeUserId, admin: this.state.isAdmin })
 		}
+	}
+
+	hideModal = () => {
+		this.setState({
+			historyModal: false
+		});
+	}
+
+	showModal = () => {
+		this.setState({
+			historyModal: true
+		});
 	}
 
 	render() {
@@ -247,6 +272,9 @@ class Users extends Component {
 		}
 		return (
 			<UsersContainer className="usersContainer">
+				{
+					this.state.historyModal && <HistoryModal userId={this.state.activeUserId} onExit={this.hideModal}/>
+				}
 				<Table>
 					<Thead>
 						<Tr>
@@ -271,6 +299,8 @@ class Users extends Component {
 													<Nick>{oneUser.nick}</Nick>
 													<MoreInfoLeftText>{oneUser.email}</MoreInfoLeftText>
 													<MoreInfoLeftText>{oneUser.profile.joined.toString().split('T')[0]}</MoreInfoLeftText>
+													<MoreInfoLeftText>{oneUser._id}</MoreInfoLeftText>
+													<MoreInfoLeftButton onClick={this.showModal}>history</MoreInfoLeftButton>
 												</MoreInfoLeft>
 												<MoreInfoMiddle>
 													<Background alt="" src={oneUser.profile.background}/>

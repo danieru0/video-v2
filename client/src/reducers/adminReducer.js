@@ -1,6 +1,7 @@
 const initState = {
 	users: null,
-	oneUser: null
+	oneUser: null,
+	history: null
 }
 
 const adminReducer = (state = initState, action) => {
@@ -27,6 +28,16 @@ const adminReducer = (state = initState, action) => {
 			return {
 				...state,
 				oneUser: null
+			}
+		case 'UPDATE_HISTORY':
+			return {
+				...state,
+				history: action.data
+			}
+		case 'CLEAR_HISTORY':
+			return {
+				...state,
+				history: null
 			}
 		default: return state;
 	}
