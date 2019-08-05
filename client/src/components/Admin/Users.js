@@ -229,7 +229,14 @@ class Users extends Component {
 		this.state.canEditVideos !== null && (query.canEditVideos = this.state.canEditVideos);
 		this.state.canUpload !== null && (query.canUpload = this.state.canUpload);
 		this.state.canUseSettings !== null && (query.canUseSettings = this.state.canUseSettings);
-		this.props.changeRules(query);
+
+		if (query.length > 1) {
+			this.props.changeRules(query);
+		}
+
+		if (this.state.isAdmin !== null) {
+			this.props.changeProfileInfo({ id: this.state.activeUserId, admin: this.state.isAdmin })
+		}
 	}
 
 	render() {

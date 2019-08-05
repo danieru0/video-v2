@@ -148,7 +148,7 @@ export const changeRules = args => {
 
 			dispatch({
 				type: 'SHOW_ALERT',
-				message: 'Saved!',
+				message: 'Rules saved!',
 				alertType: 'normal'
 			});
 		} catch (err) {
