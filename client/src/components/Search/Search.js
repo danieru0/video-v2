@@ -105,25 +105,27 @@ class Search extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		let parsedPrev = queryString.parse(prevProps.location.search);
-		let parsed = queryString.parse(window.location.search);
-		if (parsed.title) {
-			if (parsedPrev.title !== parsed.title || parsedPrev.type !== parsed.type || parsedPrev.sort !== parsed.sort) {
-				this.setState({
-					title: parsed.title
-				});
-				parsed.page = 1;
-				parsed.limit = 10;
-				if (parsed.type === 'videos') {
-					if (parsedPrev.type === 'users') this.props.cancelUsersRequest();
-					this.getVideosFunction(parsed);
-				} else if (parsed.type === 'users') {
-					if (parsedPrev.type === 'videos') this.props.cancelVideosRequest();
-					this.getUsersFunction(parsed);
+		if (this.props.location.pathname === '/search') {
+			let parsedPrev = queryString.parse(prevProps.location.search);
+			let parsed = queryString.parse(window.location.search);
+			if (parsed.title) {
+				if (parsedPrev.title !== parsed.title || parsedPrev.type !== parsed.type || parsedPrev.sort !== parsed.sort) {
+					this.setState({
+						title: parsed.title
+					});
+					parsed.page = 1;
+					parsed.limit = 10;
+					if (parsed.type === 'videos') {
+						if (parsedPrev.type === 'users') this.props.cancelUsersRequest();
+						this.getVideosFunction(parsed);
+					} else if (parsed.type === 'users') {
+						if (parsedPrev.type === 'videos') this.props.cancelVideosRequest();
+						this.getUsersFunction(parsed);
+					}
 				}
+			} else {
+				this.props.history.push('/');
 			}
-		} else {
-			this.props.history.push('/');
 		}
 	}
 

@@ -8,6 +8,8 @@ import PlaylistModal from '../shared/Modal/PlaylistModal';
 
 import { getFrontUserInformations } from '../actions/userAction';
 
+const WithRouterSideNav = withRouter(props => <SideNav {...props}/>)
+
 class NavContainer extends Component {
 	constructor() {
 		super();
@@ -62,7 +64,6 @@ class NavContainer extends Component {
 	}
 
 	render() {
-		const WithRouterSideNav = withRouter(props => <SideNav {...props}/>)
 		return (
 			<>
 				{

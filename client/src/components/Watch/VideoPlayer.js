@@ -349,9 +349,9 @@ class VideoPlayer extends Component {
 					<PlayerButton data-tip="Play/Pause (space)" margin="0px 10px" onClick={this.togglePause}>
 						{
 							this.state.paused ? (
-								<StyledIcon name="pause"/>
-							) : (
 								<StyledIcon name="play"/>
+							) : (
+								<StyledIcon name="pause"/>
 							)
 						}
 					</PlayerButton>

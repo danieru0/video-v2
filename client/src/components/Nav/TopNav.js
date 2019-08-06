@@ -110,8 +110,22 @@ class TopNav extends Component {
 		super();
 		this.state = {
 			searchValue: null,
-			redirect: false
+			redirect: false,
+			rendered: false
 		}
+	}
+
+	componentDidMount() {
+		this.setState({
+			rendered: true
+		});
+	}
+
+	shouldComponentUpdate() {
+		if (this.state.rendered) {
+			return false;
+		}
+		return true;
 	}
 
 	handleSearchChange = e => {
