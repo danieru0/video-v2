@@ -23,8 +23,9 @@ import Edit from './components/Edit/Edit';
 import Settings from './components/Settings/Settings';
 import Admin from './components/Admin/Admin';
 
+const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
+
 function App() {
-	const AuthContainerWithoutAuth = withoutAuth(AuthContainer);
 	return (
 		<BrowserRouter>
 			<div className="App">

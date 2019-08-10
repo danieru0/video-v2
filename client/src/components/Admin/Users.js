@@ -176,6 +176,21 @@ const LoaderWrapper = styled.div`
 	align-items: center;
 `
 
+const SearchWrapper = styled.div`
+
+`
+
+const Search = styled.input`
+	height: 30px;
+	font-size: 18px;
+`
+
+const SearchLabel = styled.label``;
+
+const SearchRadio = styled.input``;
+
+const SearchButton = styled.button``;
+
 class Users extends Component {
 	constructor() {
 		super();
@@ -188,7 +203,9 @@ class Users extends Component {
 			canUseSettings: null,
 			canEditVideos: null,
 			ruleChanged: false,
-			historyModal: false
+			historyModal: false,
+			searchValue: '',
+			searchType: 'name'
 		}
 	}
 
@@ -264,6 +281,26 @@ class Users extends Component {
 		});
 	}
 
+	handleSearchInput = e => {
+		this.setState({
+			searchValue: e.target.value
+		});
+	}
+
+	handleSearchRadio = e => {
+		this.setState({
+			searchType: e.target.id
+		});
+	}
+
+	handleSearch = () => {
+		if (this.state.searchType === 'name') {
+			this.props.getUsers({ page: 1, limit: 20, nick: this.state.searchValue });
+		} else if (this.state.searchType === 'id') {
+			this.props.getUsers({ page: 1, limit: 20, id: this.state.searchValue });
+		}
+	}
+
 	render() {
 		const { users, oneUser } = this.props;
 		if (oneUser) {
@@ -275,6 +312,18 @@ class Users extends Component {
 				{
 					this.state.historyModal && <HistoryModal userId={this.state.activeUserId} onExit={this.hideModal}/>
 				}
+				<SearchWrapper>
+					<Search onChange={this.handleSearchInput} placeholder="Search..."/>
+					<SearchLabel>
+						By ID:
+						<SearchRadio onClick={this.handleSearchRadio} id="id" name="search-type" type="radio"/>
+					</SearchLabel>
+					<SearchLabel>
+						By Name:
+						<SearchRadio id="name" onClick={this.handleSearchRadio} defaultChecked name="search-type" type="radio" />
+					</SearchLabel>
+					<SearchButton onClick={this.handleSearch}>Search</SearchButton>
+				</SearchWrapper>
 				<Table>
 					<Thead>
 						<Tr>

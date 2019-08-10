@@ -275,6 +275,13 @@ class Watch extends Component {
 		this.props.clearSingleVideo();
 	}
 
+	shouldComponentUpdate(newProps, newState) {
+		if (newState.typing !== this.state.typing) {
+			return false;
+		}
+		return true;
+	}
+
 	toggleDescription = () => {
 		this.setState({
 			descMore: !this.state.descMore
@@ -333,7 +340,7 @@ class Watch extends Component {
 		this.setState({
 			saveModal: true
 		});
-	}
+	} 
 
 	hideSaveModal = () => {
 		this.setState({
