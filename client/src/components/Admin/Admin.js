@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import Home from './Home';
 import Users from './Users';
+import Videos from './Videos';
 
 const AdminContainer = styled.div`
 	width: 100%;
@@ -157,7 +158,7 @@ class Admin extends Component {
 				content = <Users />;
 				break;
 			case 'videos':
-				content = 'le';
+				content = <Videos />;
 				break;
 			default: return null;
 		}

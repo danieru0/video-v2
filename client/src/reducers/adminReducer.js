@@ -1,7 +1,9 @@
 const initState = {
 	users: null,
 	oneUser: null,
-	history: null
+	history: null,
+	videos: null,
+	oneVideo: null
 }
 
 const adminReducer = (state = initState, action) => {
@@ -38,6 +40,26 @@ const adminReducer = (state = initState, action) => {
 			return {
 				...state,
 				history: null
+			}
+		case 'UPDATE_VIDEOS':
+			return {
+				...state,
+				videos: action.data
+			}
+		case 'UPDATE_ONE_VIDEO':
+			return {
+				...state,
+				oneVideo: action.data
+			}
+		case 'CLEAR_VIDEOS':
+			return {
+				...state,
+				videos: null	
+			}
+		case 'CLEAR_ONE_VIDEO':
+			return {
+				...state,
+				oneVideo: null
 			}
 		default: return state;
 	}

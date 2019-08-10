@@ -75,7 +75,83 @@ export const getUsers = (args, showMore) => {
 				});
 			}
 		} catch (err) {
+			throw err;
+		}
+	}
+}
 
+export const getVideos = (args, showMore) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			if (showMore) {
+				dispatch({
+					type: 'CLEAR_ONE_VIDEO'
+				});
+			}
+
+			const queryData = showMore ? (
+				`
+					query {
+						videos(${query}) {
+							_id
+							title
+							description
+							miniature
+							author {
+								nick
+								_id
+								avatar
+							}
+							createdAt
+						}
+					}
+				`
+			) : (
+				`
+					query {
+						videos(${query}) {
+							_id
+							title
+							views
+							length
+							likes
+							status
+							author {
+								nick
+							}
+						}
+					}
+				`
+			)
+
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: queryData
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			if (showMore) {
+				dispatch({
+					type: 'UPDATE_ONE_VIDEO',
+					data: result.data.data.videos
+				});
+			} else {
+				dispatch({
+					type: 'UPDATE_VIDEOS',
+					data: result.data.data.videos
+				});
+			}
+		} catch (err) {
+			throw err;
 		}
 	}
 }
@@ -88,9 +164,6 @@ export const changeProfileInfo = args => {
 			const result = await axios({
 				url: '/graphql',
 				method: 'post',
-				headers: {
-					'Authorization': localStorage.getItem('token')
-				},
 				data: {
 					query: `
 						mutation {
