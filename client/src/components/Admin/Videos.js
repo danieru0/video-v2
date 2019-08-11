@@ -209,6 +209,13 @@ class Videos extends Component {
 		this.props.changeVideoInfo(query);
 	}
 
+	removeMiniature = () => {
+		this.props.changeVideoInfo({
+			id: this.state.activeVideoId,
+			miniature: 'https://www.noborders-group.com/templates/newsletter/png/removed-occupations-australia-2017.jpg'
+		});
+	}
+
 	render() {
 		const { videos, oneVideo } = this.props;
 		if (oneVideo) {
@@ -256,7 +263,7 @@ class Videos extends Component {
 												</MoreInfoMiddle>
 												<MoreInfoRight>
 													<Miniature alt="" src={oneVideo.miniature}/>
-													<Button>Remove</Button>
+													<Button onClick={this.removeMiniature}>Remove</Button>
 												</MoreInfoRight>
 											</>
 										) : (
