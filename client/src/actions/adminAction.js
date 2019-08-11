@@ -285,3 +285,44 @@ export const clearHistory = () => {
 		});
 	}
 }
+
+export const changeVideoInfo = args => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							adminSetVideoInfo(${query}) {
+								title
+								description
+								miniature
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_ONE_VIDEO_INFO',
+				data: result.data.data.adminSetVideoInfo
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Informations saved!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}

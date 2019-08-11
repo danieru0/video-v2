@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getVideos } from '../../actions/adminAction';
+import { getVideos, changeVideoInfo } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -133,7 +133,7 @@ const MoreInfoMiddleDescription = styled.textarea`
 `
 
 const Button = styled.button`
-	width: 70px;
+	width: 100px;
 	height: 30px;
 	cursor: pointer;
 	margin-bottom: 10px;
@@ -166,7 +166,9 @@ class Videos extends Component {
 		super();
 		this.state = {
 			activeVideo: null,
-			activeVideoId: null
+			activeVideoId: null,
+			newTitle: null,
+			newDescription: null
 		}
 	}
 
@@ -191,6 +193,20 @@ class Videos extends Component {
 		if (this.state.activeVideoId !== e.currentTarget.id) {
 			this.props.getVideos({ page: 1, limit: 1, id: e.currentTarget.id }, true);
 		}
+	}
+
+	handleInfoInput = e => {
+		this.setState({
+			[e.target.id]: e.target.value
+		});
+	}
+
+	saveInfo = () => {
+		let query = {};
+		query.id = this.state.activeVideoId;
+		this.state.newTitle && (query.title = this.state.newTitle.length !== 0 ? this.state.newTitle : 'My awesome video');
+		this.state.newDescription && (query.description = this.state.newDescription);
+		this.props.changeVideoInfo(query);
 	}
 
 	render() {
@@ -225,21 +241,22 @@ class Videos extends Component {
 													<MoreInfoLeftText>{`Created at: ${oneVideo.createdAt.toString().split('T')[0]}`}</MoreInfoLeftText>
 													<MoreInfoLeftText>{`Video ID: ${oneVideo._id}`}</MoreInfoLeftText>
 													<MoreInfoLeftText>{`User ID: ${oneVideo.author._id}`}</MoreInfoLeftText>
+													<Button>Delete video</Button>
 												</MoreInfoLeft>
 												<MoreInfoMiddle>
 													<MoreInfoMiddleLabel>
 														Title:
-														<MoreInfoMiddleTitle defaultValue={oneVideo.title} placeholder="Title"/>
+														<MoreInfoMiddleTitle id="newTitle" onChange={this.handleInfoInput} defaultValue={oneVideo.title} placeholder="Title"/>
 													</MoreInfoMiddleLabel>
 													<MoreInfoMiddleLabel>
 														Description:
-														<MoreInfoMiddleDescription defaultValue={oneVideo.description} placeholder="Description"/>
+														<MoreInfoMiddleDescription id="newDescription" onChange={this.handleInfoInput} defaultValue={oneVideo.description} placeholder="Description"/>
 													</MoreInfoMiddleLabel>
-													<Button>Save</Button>
+													<Button onClick={this.saveInfo}>Save</Button>
 												</MoreInfoMiddle>
 												<MoreInfoRight>
 													<Miniature alt="" src={oneVideo.miniature}/>
-													<Button>Save</Button>
+													<Button>Remove</Button>
 												</MoreInfoRight>
 											</>
 										) : (
@@ -281,4 +298,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideos })(Videos);
+export default connect(mapStateToProps, { getVideos, changeVideoInfo })(Videos);
