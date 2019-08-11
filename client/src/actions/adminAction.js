@@ -103,7 +103,9 @@ export const getVideos = (args, showMore) => {
 							author {
 								nick
 								_id
-								avatar
+								profile {
+									avatar
+								}
 							}
 							createdAt
 						}
@@ -142,7 +144,7 @@ export const getVideos = (args, showMore) => {
 			if (showMore) {
 				dispatch({
 					type: 'UPDATE_ONE_VIDEO',
-					data: result.data.data.videos
+					data: result.data.data.videos[0]
 				});
 			} else {
 				dispatch({
