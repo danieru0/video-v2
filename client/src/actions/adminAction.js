@@ -326,3 +326,38 @@ export const changeVideoInfo = args => {
 		}
 	}
 }
+
+export const removeVideo = id => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							adminRemoveVideo(id: "${id}") {
+								_id
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'REMOVE_VIDEO_ADMIN'
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Video removed!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}

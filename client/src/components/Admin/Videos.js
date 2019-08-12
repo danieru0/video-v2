@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getVideos, changeVideoInfo } from '../../actions/adminAction';
+import { getVideos, changeVideoInfo, removeVideo } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -178,6 +178,16 @@ class Videos extends Component {
 		this.props.getVideos({ page: 1, limit: 20 });
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.deleteVideoStatus !== this.props.deleteVideoStatus) {
+			this.setState({
+				activeVideo: null,
+				activeVideoId: null
+			});
+			document.getElementById(this.state.activeVideoId).parentNode.removeChild(document.getElementById(this.state.activeVideoId));
+		}
+	}
+
 	showMore = e => {
 		if (e.currentTarget.id === this.state.activeVideo) {
 			this.setState({
@@ -210,10 +220,18 @@ class Videos extends Component {
 	}
 
 	removeMiniature = () => {
-		this.props.changeVideoInfo({
-			id: this.state.activeVideoId,
-			miniature: 'https://www.noborders-group.com/templates/newsletter/png/removed-occupations-australia-2017.jpg'
-		});
+		if (window.confirm('Are you sure?')) {
+			this.props.changeVideoInfo({
+				id: this.state.activeVideoId,
+				miniature: 'https://www.noborders-group.com/templates/newsletter/png/removed-occupations-australia-2017.jpg'
+			});
+		}
+	}
+
+	handleRemoveVideo = () => {
+		if (window.confirm('Are you sure?')) {
+			this.props.removeVideo(this.state.activeVideoId);
+		}
 	}
 
 	render() {
@@ -248,7 +266,7 @@ class Videos extends Component {
 													<MoreInfoLeftText>{`Created at: ${oneVideo.createdAt.toString().split('T')[0]}`}</MoreInfoLeftText>
 													<MoreInfoLeftText>{`Video ID: ${oneVideo._id}`}</MoreInfoLeftText>
 													<MoreInfoLeftText>{`User ID: ${oneVideo.author._id}`}</MoreInfoLeftText>
-													<Button>Delete video</Button>
+													<Button onClick={this.handleRemoveVideo}>Delete video</Button>
 												</MoreInfoLeft>
 												<MoreInfoMiddle>
 													<MoreInfoMiddleLabel>
@@ -301,8 +319,9 @@ class Videos extends Component {
 const mapStateToProps = state => {
 	return {
 		videos: state.adminReducer.videos,
-		oneVideo: state.adminReducer.oneVideo
+		oneVideo: state.adminReducer.oneVideo,
+		deleteVideoStatus: state.adminReducer.deleteVideoStatus
 	}
 }
 
-export default connect(mapStateToProps, { getVideos, changeVideoInfo })(Videos);
+export default connect(mapStateToProps, { getVideos, changeVideoInfo, removeVideo })(Videos);

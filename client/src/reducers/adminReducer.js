@@ -3,7 +3,8 @@ const initState = {
 	oneUser: null,
 	history: null,
 	videos: null,
-	oneVideo: null
+	oneVideo: null,
+	deleteVideoStatus: null
 }
 
 const adminReducer = (state = initState, action) => {
@@ -65,6 +66,11 @@ const adminReducer = (state = initState, action) => {
 			return {
 				...state,
 				oneVideo: null
+			}
+		case 'REMOVE_VIDEO_ADMIN':
+			return {
+				...state,
+				deleteVideoStatus: Math.random()
 			}
 		default: return state;
 	}
