@@ -152,6 +152,21 @@ const Miniature = styled.img`
 	border: 1px solid black;
 `
 
+const SearchWrapper = styled.div`
+
+`
+
+const Search = styled.input`
+	height: 30px;
+	font-size: 18px;
+`
+
+const SearchLabel = styled.label``;
+
+const SearchRadio = styled.input``;
+
+const SearchButton = styled.button``;
+
 const LoaderWrapper = styled.div`
 	width: 100%;
 	height: 100%;
@@ -168,7 +183,9 @@ class Videos extends Component {
 			activeVideo: null,
 			activeVideoId: null,
 			newTitle: null,
-			newDescription: null
+			newDescription: null,
+			searchValue: '',
+			searchType: 'name'
 		}
 	}
 
@@ -234,6 +251,26 @@ class Videos extends Component {
 		}
 	}
 
+	handleSearchInput = e => {
+		this.setState({
+			searchValue: e.target.value
+		});
+	}
+
+	handleSearchRadio = e => {
+		this.setState({
+			searchType: e.target.id
+		});
+	}
+
+	handleSearch = () => {
+		if (this.state.searchType === 'name') {
+			this.props.getVideos({ page: 1, limit: 20, title: this.state.searchValue });
+		} else if (this.state.searchType === 'id') {
+			this.props.getVideos({ page: 1, limit: 20, id: this.state.searchValue });
+		}
+	}
+
 	render() {
 		const { videos, oneVideo } = this.props;
 		if (oneVideo) {
@@ -242,6 +279,18 @@ class Videos extends Component {
 		}
 		return (
 			<VideosContainer>
+				<SearchWrapper>
+					<Search onChange={this.handleSearchInput} placeholder="Search..."/>
+					<SearchLabel>
+						By ID:
+						<SearchRadio onClick={this.handleSearchRadio} id="id" name="search-type" type="radio"/>
+					</SearchLabel>
+					<SearchLabel>
+						By Name:
+						<SearchRadio id="name" onClick={this.handleSearchRadio} defaultChecked name="search-type" type="radio" />
+					</SearchLabel>
+					<SearchButton onClick={this.handleSearch}>Search</SearchButton>
+				</SearchWrapper>
 				<Table>
 					<Thead>
 						<Tr>
