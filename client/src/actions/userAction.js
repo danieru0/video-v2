@@ -127,9 +127,6 @@ export const getFrontUserInformations = () => {
 									status
 									name
 								}
-								rules {
-									canUpload
-								}
 							}
 						}
 					`

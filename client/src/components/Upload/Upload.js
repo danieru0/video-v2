@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -232,6 +231,7 @@ class Upload extends Component {
 					this.setState({ progress: percentCompleted });
 				}
 			});
+
 			this.setState({ 
 				uploaded: true,
 				uploadedName: result.data.name,
@@ -279,7 +279,7 @@ class Upload extends Component {
 			this.props.createVideo(options);
 			
 		} catch (err) {
-			throw err;
+			window.location.href = '/';
 		}
 
 	}
@@ -449,9 +449,6 @@ class Upload extends Component {
 	}
 
 	render() {
-		if (this.props.user) {
-			if (!this.props.user.rules.canUpload) return <Redirect to="/" />
-		}
 		return (
 			<UploadContainer>
 				<HiddenVideoPlayer src="" preload="metadata" width="640" height="480" ref={this.videoRef} />
