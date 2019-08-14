@@ -49,6 +49,7 @@ const CommentDate = styled.span`
 const CommentText = styled.div`
 	font-size: 14px;
 	margin-top: 2px;
+	white-space: pre-wrap;
 `
 
 const Comment = ({nick, avatar, date, text}) => {
@@ -64,7 +65,7 @@ const Comment = ({nick, avatar, date, text}) => {
 						<CommentDate>{date}</CommentDate>
 					</CommentAuthor>
 				</CommentLink>
-				<CommentText>{text}</CommentText>
+				<CommentText readOnly disabled>{text.split('<br>').join("\n")}</CommentText>
 			</CommentWrapper>
 		</CommentContainer>	
 	);

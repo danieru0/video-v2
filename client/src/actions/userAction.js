@@ -300,9 +300,11 @@ export const clearUserHistorySearch = () => {
 }
 
 export const makeComment = (id, text) => {
+	text = text.split("\n").map(item => item === '' ? item = "<br>" : item).join('');
+	console.log(text);
 	return async dispatch => {
 		try {
-			await axios({
+			const result = await axios({
 				url: '/graphql',
 				method: 'post',
 				headers: {
@@ -318,6 +320,7 @@ export const makeComment = (id, text) => {
 					`
 				}
 			});
+			if (result.data.errors) throw (result.data.errors[0].message);
 
 			dispatch({
 				type: 'SHOW_ALERT',
@@ -325,8 +328,23 @@ export const makeComment = (id, text) => {
 				alertType: 'normal'
 			});
 		} catch (err) {
-			throw err;
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: err,
+				alertType: 'error'
+			});
+			dispatch({
+				type: 'SET_MAKE_COMMENT_ERROR'
+			});
 		}
+	}
+}
+
+export const clearMakeCommentError = () => {
+	return dispatch => {
+		dispatch({
+			type: 'CLEAR_MAKE_COMMENT_ERROR'
+		});
 	}
 }
 

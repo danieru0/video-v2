@@ -4,7 +4,8 @@ const initState = {
 	userProfile: null,
 	isLiked: null,
 	historyVideos: null,
-	historySearch: null
+	historySearch: null,
+	makeCommentError: false
 }
 
 const userReducer = (state = initState, action) => {
@@ -74,6 +75,16 @@ const userReducer = (state = initState, action) => {
 			return {
 				...state,
 				userProfile: action.data
+			}
+		case 'SET_MAKE_COMMENT_ERROR': 
+			return {
+				...state,
+				makeCommentError: true
+			}
+		case 'CLEAR_MAKE_COMMENT_ERROR':
+			return {
+				...state,
+				makeCommentError: false
 			}
 		default: return state;
 	}
