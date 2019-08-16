@@ -6,6 +6,7 @@ import withoutAuth from './shared/hocs/withoutAuth';
 import withPlaylistAuth from './shared/hocs/withPlaylistAuth';
 import withEditAuth from './shared/hocs/withEditAuth';
 import withAdminAuth from './shared/hocs/withAdminAuth';
+import withVideoStatusAuth from './shared/hocs/withVideoStatusAuth';
 
 import AuthContainer from './containers/AuthContainer';
 import NavContainer from './containers/NavContainer';
@@ -36,7 +37,7 @@ function App() {
 					<Route path="/login" render={props => <AuthContainerWithoutAuth type="login" {...props} /> }/>
 					<Route path="/register" render={props => <AuthContainerWithoutAuth type="register" {...props}/> }/>
 					<Route path="/upload" component={withAuth(Upload)}/>
-					<Route path="/watch/:id" component={Watch}/>
+					<Route path="/watch/:id" component={withVideoStatusAuth(Watch)}/>
 					<Route path="/search" component={Search}/>
 					<Route path="/favourites" component={withAuth(Favourites)}/>
 					<Route path="/history" component={withAuth(History)}/>
