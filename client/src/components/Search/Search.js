@@ -104,7 +104,7 @@ class Search extends Component {
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps, prevState) {
 		if (this.props.location.pathname === '/search') {
 			let parsedPrev = queryString.parse(prevProps.location.search);
 			let parsed = queryString.parse(window.location.search);
@@ -118,6 +118,7 @@ class Search extends Component {
 					if (parsed.type === 'videos') {
 						if (parsedPrev.type === 'users') this.props.cancelUsersRequest();
 						this.getVideosFunction(parsed);
+						document.getElementById(`sort-${parsed.sort}`).checked = true;
 					} else if (parsed.type === 'users') {
 						if (parsedPrev.type === 'videos') this.props.cancelVideosRequest();
 						this.getUsersFunction(parsed);
@@ -135,6 +136,9 @@ class Search extends Component {
 	}
 
 	handleOptionChange = (searchtype, value) => {
+		if (searchtype === 'searchsort') {
+			if (value === this.state.searchsort) return false;
+		}
 		this.props.clearVideos();
 		this.props.clearUsers();
 		this.setState({
