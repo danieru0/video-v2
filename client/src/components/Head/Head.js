@@ -26,7 +26,7 @@ const HeadWrapper = styled.div`
 	height: 100%;
 	margin: auto;
 
-	@media (max-width: 1550px) {
+	@media (max-width: 1820px) {
 		width: 90%;
 	}
 `
@@ -37,6 +37,30 @@ const HeadMostPopularWrapper = styled.div`
 	margin-top: 60px;
 	display: flex;
 	flex-direction: column;
+
+	@media (max-width: 1450px) {
+		a:last-of-type {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1100px) {
+		a:nth-of-type(4) {
+			display: none;
+		}
+	}
+
+	@media (max-width: 635px) {
+		a:nth-of-type(3) {
+			display: none;
+		}
+	}
+
+	@media (max-width: 400px) {
+		a:nth-of-type(2) {
+			display: none;
+		}
+	}
 `
 
 const HeadText = styled.p`
@@ -49,6 +73,10 @@ const MostPopular = styled.div`
 	width: 100%;
 	display: flex;
 	margin-top: 30px;
+
+	@media (max-width: 400px) {
+		justify-content: center;
+	}
 `
 
 const HeadAllWrapper = styled.div`
@@ -57,10 +85,13 @@ const HeadAllWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 
-
 	p:first-child {
 		width: 100%;
 		margin-bottom: 10px;
+	}
+
+	@media (max-width: 920px) {
+		justify-content: center;
 	}
 `
 
