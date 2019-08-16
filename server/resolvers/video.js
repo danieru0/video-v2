@@ -141,8 +141,10 @@ export default {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
 
-				const user = await User.findById(req.userId).select("uploadedVideos");
+				const user = await User.findById(req.userId).select("uploadedVideos rules");
 				if (!user.uploadedVideos.includes(args.id)) throw new Error('This video is not uploaded by you!');
+
+				if (!user.rules.canEditVideos) throw new Error('You cant edit videos!');
 
 				const selectedVideo = await Video.findById(args.id);
 				if (!selectedVideo) throw new Error('Video not found!');

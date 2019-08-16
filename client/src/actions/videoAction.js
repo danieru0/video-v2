@@ -161,7 +161,7 @@ export const editVideo = (args) => {
 
 	return async dispatch => {
 		try {
-			await axios({
+			const result = await axios({
 				url: '/graphql',
 				method: 'post',
 				headers: {
@@ -177,6 +177,7 @@ export const editVideo = (args) => {
 					`
 				}
 			});
+			if (result.data.errors) throw (result.data.errors[0].message);
 
 			dispatch({
 				type: 'SHOW_ALERT',
@@ -185,7 +186,13 @@ export const editVideo = (args) => {
 			});	
 
 		} catch (err) {
-			throw err;
+			if (err === 'You cant edit videos!') {
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: 'You cant edit videos!',
+					alertType: 'error'
+				});	
+			}
 		}
 	}
 }
