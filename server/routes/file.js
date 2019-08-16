@@ -1,20 +1,22 @@
 import secureUpload from '../middlewares/secureUpload';
+import canUpload from '../middlewares/canUpload';
+import canUseSettings from '../middlewares/canUseSettings';
 import fs from 'fs';
 
 module.exports = (app, videoUpload, imageUpload, miniatureUpload, backgroundUpload) => {
-	app.post('/upload/video', secureUpload, videoUpload.single('video'), (req, res) => {
+	app.post('/upload/video', secureUpload, canUpload, videoUpload.single('video'), (req, res) => {
 		res.status(200).send({name: req.file.filename});
 	});
 
-	app.post('/upload/avatar', secureUpload, imageUpload.single('avatar'), (req, res) => {
+	app.post('/upload/avatar', secureUpload, canUseSettings, imageUpload.single('avatar'), (req, res) => {
 		res.status(200).send('File name: ' + req.file.filename);
 	});
 
-	app.post('/upload/miniature', secureUpload, miniatureUpload.single('miniature'), (req, res) => {
+	app.post('/upload/miniature', secureUpload, canUseSettings, miniatureUpload.single('miniature'), (req, res) => {
 		res.status(200).send({name: req.file.filename});
 	});
 
-	app.post('/upload/background', secureUpload, backgroundUpload.single('background'), (req, res) => {
+	app.post('/upload/background', secureUpload, canUseSettings, backgroundUpload.single('background'), (req, res) => {
 		res.status(200).send({name: req.file.filename});
 	});
 

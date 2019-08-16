@@ -117,7 +117,7 @@ export default {
 				if (!req.userId) throw new Error('Not authenticated!');
 
 				const me = await User.findById(req.userId).select('profile rules');
-				if (!me.rules.canUseSettings) throw new Error('Settings has been blocked! Contact administrator!');
+				if (!me.rules.canUseSettings) throw new Error('You cant use settings!');
 
 				me.profile = {...me.profile, ...args};
 				const result = await me.save();

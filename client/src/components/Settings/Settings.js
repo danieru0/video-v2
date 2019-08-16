@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { changeProfileInfo } from '../../actions/userAction';
+import { showAlert } from '../../actions/alertAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -195,7 +196,11 @@ class Settings extends Component {
 					}
 				});
 			} catch (err) {
-				throw err;
+				this.props.showAlert('You cant use settings!', 'error');
+				this.setState({
+					saving: false
+				});
+				return false;
 			}
 		}
 
@@ -213,7 +218,11 @@ class Settings extends Component {
 					}
 				});
 			} catch (err) {
-				throw err;
+				this.props.showAlert('You cant use settings!', 'error');
+				this.setState({
+					saving: false
+				});
+				return false;
 			}
 		}
 
@@ -226,7 +235,6 @@ class Settings extends Component {
 		this.setState({
 			saving: false
 		});
-		window.location.reload();
 	}
 
 	render() {
@@ -247,10 +255,10 @@ class Settings extends Component {
 								</SettingsInfo>
 								<SettingsContent>
 									<SettingsBackground image={this.state.backgroundLink ? this.state.backgroundLink : user.profile.background}/>
-									<SettingsFile onChange={this.handleBackground} type="file" />
+									<SettingsFile onChange={this.handleBackground} type="file" accept="image/jpeg" />
 									<SettingsLine />
 									<SettingsAvatar alt="" src={this.state.avatarLink ? this.state.avatarLink : user.profile.avatar}/>
-									<SettingsFile onChange={this.handleAvatar} type="file" />
+									<SettingsFile onChange={this.handleAvatar} type="file" accept="image/jpeg" />
 									<SettingsLine />
 									<SettingsDesc onChange={this.handleDescription} defaultValue={user.profile.description} placeholder="Description..."></SettingsDesc>
 								</SettingsContent>
@@ -270,4 +278,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { changeProfileInfo })(Settings);
+export default connect(mapStateToProps, { changeProfileInfo, showAlert })(Settings);

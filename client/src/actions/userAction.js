@@ -301,7 +301,6 @@ export const clearUserHistorySearch = () => {
 
 export const makeComment = (id, text) => {
 	text = text.split("\n").map(item => item === '' ? item = "<br>" : item).join('');
-	console.log(text);
 	return async dispatch => {
 		try {
 			const result = await axios({
@@ -489,8 +488,12 @@ export const changeProfileInfo = args => {
 			if (err === 'Not authenticated!') {
 				localStorage.removeItem('token');
 				window.location = '/login';
-			} else {
-				throw err;
+			} else if (err === 'You cant use settings!') {
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: 'You cant use settings!',
+					alertType: 'error'
+				})
 			}
 		}
 	}
