@@ -10,7 +10,7 @@ export const cancelVideosRequest = () => {
 	}
 }
 
-export const getVideos = (args, updatePopular, type) => {
+export const getVideos = (args, updatePopular, type, inifiniteScroll) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
@@ -53,7 +53,7 @@ export const getVideos = (args, updatePopular, type) => {
 					type: 'UPDATE_POPULAR_VIDEOS',
 					data: result.data.data.videos
 				});
-			} else {
+			} else if (type) {
 				switch(type) {
 					case 'profile':
 						dispatch({
@@ -73,12 +73,20 @@ export const getVideos = (args, updatePopular, type) => {
 							data: result.data.data.videos
 						});
 						break;
-					default:
-						dispatch({
-							type: 'UPDATE_VIDEOS',
-							data: result.data.data.videos
-						});
+					default: return null;
 				}
+			} else if (inifiniteScroll) {
+				if (result.data.data.videos.length !== 0) {
+					dispatch({
+						type: 'ADD_NEW_VIDEOS',
+						data: result.data.data.videos
+					});	
+				}
+			} else {
+				dispatch({
+					type: 'UPDATE_VIDEOS',
+					data: result.data.data.videos
+				});
 			}
 		} catch (err) {
 			if (!axios.isCancel) {

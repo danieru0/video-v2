@@ -96,13 +96,39 @@ const HeadAllWrapper = styled.div`
 `
 
 class Head extends Component {
+	constructor() {
+		super();
+		this.state = {
+			page: 1
+		}
+	}
 	componentDidMount() {
 		this.props.getVideos({page: 1, limit: 5, sort: "popular"}, true);
-		this.props.getVideos({page: 1, limit: 10});
+		this.props.getVideos({page: 1, limit: 20});
+		document.addEventListener('scroll', this.trackScrolling);
 	}
 
 	componentWillUnmount() {
 		this.props.clearVideos();
+		document.removeEventListener('scroll', this.trackScrolling);
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.videos !== this.props.videos) {
+			document.addEventListener('scroll', this.trackScrolling);	
+		}
+	}
+
+	trackScrolling = () => {
+		const videosWrapper = document.getElementById('all-videos');
+		if (videosWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+			document.removeEventListener('scroll', this.trackScrolling);
+			this.setState({
+				page: this.state.page + 1
+			}, () => {
+				this.props.getVideos({page: this.state.page, limit: 20}, false, false, true);
+			});
+		} 
 	}
 
 	render() {
@@ -125,7 +151,7 @@ class Head extends Component {
 							}
 						</MostPopular>
 					</HeadMostPopularWrapper>
-					<HeadAllWrapper>
+					<HeadAllWrapper id="all-videos">
 						<HeadText>All Videos</HeadText>
 						{
 							videos && (
