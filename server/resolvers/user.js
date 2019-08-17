@@ -32,7 +32,8 @@ export default {
 
 				const options = {
 					page: args.page,
-					limit: args.limit
+					limit: args.limit,
+					select: '-password'
 				}
 
 				const result = await User.paginate(query, options);
@@ -45,7 +46,7 @@ export default {
 			try {
 				if (!req.userId) throw new Error('Not authenticated!');
 
-				const user = await User.findById(req.userId);
+				const user = await User.findById(req.userId).select('-password');
 				return user;
 			} catch (err) {
 				throw err;

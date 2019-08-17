@@ -4,7 +4,7 @@ import User from '../models/user';
 export default {
 	Video: {
 		author: async (parent, args, req) => {
-			const video = await Video.findById(parent._id).populate('author');
+			const video = await Video.findById(parent._id).populate('author').select('-password');
 	
 			return video.author;
 		},
