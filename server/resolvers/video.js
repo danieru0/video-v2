@@ -21,7 +21,12 @@ export default {
 				args.author && (query.author = args.author);
 				args.title && (query.title = {"$regex": args.title, "$options": "i"});
 				args.id && (query._id = args.id);
-				if (req.userId) args.author !== req.userId && (query.status = 'public');
+				if (req.userId) {
+					args.author !== req.userId && (query.status = 'public');
+				} else {
+					query.status = 'public';
+				}
+			
 
 				const options = {
 					page: args.page,

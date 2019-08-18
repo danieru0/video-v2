@@ -104,7 +104,7 @@ class Head extends Component {
 	}
 	componentDidMount() {
 		this.props.getVideos({page: 1, limit: 5, sort: "popular"}, true);
-		this.props.getVideos({page: 1, limit: 20});
+		this.props.getVideos({page: 1, limit: 15});
 		document.addEventListener('scroll', this.trackScrolling);
 	}
 
@@ -126,7 +126,7 @@ class Head extends Component {
 			this.setState({
 				page: this.state.page + 1
 			}, () => {
-				this.props.getVideos({page: this.state.page, limit: 20}, false, false, true);
+				this.props.getVideos({page: this.state.page, limit: 15}, false, false, true);
 			});
 		} 
 	}
