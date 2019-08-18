@@ -36,7 +36,9 @@ export default function withAdminAuth(ComponentToCheck) {
 					admin: result.data.data.me.isAdmin
 				});
 			} catch (err) {
-				throw err;
+				this.setState({
+					admin: false
+				});
 			}
 		}
 

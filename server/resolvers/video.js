@@ -22,12 +22,14 @@ export default {
 				args.title && (query.title = {"$regex": args.title, "$options": "i"});
 				args.id && (query._id = args.id);
 				if (req.userId) {
-					args.author !== req.userId && (query.status = 'public');
+					const user = await User.findById(req.userId).select('isAdmin');
+					if (!user.isAdmin) {
+						args.author !== req.userId && (query.status = 'public');
+					}
 				} else {
 					query.status = 'public';
 				}
 			
-
 				const options = {
 					page: args.page,
 					limit: args.limit
