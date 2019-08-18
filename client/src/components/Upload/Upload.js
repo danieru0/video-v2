@@ -12,7 +12,8 @@ import { createVideo, editVideo } from '../../actions/videoAction';
 
 const UploadContainer = styled.div`
 	width: calc(100% - 250px);
-	height: calc(100vh - 80px);
+	min-height: calc(100vh - 80px);
+	max-height: 100%;
 	margin-top: 80px;
 	margin-left: 250px;
 	background: #FAFAFA;
@@ -49,6 +50,7 @@ const UploadFileText = styled.p`
 	color: #10A074;
 	font-family: 'Lato';
 	margin-top: 15px;
+	text-align: center;
 `
 
 const HiddenFileInput = styled.input`
@@ -60,7 +62,7 @@ const UploadProgressBar = styled.div`
 	height: 50px;
 	background: #fff;
 	border: 1px solid #E7E7E7;
-	margin-top: -500px;
+	margin-top: 80px;
 	position: relative;
 `
 
@@ -71,13 +73,21 @@ const Progress = styled.div`
 `
 
 const UploadFormWrapper = styled.div`
-	width: 100%;
+	width: 70%;
 	display: flex;
 	margin-top: 40px;
+
+	@media (max-width: 820px) {
+		flex-direction: column;
+	}
 `
 
 const UploadFormInformations = styled.div`
 	width: 60%;
+
+	@media (max-width: 820px) {
+		width: 100%;
+	}
 `
 
 const UploadFormInput = styled.input`
@@ -88,16 +98,24 @@ const UploadFormInput = styled.input`
 	font-size: 20px;
 	margin-bottom: 10px;
 	font-family: 'Lato';
+
+	@media (max-width: 820px) {
+		width: 100%;
+	}
 `
 
 const UploadFormDesc = styled.div`
 	width: 90%;
-	height: 200px;
+	min-height: 200px;
 	border: 2px solid #E7E7E7;
 	font-size: 20px;
 	margin-bottom: 10px;
 	background: #fff;
 	font-family: 'Lato';
+
+	@media (max-width: 820px) {
+		width: 100%;
+	}
 `
 
 const UploadSelect = styled.select`
@@ -114,6 +132,11 @@ const UploadFormMiniature = styled.div`
 	width: 40%;
 	height: 225px;
 	position: relative;
+
+	@media (max-width: 820px) {
+		width: 100%;
+		margin-top: 20px;
+	}
 `
 
 const FormMiniatureOverlay = styled.div`
@@ -132,6 +155,10 @@ const Miniature = styled.div`
 	background: ${({miniature}) => miniature ? `url(${miniature});` : 'url(https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png);'}
 	background-size: cover;
 	background-position: center;
+
+	@media (max-width: 820px) {
+		width: 300px;
+	}
 `
 
 const MiniatureFileInput = styled.input`
@@ -153,6 +180,7 @@ const UploadVideoButton = styled.button`
 	cursor: pointer;
 	outline: none;
 	position: relative;
+	margin-bottom: 30px;
 `
 
 const UploadVideoOverlay = styled.div`
@@ -169,6 +197,11 @@ const UploadVideoOverlay = styled.div`
 const HiddenVideoPlayer = styled.video`
 	position: absolute;
 	visibility: hidden;
+
+	@media (max-width: 640px) {
+		width: 100%;
+	}
+
 `
 
 const UploadStatusText = styled.p`
@@ -185,6 +218,10 @@ const UploadStatusText = styled.p`
 const HiddenCanvas = styled.canvas`
 	position: absolute;
 	visibility: hidden;
+
+	@media (max-width: 640px) {
+		width: 100%;
+	}
 `
 
 class Upload extends Component {
@@ -461,9 +498,11 @@ class Upload extends Component {
 							<UploadFileText>Upload video by dragging or clicking here</UploadFileText>
 						</UploadFilePlace>
 					) : (
-						<UploadProgressBar>
-							<UploadStatusText>{this.state.uploadingText}</UploadStatusText>
-							<Progress progress={this.state.progress} />
+						<>
+							<UploadProgressBar>
+								<UploadStatusText>{this.state.uploadingText}</UploadStatusText>
+								<Progress progress={this.state.progress} />
+							</UploadProgressBar>
 							<UploadFormWrapper>
 								<UploadFormInformations>
 									<UploadFormInput error={this.state.inputTitleError ? 1 : 0} onChange={this.handleTitleChange} value={this.state.title} required/>
@@ -481,11 +520,11 @@ class Upload extends Component {
 									<MiniatureFileInput onChange={this.handleMiniatureInputChange} type="file" accept="image/jpeg"/>
 								</UploadFormMiniature>
 							</UploadFormWrapper>
-							<UploadVideoButton onClick={this.updateUploadedVideo}>
-								Save
+								<UploadVideoButton onClick={this.updateUploadedVideo}>
+									Save
 								<UploadVideoOverlay saving={this.state.saving ? 1 : 0}></UploadVideoOverlay>
 							</UploadVideoButton>
-						</UploadProgressBar>
+						</>
 					)
 				}
 			</UploadContainer>
