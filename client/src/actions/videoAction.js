@@ -62,10 +62,19 @@ export const getVideos = (args, updatePopular, type, inifiniteScroll) => {
 						});
 						break;
 					case 'user':
-						dispatch({
-							type: 'UPDATE_USER_VIDEOS',
-							data: result.data.data.videos
-						});
+						if (inifiniteScroll) {
+							if (result.data.data.videos.length !== 0) {
+								dispatch({
+									type: 'ADD_USER_VIDEOS',
+									data: result.data.data.videos
+								});
+							}
+						} else {
+							dispatch({
+								type: 'UPDATE_USER_VIDEOS',
+								data: result.data.data.videos
+							});
+						}
 						break;
 					case 'edit':
 						dispatch({

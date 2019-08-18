@@ -210,12 +210,14 @@ class Videos extends Component {
 		super();
 		this.state = {
 			activeButton: null,
-			sort: 'newest'
+			sort: 'newest',
+			page: 1
 		}
 	}
 	componentDidMount() {
 		if (this.props.user) {
 			this.props.getVideos({ author: this.props.user._id, page:1, limit: 10, sort: 'newest' }, false, 'user');
+			document.addEventListener('scroll', this.trackScrolling);
 		}
 	}
 
@@ -223,15 +225,32 @@ class Videos extends Component {
 		if (prevProps.user !== this.props.user) {
 			this.props.getVideos({ author: this.props.user._id, page:1, limit: 10, sort: 'newest' }, false, 'user');
 		}
+		if (prevProps.userVideos !== this.props.userVideos) {
+			document.addEventListener('scroll', this.trackScrolling);
+		}
 	}
 
 	componentWillUnmount() {
 		this.props.clearUserVideos();
+		document.removeEventListener('scroll', this.trackScrolling);
+	}
+
+	trackScrolling = () => {
+		const videosWrapper = document.getElementById('videos-wrapper');
+		if (videosWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+			document.removeEventListener('scroll', this.trackScrolling);
+			this.setState({
+				page: this.state.page + 1
+			}, () => {
+				this.props.getVideos({author: this.props.user._id, page: this.state.page, limit: 10, sort: this.state.sort}, false, 'user', true);
+			});
+		} 
 	}
 
 	sort = type => {
 		this.setState({
-			activeButton: type
+			activeButton: type,
+			page: 1
 		});
 		if (type === 'date') {
 			if (this.state.sort === 'newest') {
@@ -249,8 +268,14 @@ class Videos extends Component {
 			}
 		} else {
 			if (this.state.sort !== 'popular') {
+				this.setState({
+					sort: 'popular'
+				});
 				this.props.getVideos({ author: this.props.user._id, page:1, limit: 10, sort: 'popular' }, false, 'user');
 			} else {
+				this.setState({
+					sort: 'newest'
+				});
 				this.props.getVideos({ author: this.props.user._id, page:1, limit: 10, sort: 'newest' }, false, 'user');
 			}
 		}
@@ -260,7 +285,7 @@ class Videos extends Component {
 		const { userVideos } = this.props;
 		return (
 			<VideosContainer>
-				<VideosWrapper>
+				<VideosWrapper id="videos-wrapper">
 					<VideosMenu>
 						<MenuFilmVideoText>Videos</MenuFilmVideoText>
 						<MenuFilmText>Status</MenuFilmText>

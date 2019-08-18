@@ -72,6 +72,11 @@ const videoReducer = (state = initState, action) => {
 				...state,
 				userVideos: action.data
 			}
+		case 'ADD_USER_VIDEOS': 
+			return {
+				...state,
+				userVideos: [...state.userVideos, ...action.data]
+			}
 		case 'CLEAR_USER_VIDEOS':
 			return {
 				...state,
