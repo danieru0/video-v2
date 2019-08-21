@@ -8,7 +8,7 @@ export default `
 		uploadedVideos: [Video]
 		playlists(id: ID): [Playlist]
 		likedVideos(id: ID): [Video]
-		history: History
+		history(skip: Int!, limit: Int!): History
 		isAdmin: Boolean
 	}
 

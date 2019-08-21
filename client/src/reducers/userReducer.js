@@ -51,6 +51,11 @@ const userReducer = (state = initState, action) => {
 				...state,
 				historyVideos: action.data
 			}
+		case 'ADD_HISTORY_VIDEOS':
+			return {
+				...state,
+				historyVideos: [...state.historyVideos, ...action.data]
+			}
 		case 'CLEAR_HISTORY_VIDEOS':
 			return {
 				...state,

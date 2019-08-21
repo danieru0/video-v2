@@ -18,7 +18,11 @@ export default {
 			return user.likedVideos;
 		},
 		history: async (parent, args) => {
-			const user = await User.findById(parent._id).populate('history.videos');
+			const user = await User.findById(parent._id, {'history.search': { $slice: [args.skip, args.limit] } }).populate(
+				{
+					path: 'history.videos',
+				}
+			).where('history.videos').slice(args.skip, args.limit); //please kill me
 
 			return user.history;
 		}

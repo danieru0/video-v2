@@ -189,7 +189,7 @@ export const getUserFavouritesVideos = () => {
 	}
 }
 
-export const getUserHistoryVideos = () => {
+export const getUserHistoryVideos = (skip, limit, infiniteScroll) => {
 	return async dispatch => {
 		try {
 			const result = await axios({
@@ -205,7 +205,7 @@ export const getUserHistoryVideos = () => {
 					query: `
 						query {
 							me {
-								history {
+								history(skip: ${skip}, limit: ${limit}) {
 									videos {
 										_id
 										title
@@ -225,10 +225,17 @@ export const getUserHistoryVideos = () => {
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			dispatch({
-				type: 'UPDATE_HISTORY_VIDEOS',
-				data: result.data.data.me.history.videos.reverse()
-			});
+			if (infiniteScroll) {
+				dispatch({
+					type: 'ADD_HISTORY_VIDEOS',
+					data: result.data.data.data.me.history.videos
+				});
+			} else {
+				dispatch({
+					type: 'UPDATE_HISTORY_VIDEOS',
+					data: result.data.data.me.history.videos
+				});
+			}
 		} catch (err) {
 			if (!axios.isCancel) {
 				throw err;
@@ -237,7 +244,7 @@ export const getUserHistoryVideos = () => {
 	}
 }
 
-export const getUserHistorySearch = () => {
+export const getUserHistorySearch = (skip, limit) => {
 	return async dispatch => {
 		try {
 			const result = await axios({
@@ -253,7 +260,7 @@ export const getUserHistorySearch = () => {
 					query: `
 						query {
 							me {
-								history {
+								history(skip: ${skip}, limit: ${limit}) {
 									search
 								}
 							}
@@ -265,7 +272,7 @@ export const getUserHistorySearch = () => {
 
 			dispatch({
 				type: 'UPDATE_HISTORY_SEARCH',
-				data: result.data.data.me.history.search.reverse()
+				data: result.data.data.me.history.search
 			});
 		} catch (err) {
 			if (!axios.isCancel) {

@@ -153,22 +153,46 @@ class History extends Component {
 	constructor() {
 		super();
 		this.state = {
-			type: 'videos'
+			type: 'videos',
+			skip: 0
 		}
 	}
 
 	componentDidMount() {
-		this.props.getUserHistoryVideos();
+		this.props.getUserHistoryVideos(0, 20);
+		document.addEventListener('scroll', this.trackScrolling);
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.historyVideos !== this.props.historyVideos) {
+			document.addEventListener('scroll', this.trackScrolling);
+		}
 	}
 
 	componentWillUnmount() {
 		this.props.clearUserHistorySearch();
 		this.props.clearUserHistoryVideos();
+		document.removeEventListener('scroll', this.trackScrolling);
+	}
+
+	trackScrolling = () => {
+		const historyWrapper = document.getElementById('history-wrapper');
+		if (historyWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+			document.removeEventListener('scroll', this.trackScrolling);
+			this.setState({
+				skip: this.state.skip + 20
+			}, () => {
+				if (this.state.type === 'videos') {
+					this.props.getUserHistoryVideos(this.state.skip, 20, true)
+				}
+			});
+		}
 	}
 
 	handleTypeChange = type => {
 		this.setState({
-			type: type
+			type: type,
+			skip: 0
 		});
 		this.props.cancelUsersRequest();
 		if (type === 'videos') {
@@ -197,7 +221,7 @@ class History extends Component {
 						<HistoryOptionsCheckmark className="checkmark"/>
 					</HistoryOptionsLabel>
 				</HistoryOptionsWrapper>
-				<HistoryWrapper>
+				<HistoryWrapper id="history-wrapper">
 					{
 						this.state.type === 'videos' && (
 							<HistoryVidoes>
