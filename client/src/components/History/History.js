@@ -164,7 +164,7 @@ class History extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.historyVideos !== this.props.historyVideos) {
+		if (prevProps.historyVideos !== this.props.historyVideos || prevProps.historySearch !== this.props.historySearch) {
 			document.addEventListener('scroll', this.trackScrolling);
 		}
 	}
@@ -184,6 +184,8 @@ class History extends Component {
 			}, () => {
 				if (this.state.type === 'videos') {
 					this.props.getUserHistoryVideos(this.state.skip, 20, true)
+				} else if (this.state.type === 'search') {
+					this.props.getUserHistorySearch(this.state.skip, 20, true)
 				}
 			});
 		}
@@ -197,10 +199,16 @@ class History extends Component {
 		this.props.cancelUsersRequest();
 		if (type === 'videos') {
 			this.props.clearUserHistorySearch();
-			this.props.getUserHistoryVideos();
+			this.props.getUserHistoryVideos(0, 20);
+			this.setState({
+				skip: 0
+			})
 		} else if (type === 'search') {
 			this.props.clearUserHistoryVideos();
-			this.props.getUserHistorySearch();
+			this.props.getUserHistorySearch(0, 20);
+			this.setState({
+				skip: 0
+			})
 		}
 	}
 

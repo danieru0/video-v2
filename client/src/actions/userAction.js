@@ -226,10 +226,12 @@ export const getUserHistoryVideos = (skip, limit, infiniteScroll) => {
 			if (result.data.errors) throw (result.data.errors[0].message);
 
 			if (infiniteScroll) {
-				dispatch({
-					type: 'ADD_HISTORY_VIDEOS',
-					data: result.data.data.data.me.history.videos
-				});
+				if (result.data.data.me.history.videos.length !== 0) {
+					dispatch({
+						type: 'ADD_HISTORY_VIDEOS',
+						data: result.data.data.data.me.history.videos
+					});
+				}
 			} else {
 				dispatch({
 					type: 'UPDATE_HISTORY_VIDEOS',
@@ -244,7 +246,7 @@ export const getUserHistoryVideos = (skip, limit, infiniteScroll) => {
 	}
 }
 
-export const getUserHistorySearch = (skip, limit) => {
+export const getUserHistorySearch = (skip, limit, infiniteScroll) => {
 	return async dispatch => {
 		try {
 			const result = await axios({
@@ -270,10 +272,19 @@ export const getUserHistorySearch = (skip, limit) => {
 			});
 			if (result.data.errors) throw (result.data.errors[0].message);
 
-			dispatch({
-				type: 'UPDATE_HISTORY_SEARCH',
-				data: result.data.data.me.history.search
-			});
+			if (infiniteScroll) {
+				if (result.data.data.me.history.search.length !== 0) {
+					dispatch({
+						type: 'ADD_HISTORY_SEARCH',
+						data: result.data.data.me.history.search
+					});
+				}
+			} else {
+				dispatch({
+					type: 'UPDATE_HISTORY_SEARCH',
+					data: result.data.data.me.history.search
+				});	
+			}
 		} catch (err) {
 			if (!axios.isCancel) {
 				throw err;

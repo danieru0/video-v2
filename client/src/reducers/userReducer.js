@@ -66,6 +66,11 @@ const userReducer = (state = initState, action) => {
 				...state,
 				historySearch: action.data
 			}
+		case 'ADD_HISTORY_SEARCH':
+			return {
+				...state,
+				historySearch: [...state.historySearch, ...action.data]
+			}
 		case 'CLEAR_HISTORY_SEARCH':
 			return {
 				...state,
