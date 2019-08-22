@@ -16,6 +16,9 @@ export default function withEditAuth(ComponentToCheck) {
 			const result = await axios({
 				url: '/graphql',
 				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
 				data: {
 					query: `
 						query {
