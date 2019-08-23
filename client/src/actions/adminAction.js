@@ -80,7 +80,7 @@ export const getUsers = (args, showMore) => {
 	}
 }
 
-export const getVideos = (args, showMore) => {
+export const getVideos = (args, showMore, infiniteScroll) => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
 
@@ -147,10 +147,19 @@ export const getVideos = (args, showMore) => {
 					data: result.data.data.videos[0]
 				});
 			} else {
-				dispatch({
-					type: 'UPDATE_VIDEOS',
-					data: result.data.data.videos
-				});
+				if (infiniteScroll) {
+					if (result.data.data.videos.length !== 0) {
+						dispatch({
+							type: 'ADD_VIDEOS',
+							data: result.data.data.videos
+						});
+					}
+				} else {
+					dispatch({
+						type: 'UPDATE_VIDEOS',
+						data: result.data.data.videos
+					});	
+				}
 			}
 		} catch (err) {
 			throw err;

@@ -47,6 +47,11 @@ const adminReducer = (state = initState, action) => {
 				...state,
 				videos: action.data
 			}
+		case 'ADD_VIDEOS':
+			return {
+				...state,
+				videos: [...state.videos, ...action.data]
+			}
 		case 'UPDATE_ONE_VIDEO':
 			return {
 				...state,

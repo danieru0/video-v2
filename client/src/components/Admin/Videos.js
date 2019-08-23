@@ -185,7 +185,8 @@ class Videos extends Component {
 			newTitle: null,
 			newDescription: null,
 			searchValue: '',
-			searchType: 'name'
+			searchType: 'name',
+			page: 1
 		}
 	}
 
@@ -193,6 +194,7 @@ class Videos extends Component {
 
 	componentDidMount() {
 		this.props.getVideos({ page: 1, limit: 20 });
+		document.addEventListener('scroll', this.trackScrolling);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -202,6 +204,25 @@ class Videos extends Component {
 				activeVideoId: null
 			});
 			document.getElementById(this.state.activeVideoId).parentNode.removeChild(document.getElementById(this.state.activeVideoId));
+		}
+		if (prevProps.videos !== this.props.videos) {
+			document.addEventListener('scroll', this.trackScrolling);
+		}
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('scroll', this.trackScrolling);
+	}
+
+	trackScrolling = () => {
+		const videosWrapper = document.getElementById('videos-wrapper');
+		if (videosWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+			document.removeEventListener('scroll', this.trackScrolling);
+			this.setState({
+				page: this.state.page + 1
+			}, () => {
+				this.props.getVideos({ page: this.state.page, limit: 20 }, false, true);
+			});
 		}
 	}
 
@@ -302,7 +323,7 @@ class Videos extends Component {
 							<Th>Likes</Th>
 						</Tr>
 					</Thead>
-					<Tbody>
+					<Tbody id="videos-wrapper">
 						<MoreInfoContainer>
 							<MoreInfoWrapper colSpan="6" ref={this.moreInfoRef}>
 								<MoreInfoContent active={this.state.activeVideo ? 1 : 0}>
