@@ -66,7 +66,8 @@ class Search extends Component {
 		this.state = {
 			title: '',
 			searchtype: 'videos',
-			searchsort: 'popular'
+			searchsort: 'popular',
+			page: 1
 		}
 	}
 
@@ -84,6 +85,7 @@ class Search extends Component {
 	}
 
 	componentDidMount() {
+		document.addEventListener('scroll', this.trackScrolling);
 		let parsed = queryString.parse(window.location.search);
 
 		document.getElementById(`type-${parsed.type}`).checked = true;
@@ -96,7 +98,7 @@ class Search extends Component {
 		});
 
 		parsed.page = 1;
-		parsed.limit = 10;
+		parsed.limit = 15;
 		if (parsed.type === 'videos') {
 			this.getVideosFunction(parsed);
 		} else if (parsed.type === 'users') {
@@ -111,10 +113,11 @@ class Search extends Component {
 			if (parsed.title) {
 				if (parsedPrev.title !== parsed.title || parsedPrev.type !== parsed.type || parsedPrev.sort !== parsed.sort) {
 					this.setState({
-						title: parsed.title
+						title: parsed.title,
+						page: 1
 					});
 					parsed.page = 1;
-					parsed.limit = 10;
+					parsed.limit = 15;
 					if (parsed.type === 'videos') {
 						if (parsedPrev.type === 'users') this.props.cancelUsersRequest();
 						this.getVideosFunction(parsed);
@@ -128,11 +131,29 @@ class Search extends Component {
 				this.props.history.push('/');
 			}
 		}
+		if (prevProps.videos !== this.props.videos) {
+			document.addEventListener('scroll', this.trackScrolling);
+		}
+	}
+
+	trackScrolling = () => {
+		const searchWrapper = document.getElementById('search-wrapper');
+		if (searchWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+			document.removeEventListener('scroll', this.trackScrolling);
+			this.setState({
+				page: this.state.page + 1
+			}, () => {
+				if (this.state.searchtype === 'videos') {
+					this.props.getVideos({ page: this.state.page, limit: 15, title: this.state.title, sort: this.state.searchsort }, false, false, true);
+				}
+			});
+		}
 	}
 
 	componentWillUnmount() {
 		this.props.clearVideos();
 		this.props.clearUsers();
+		document.removeEventListener('scroll', this.trackScrolling);
 	}
 
 	handleOptionChange = (searchtype, value) => {
@@ -142,7 +163,8 @@ class Search extends Component {
 		this.props.clearVideos();
 		this.props.clearUsers();
 		this.setState({
-			[searchtype]: value
+			[searchtype]: value,
+			page: 1
 		}, () => {
 			this.props.history.push(`/search?title=${this.state.title}&sort=${this.state.searchsort}&type=${this.state.searchtype}`)
 		});
@@ -181,7 +203,7 @@ class Search extends Component {
 						)
 					}
 				</SearchOptionsWrapper>
-				<VideosWrapper>
+				<VideosWrapper id="search-wrapper">
 					{
 						videos && (
 							videos.map((item, index) => {
