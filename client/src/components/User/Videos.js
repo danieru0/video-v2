@@ -46,7 +46,7 @@ const Info = styled.p`
 
 const Videos = ({videos}) => {
 	return (
-		<VideosContainer>
+		<VideosContainer id="videos-wrapper">
 			{
 				videos && (
 					videos.map((item, index) => {

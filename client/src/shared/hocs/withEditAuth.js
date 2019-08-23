@@ -37,9 +37,13 @@ export default function withEditAuth(ComponentToCheck) {
 		}
 
 		render() {
-			if (this.state.author && this.props.user) {
-				if (this.state.author === this.props.user.nick) {
-					return <ComponentToCheck {...this.props}/>
+			if (this.state.author) {
+				if (this.props.user) {
+					if (this.state.author === this.props.user.nick) {
+						return <ComponentToCheck {...this.props}/>
+					} else {
+						return <Redirect to="/" />
+					}
 				} else {
 					return <Redirect to="/" />
 				}

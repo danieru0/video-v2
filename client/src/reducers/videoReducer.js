@@ -62,6 +62,11 @@ const videoReducer = (state = initState, action) => {
 				...state,
 				videosProfile: action.data
 			}
+		case 'ADD_PROFILE_VIDEOS':
+			return {
+				...state,
+				videosProfile: [...state.videosProfile, ...action.data]
+			}
 		case 'CLEAR_PROFILE_VIDEOS':
 			return {
 				...state,

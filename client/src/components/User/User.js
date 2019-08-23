@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
 import { getUsers, clearUserProfile } from '../../actions/userAction';
-import { clearVideosProfile } from '../../actions/videoAction';
+import { clearVideosProfile, getVideos } from '../../actions/videoAction';
 
 import Videos from './Videos';
 import Playlists from './Playlists';
@@ -119,8 +119,15 @@ const UserMenuButton = styled.button`
 `
 
 class User extends Component {
+	constructor() {
+		super();
+		this.state = {
+			page: 1
+		}
+	}
 	componentDidMount() {
 		this.props.getUsers({ nick: this.props.match.params.user, page: 1, limit: 1 }, true);
+		document.addEventListener('scroll', this.trackScrolling);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -129,11 +136,29 @@ class User extends Component {
 			this.props.clearVideosProfile();
 			this.props.getUsers({ nick: this.props.match.params.user, page: 1, limit: 1 }, true);
 		}
+		if (prevProps.videosProfile !== this.props.videosProfile) {
+			document.addEventListener('scroll', this.trackScrolling);
+		}
 	}
 
 	componentWillUnmount() {
 		this.props.clearUserProfile();
 		this.props.clearVideosProfile();
+		document.removeEventListener('scroll', this.trackScrolling);
+	}
+
+	trackScrolling = () => {
+		if (this.props.match.params.page === undefined) {
+			const videosWrapper = document.getElementById('videos-wrapper');
+			if (videosWrapper.getBoundingClientRect().bottom <= window.innerHeight) {
+				document.removeEventListener('scroll', this.trackScrolling);
+				this.setState({
+					page: this.state.page + 1
+				}, () => {
+					this.props.getVideos({ author: this.props.userProfile[0]._id, page: this.state.page, limit: 20, sort: 'newest' }, false, 'profile', true);
+				})
+			}
+		}
 	}
 
 	updatePage = page => {
@@ -210,4 +235,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getUsers, clearUserProfile, clearVideosProfile })(User);
+export default connect(mapStateToProps, { getUsers, clearUserProfile, clearVideosProfile, getVideos })(User);

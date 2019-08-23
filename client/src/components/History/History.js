@@ -21,7 +21,7 @@ const HistoryContainer = styled.div`
 `
 
 const HistoryOptionsWrapper = styled.div`
-	position: absolute;
+	position: fixed;
 	right: 0;
 	width: 500px;
 	background: #F1F1F1;

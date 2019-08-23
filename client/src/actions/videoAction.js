@@ -56,10 +56,19 @@ export const getVideos = (args, updatePopular, type, inifiniteScroll) => {
 			} else if (type) {
 				switch(type) {
 					case 'profile':
-						dispatch({
-							type: 'UPDATE_PROFILE_VIDEOS',
-							data: result.data.data.videos
-						});
+						if (inifiniteScroll) {
+							if (result.data.data.videos.length !== 0) {
+								dispatch({
+									type: 'ADD_PROFILE_VIDEOS',
+									data: result.data.data.videos
+								})
+							}
+						} else {
+							dispatch({
+								type: 'UPDATE_PROFILE_VIDEOS',
+								data: result.data.data.videos
+							});
+						}
 						break;
 					case 'user':
 						if (inifiniteScroll) {

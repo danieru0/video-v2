@@ -229,7 +229,7 @@ export const getUserHistoryVideos = (skip, limit, infiniteScroll) => {
 				if (result.data.data.me.history.videos.length !== 0) {
 					dispatch({
 						type: 'ADD_HISTORY_VIDEOS',
-						data: result.data.data.data.me.history.videos
+						data: result.data.data.me.history.videos
 					});
 				}
 			} else {
