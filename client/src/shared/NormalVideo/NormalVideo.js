@@ -131,7 +131,7 @@ const NormalVideo = ({ id, miniature, title, author, views, createdAt, length, d
 
 NormalVideo.propTypes = {
 	id: PropTypes.string.isRequired,
-	miniature: PropTypes.string.isRequired,
+	miniature: PropTypes.string,
 	title: PropTypes.string.isRequired,
 	author: PropTypes.string.isRequired,
 	createdAt: PropTypes.string.isRequired,

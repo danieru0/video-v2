@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getVideos, changeVideoInfo, removeVideo } from '../../actions/adminAction';
+import { getVideos, changeVideoInfo, removeVideo, clearVideos } from '../../actions/adminAction';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -212,6 +212,7 @@ class Videos extends Component {
 
 	componentWillUnmount() {
 		document.removeEventListener('scroll', this.trackScrolling);
+		this.props.clearVideos();
 	}
 
 	trackScrolling = () => {
@@ -394,4 +395,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, { getVideos, changeVideoInfo, removeVideo })(Videos);
+export default connect(mapStateToProps, { getVideos, changeVideoInfo, removeVideo, clearVideos })(Videos);
