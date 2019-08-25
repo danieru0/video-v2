@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { getUserPlaylist, changePlaylistStatus, clearPlaylistInfo, removePlaylist, removeVideoFromPlaylist } from '../../actions/playlistAction';
+import { getUserPlaylist, changePlaylistStatus, removePlaylist, removeVideoFromPlaylist } from '../../actions/playlistAction';
+import { clearPlaylistInfo } from '../../actions/clearAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 

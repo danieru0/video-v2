@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import PopularVideo from './PopularVideo';
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
-import { getVideos, clearVideos } from '../../actions/videoAction';
+import { getVideos } from '../../actions/videoAction';
+import { clearVideos } from '../../actions/clearAction';
 
 const HeadContainer = styled.div`
 	width: calc(100% - 250px);

@@ -7,8 +7,9 @@ import { DateTime } from 'luxon';
 import Textarea from 'react-textarea-autosize';
 import Linkify from 'react-linkify';
 
-import { getVideoInformations, clearSingleVideo, increaseViews } from '../../actions/videoAction';
-import { makeComment, checkIfLiked, toggleLike, addVideoToHistory, clearMakeCommentError } from '../../actions/userAction';
+import { getVideoInformations, increaseViews } from '../../actions/videoAction';
+import { makeComment, checkIfLiked, toggleLike, addVideoToHistory } from '../../actions/userAction';
+import { clearMakeCommentError, clearSingleVideo } from '../../actions/clearAction';
 
 import VideoPlayer from './VideoPlayer';
 import WatchError from './WatchError';

@@ -81,22 +81,6 @@ export const getUsers = (args, profile) => {
 	}
 }
 
-export const clearUsers = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_USERS'
-		});
-	}
-}
-
-export const clearUserProfile = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_USER_PROFILE'
-		});
-	}
-}
-
 export const getFrontUserInformations = () => {
 	return async dispatch => {
 		try {
@@ -293,30 +277,6 @@ export const getUserHistorySearch = (skip, limit, infiniteScroll) => {
 	}
 }
 
-export const clearUserFavouritesVideos = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_FAVOURITES_VIDEOS'
-		});
-	}
-}
-
-export const clearUserHistoryVideos = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_HISTORY_VIDEOS'
-		});
-	}
-}
-
-export const clearUserHistorySearch = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_HISTORY_SEARCH'
-		});
-	}
-}
-
 export const makeComment = (id, text) => {
 	text = text.split("\n").map(item => item === '' ? item = "<br>" : item).join('');
 	return async dispatch => {
@@ -354,14 +314,6 @@ export const makeComment = (id, text) => {
 				type: 'SET_MAKE_COMMENT_ERROR'
 			});
 		}
-	}
-}
-
-export const clearMakeCommentError = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_MAKE_COMMENT_ERROR'
-		});
 	}
 }
 

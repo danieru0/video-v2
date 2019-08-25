@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getVideos, changeVideoInfo, removeVideo, clearVideos } from '../../actions/adminAction';
+import { getVideos, changeVideoInfo, removeVideo } from '../../actions/adminAction';
+import { clearVideos } from '../../actions/clearAction';
 
 import Loader from '../../shared/Loader/Loader';
 

@@ -5,7 +5,8 @@ import { withRouter } from 'react-router-dom';
 
 import Loader from '../../shared/Loader/Loader';
 
-import { getVideos, editVideo, clearEditVideo, removeVideo } from '../../actions/videoAction';
+import { getVideos, editVideo, removeVideo } from '../../actions/videoAction';
+import { clearEditVideo } from '../../actions/clearAction';
 import Axios from 'axios';
 
 const EditContainer = styled.div`

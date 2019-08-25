@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getUsers, clearUserProfile } from '../../actions/userAction';
-import { clearVideosProfile, getVideos } from '../../actions/videoAction';
+import { getUsers } from '../../actions/userAction';
+import { getVideos } from '../../actions/videoAction';
+import { clearVideosProfile, clearUserProfile } from '../../actions/clearAction';
 
 import Videos from './Videos';
 import Playlists from './Playlists';

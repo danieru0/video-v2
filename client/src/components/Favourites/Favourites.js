@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getUserFavouritesVideos, clearUserFavouritesVideos } from '../../actions/userAction';
+import { getUserFavouritesVideos } from '../../actions/userAction';
+import { clearUserFavouritesVideos } from '../../actions/clearAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 

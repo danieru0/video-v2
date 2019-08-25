@@ -287,22 +287,6 @@ export const getHistory = args => {
 	}
 }
 
-export const clearHistory = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_HISTORY'
-		});
-	}
-}
-
-export const clearVideos = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_VIDEOS'
-		})
-	}
-}
-
 export const changeVideoInfo = args => {
 	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
 	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);

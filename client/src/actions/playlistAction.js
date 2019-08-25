@@ -232,15 +232,3 @@ export const removeVideoFromPlaylist = (playlistId, videoId) => {
 		}
 	}
 }
-
-export const clearPlaylistInfo = () => {
-	return dispatch => {
-		dispatch({
-			type: 'CLEAR_PLAYLIST_INFO'
-		});
-		dispatch({
-			type: 'SET_PLAYLIST_REMOVED',
-			data: null
-		});
-	}
-}

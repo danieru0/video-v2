@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getHistory, clearHistory } from '../../actions/adminAction';
+import { getHistory } from '../../actions/adminAction';
+import { clearHistory } from '../../actions/clearAction';
 
 import Modal from './Modal';
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';

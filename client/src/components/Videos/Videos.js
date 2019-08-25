@@ -5,7 +5,8 @@ import FontAwesome from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 
-import { getVideos, clearUserVideos } from '../../actions/videoAction';
+import { getVideos } from '../../actions/videoAction';
+import { clearUserVideos } from '../../actions/clearAction';
 
 const VideoWatchLink = styled(Link)`
 	font-size: 14px;

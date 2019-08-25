@@ -4,8 +4,9 @@ import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { getVideos, clearVideos, cancelVideosRequest } from '../../actions/videoAction';
-import { getUsers, clearUsers, cancelUsersRequest } from '../../actions/userAction';
+import { getVideos, cancelVideosRequest } from '../../actions/videoAction';
+import { getUsers, cancelUsersRequest } from '../../actions/userAction';
+import { clearVideos, clearUsers } from '../../actions/clearAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 import User from './User';

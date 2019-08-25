@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getUserHistoryVideos, getUserHistorySearch, clearUserHistoryVideos, clearUserHistorySearch, cancelUsersRequest } from '../../actions/userAction';
+import { getUserHistoryVideos, getUserHistorySearch, cancelUsersRequest } from '../../actions/userAction';
+import { clearUserHistoryVideos, clearUserHistorySearch } from '../../actions/clearAction';
 
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
 
