@@ -89,6 +89,11 @@ const PlayerInputRangeVolume = styled.input`
 	-webkit-appearance: none;
 	outline: none;
 	width: 100%;
+	background: none;
+
+	@-moz-document url-prefix() {
+		margin-top: 4px;
+	}
 
 	&::-webkit-slider-thumb {
 		width: 19px;
@@ -114,6 +119,9 @@ const PlayerInputRangeVolume = styled.input`
 		height: 19px;
 		border-radius: 50px;
 		background: #fff;
+		position: relative;
+		z-index: 1;
+		cursor: pointer;
 	}
 
 	&::-moz-range-track {
@@ -132,6 +140,10 @@ const PlayerInputRangeVolumePath = styled.div`
 	top: 10px;
 	left: 2px;
 	cursor: pointer;
+
+	@-moz-document url-prefix() {
+		display: none;
+	}
 `
 
 const PlayerLength = styled.p`
@@ -189,7 +201,7 @@ class VideoPlayer extends Component {
 		this.playerRef.current.addEventListener('click', this.resetTimer);
 		this.playerRef.current.addEventListener('keypress', this.resetTimer);
 		this.playerRef.current.addEventListener('scroll', this.resetTimer, true);
-		this.playerRef.current.addEventListener('dblclick', this.resizePlayer);
+		this.playerRef.current.addEventListener('dblclick', (e) => e.target.nodeName === 'VIDEO' && this.resizePlayer(e));
 		this.playerRef.current.addEventListener('contextmenu', (e) => e.preventDefault());
 		document.addEventListener('keydown', this.detectButton);
 	}
@@ -300,6 +312,7 @@ class VideoPlayer extends Component {
 	}
 
 	changeInputRange = e => {
+		this.volumeRangeRef.current.click();
 		const rect = e.target.getBoundingClientRect();
 		const mouseX = e.pageX - rect.x;
 		const rangeNumber = Number(`0.${mouseX}`);
@@ -308,7 +321,7 @@ class VideoPlayer extends Component {
 		this.changeVolume(rangeNumber);
 	}
 
-	resizePlayer = () => {
+	resizePlayer = (e) => {
 		const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
         					(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
         					(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
@@ -365,7 +378,7 @@ class VideoPlayer extends Component {
 						}
 						</PlayerButton>
 					<PlayerInputRangeContainer>
-						<PlayerInputRangeVolumePath onClick={this.changeInputRange} ref={this.volumePathRef}/>
+						<PlayerInputRangeVolumePath onMouseDown={this.changeInputRange} ref={this.volumePathRef}/>
 						<PlayerInputRangeVolume ref={this.volumeRangeRef} onChange={this.handleVolumeRangeChange} step="0.01" min="0" max="1" type="range"/>
 					</PlayerInputRangeContainer>
 					<PlayerLength ref={this.timeRef} />
