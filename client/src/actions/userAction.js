@@ -62,6 +62,7 @@ export const getUsers = (args, profile) => {
 			if (result.data.errors) throw (result.data.errors[0].message);
 
 			if (profile) {
+				if (result.data.data.users.length === 0) throw new Error('Empty');
 				dispatch({
 					type: 'UPDATE_USER_PROFILE',
 					data: result.data.data.users 
@@ -76,6 +77,8 @@ export const getUsers = (args, profile) => {
 		} catch (err) {
 			if (!axios.isCancel) {
 				throw err;
+			} else if (err.message === 'Empty') {
+				window.location.href = '/';
 			}
 		}
 	}

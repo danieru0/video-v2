@@ -13,24 +13,31 @@ export default function withPlaylistAuth(ComponentToCheck) {
 		}
 
 		async componentDidMount() {
-			const result = await axios({
-				url: '/graphql',
-				method: 'post',
-				data: {
-					query: `
-						query {
-							users(nick: "${this.props.match.params.user}", page: 1, limit: 1) {
-								playlists(id: "${this.props.match.params.id}") {
-									status
+			try {
+				const result = await axios({
+					url: '/graphql',
+					method: 'post',
+					data: {
+						query: `
+							query {
+								users(nick: "${this.props.match.params.user}", page: 1, limit: 1) {
+									playlists(id: "${this.props.match.params.id}") {
+										status
+									}
 								}
 							}
-						}
-					`
-				}
-			});
-			this.setState({
-				status: result.data.data.users[0].playlists[0].status
-			});
+						`
+					}
+				});
+				if (result.data.data.users.length === 0) throw new Error('User empty');
+				if (result.data.data.users[0].playlists.length === 0) throw new Error('Playlist empty');
+
+				this.setState({
+					status: result.data.data.users[0].playlists[0].status
+				});
+			} catch (err) {
+				window.location.href = '/';
+			}
 		}
 
 		render() {

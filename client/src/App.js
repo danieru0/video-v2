@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch, withRouter } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, withRouter, Redirect } from 'react-router-dom';
 
 import withAuth from './shared/hocs/withAuth';
 import withoutAuth from './shared/hocs/withoutAuth';
@@ -47,6 +47,7 @@ function App() {
 					<Route path="/edit/:id" component={withEditAuth(withAuth(Edit))}/>
 					<Route path="/settings" component={withAuth(Settings)}/>
 					<Route path="/admin/:page?" component={withAdminAuth(Admin)}/>
+					<Redirect to="/"/>
 				</Switch>
 			</div>
 		</BrowserRouter>

@@ -14,29 +14,37 @@ export default function withVideoStatusAuth(ComponentToCheck) {
 		}
 
 		async componentDidMount() {
-			const result = await axios({
-				url: '/graphql',
-				method: 'post',
-				headers: {
-					'Authorization': localStorage.getItem('token')
-				},
-				data: {
-					query: `
-						query {
-							videos(page: 1, limit: 1, id: "${this.props.match.params.id}") {
-								status
-								author {
-									_id
+			try {
+				const result = await axios({
+					url: '/graphql',
+					method: 'post',
+					headers: {
+						'Authorization': localStorage.getItem('token')
+					},
+					data: {
+						query: `
+							query {
+								videos(page: 1, limit: 1, id: "${this.props.match.params.id}") {
+									status
+									author {
+										_id
+									}
 								}
 							}
-						}
-					`
+						`
+					}
+				});
+				if (result.data.errors) throw (result.data.errors[0].message);
+	
+				this.setState({
+					status: result.data.data.videos[0].status,
+					authorId: result.data.data.videos[0].author._id
+				});
+			} catch (err) {
+				if (err.split(' ')[0] === 'Cast') {
+					window.location.href = '/';
 				}
-			});
-			this.setState({
-				status: result.data.data.videos[0].status,
-				authorId: result.data.data.videos[0].author._id
-			});
+			}
 		}
 
 		render() {
