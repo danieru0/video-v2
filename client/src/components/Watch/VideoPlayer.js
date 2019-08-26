@@ -79,6 +79,9 @@ const PlayerInputRangeContainer = styled.div`
 	position: absolute;
 	top: 20px;
 	left: 80px;
+	overflow: hidden;
+	height: 30px
+	padding-right: 2px;
 
 	@media (max-width: 352px) {
 		width: 90px;
@@ -174,7 +177,8 @@ class VideoPlayer extends Component {
 		this.state = {
 			paused: false,
 			muted: false,
-			idle: false
+			idle: false,
+			rangeDrag: false
 		}
 	}
 
@@ -312,16 +316,27 @@ class VideoPlayer extends Component {
 	}
 
 	changeInputRange = e => {
-		this.volumeRangeRef.current.click();
 		const rect = e.target.getBoundingClientRect();
 		const mouseX = e.pageX - rect.x;
-		const rangeNumber = Number(`0.${mouseX}`);
-		this.volumeRangeRef.current.value = rangeNumber;
-		this.volumePathRef.current.style.width = mouseX + "%";
+		const rangeNumber = mouseX > 10 ? mouseX >= 100 ? 1 : Number(`0.${mouseX}`) : Number(`0.0${mouseX}`);
+		this.volumeRangeRef.current.value = rangeNumber === 1 ? rangeNumber :  rangeNumber - 0.09;
+		this.volumePathRef.current.style.width = mouseX - 6 + "%";
 		this.changeVolume(rangeNumber);
 	}
 
-	resizePlayer = (e) => {
+	handlePathRefMove = e => {
+		if (this.state.rangeDrag) {
+			if (e.target.nodeName === 'INPUT') {
+				this.changeInputRange(e);
+			} else {
+				this.setState({
+					rangeDrag: false
+				})
+			}
+		}
+	}
+
+	resizePlayer = () => {
 		const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
         					(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
         					(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
@@ -377,9 +392,9 @@ class VideoPlayer extends Component {
 							)
 						}
 						</PlayerButton>
-					<PlayerInputRangeContainer>
-						<PlayerInputRangeVolumePath onMouseDown={this.changeInputRange} ref={this.volumePathRef}/>
-						<PlayerInputRangeVolume ref={this.volumeRangeRef} onChange={this.handleVolumeRangeChange} step="0.01" min="0" max="1" type="range"/>
+					<PlayerInputRangeContainer onMouseUp={() => this.setState({ rangeDrag: false })}>
+						<PlayerInputRangeVolumePath onMouseMove={this.handlePathRefMove} onMouseUp={() => this.setState({ rangeDrag: false })} onMouseDown={(e) => { this.changeInputRange(e); this.setState({rangeDrag: true}) } } ref={this.volumePathRef}/>
+						<PlayerInputRangeVolume onMouseMove={this.handlePathRefMove} onMouseUp={() => this.setState({ rangeDrag: false })} ref={this.volumeRangeRef} onChange={this.handleVolumeRangeChange} step="0.01" min="0" max="1" type="range"/>
 					</PlayerInputRangeContainer>
 					<PlayerLength ref={this.timeRef} />
 					<PlayerButton data-tip="Resize (f)" onClick={this.resizePlayer} right>
