@@ -41,9 +41,7 @@ export default function withVideoStatusAuth(ComponentToCheck) {
 					authorId: result.data.data.videos[0].author._id
 				});
 			} catch (err) {
-				if (err.split(' ')[0] === 'Cast') {
-					window.location.href = '/';
-				}
+				window.location.href = '/';
 			}
 		}
 

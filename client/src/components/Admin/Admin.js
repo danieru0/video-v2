@@ -147,6 +147,11 @@ const AdminContent = styled.div`
 
 class Admin extends Component {
 
+	logOut = () => {
+		localStorage.removeItem('token');
+		window.location.reload();
+	}
+
 	render() {
 		const { match } = this.props;
 		let content;
@@ -163,7 +168,6 @@ class Admin extends Component {
 				break;
 			default: return null;
 		}
-
 		return (
 			<AdminContainer>
 				<Helmet>
@@ -173,7 +177,7 @@ class Admin extends Component {
 					<TopNavPageTitle>{match.params.page ? match.params.page : 'Home'}</TopNavPageTitle>
 					<TopNavRightWrapper>
 						<TopNavBackLink to="/">Go back</TopNavBackLink>
-						<TopNavLogOut>Log out</TopNavLogOut>
+						<TopNavLogOut onClick={this.logOut}>Log out</TopNavLogOut>
 					</TopNavRightWrapper>
 				</AdminTopNav>
 				<AdminSideNav>
