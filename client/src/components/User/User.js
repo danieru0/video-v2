@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
+import { Helmet } from 'react-helmet';
 
 import { getUsers } from '../../actions/userAction';
 import { getVideos } from '../../actions/videoAction';
@@ -191,6 +192,9 @@ class User extends Component {
 
 		return (
 			<UserContainer>
+				<Helmet>
+					<title>{ userProfile ? `${userProfile[0].nick} - Video v2` : 'Loading... - Video v2'}</title>
+				</Helmet>
 				{
 					userProfile && (
 						<>

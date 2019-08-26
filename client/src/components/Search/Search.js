@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { getVideos, cancelVideosRequest } from '../../actions/videoAction';
 import { getUsers, cancelUsersRequest } from '../../actions/userAction';
@@ -175,6 +176,9 @@ class Search extends Component {
 		const { videos, users } = this.props;
 		return (
 			<SearchConintaner>
+				<Helmet>
+					<title>Search - Video v2</title>
+				</Helmet>
 				<SearchOptionsWrapper>
 					<SearchOptionsLabel>
 						<SearchOptionsInput onClick={() => this.handleOptionChange('searchtype', 'videos')} id="type-videos" type="radio" name="search-type"/>

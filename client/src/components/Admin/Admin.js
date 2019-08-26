@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link, withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Home from './Home';
 import Users from './Users';
@@ -165,6 +166,9 @@ class Admin extends Component {
 
 		return (
 			<AdminContainer>
+				<Helmet>
+					<title>{ match.params.page ? `Admin:${match.params.page} - Video v2` : 'Admin - Video v2'}</title>
+				</Helmet>
 				<AdminTopNav>
 					<TopNavPageTitle>{match.params.page ? match.params.page : 'Home'}</TopNavPageTitle>
 					<TopNavRightWrapper>

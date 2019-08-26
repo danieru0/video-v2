@@ -55,11 +55,12 @@ const PopularVideoViews = styled.p`
 const PopularVideo = ({ id, miniature, title, author, createdAt, views }) => {
 	createdAt = new Date( Number(createdAt) );
 	createdAt = DateTime.fromJSDate( createdAt );
+	let originalTitle = title;
 	if (title.length > 62) {
 		title = title.substring(0, 62)+'...';
 	}
 	return (
-		<PopularVideoContainer miniature={miniature} to={`/watch/${id}`}>
+		<PopularVideoContainer title={originalTitle} miniature={miniature} to={`/watch/${id}`}>
 			<PopularVideoOverlay>
 				<PopularVideoTitle>{title}</PopularVideoTitle>
 				<PopularVideoInfo>{`${author} | ${createdAt.toRelative()}`}</PopularVideoInfo>

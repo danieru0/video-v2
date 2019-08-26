@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import { getUserHistoryVideos, getUserHistorySearch, cancelUsersRequest } from '../../actions/userAction';
 import { clearUserHistoryVideos, clearUserHistorySearch } from '../../actions/clearAction';
@@ -217,6 +218,9 @@ class History extends Component {
 		const { historyVideos, historySearch } = this.props;
 		return (
 			<HistoryContainer>
+				<Helmet>
+					<title>Your history - Video v2</title>
+				</Helmet>
 				<HistoryOptionsWrapper>
 					<HistoryOptionsText>History type</HistoryOptionsText>
 					<HistoryOptionsLabel>

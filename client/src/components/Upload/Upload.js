@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -488,6 +489,9 @@ class Upload extends Component {
 	render() {
 		return (
 			<UploadContainer>
+				<Helmet>
+					<title>Upload video - Video v2</title>
+				</Helmet>
 				<HiddenVideoPlayer src="" preload="metadata" width="640" height="480" ref={this.videoRef} />
 				<HiddenCanvas width="640" height="480" ref={this.canvasRef} />
 				{

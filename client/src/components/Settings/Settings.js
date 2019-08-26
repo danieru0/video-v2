@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 import { changeProfileInfo } from '../../actions/userAction';
 import { showAlert } from '../../actions/alertAction';
@@ -241,6 +242,9 @@ class Settings extends Component {
 		const { user } = this.props;
 		return (
 			<SettingsContainer>
+				<Helmet>
+					<title>Settings - Video v2</title>
+				</Helmet>
 				<SettingsOverlay saving={this.state.saving ? 1 : 0}>
 					<Loader />
 				</SettingsOverlay>

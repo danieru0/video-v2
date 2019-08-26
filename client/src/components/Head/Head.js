@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import PopularVideo from './PopularVideo';
 import NormalVideo from '../../shared/NormalVideo/NormalVideo';
@@ -136,6 +137,9 @@ class Head extends Component {
 		const { popularVideos, videos } = this.props;
 		return (
 			<HeadContainer>
+				<Helmet>
+					<title>Video v2</title>
+				</Helmet>
 				<HeadWrapper>
 					<HeadMostPopularWrapper>
 						<HeadText>Most Popular</HeadText>

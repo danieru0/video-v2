@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -153,6 +154,9 @@ const Login = ({ handleSubmit, authProcess, authErrors }) => {
 
 	return (
 		<LoginBackground>
+			<Helmet>
+				<title>Login - Video v2</title>
+			</Helmet>
 			<LoginForm onSubmit={event => handleSubmit(event, email, password)}>
 				<LoaderContainer authProcess={authProcess}>
 					<Loader />

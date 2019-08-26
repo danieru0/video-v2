@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Loader from '../../shared/Loader/Loader';
 
@@ -271,6 +272,9 @@ class Edit extends Component {
 		const { videoEdit } = this.props;
 		return (
 			<EditContainer>
+				<Helmet>
+					<title>Edit video - Video v2</title>
+				</Helmet>
 				{
 					videoEdit && (
 						<>

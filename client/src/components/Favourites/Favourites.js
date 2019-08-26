@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import { getUserFavouritesVideos } from '../../actions/userAction';
 import { clearUserFavouritesVideos } from '../../actions/clearAction';
@@ -54,6 +55,9 @@ class Favourites extends Component {
 		const { favouritesVideos } = this.props;
 		return (
 			<FavouritesContainer>
+				<Helmet>
+					<title>Favourites - Video v2</title>
+				</Helmet>
 				<FavouritesWrapper>
 				<FavouritesText>Your Favourites</FavouritesText>
 					{

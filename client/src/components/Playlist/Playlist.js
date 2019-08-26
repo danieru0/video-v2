@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { getUserPlaylist, changePlaylistStatus, removePlaylist, removeVideoFromPlaylist } from '../../actions/playlistAction';
 import { clearPlaylistInfo } from '../../actions/clearAction';
@@ -202,6 +203,9 @@ class Playlist extends Component {
 
 		return (
 			<PlaylistContainer>
+				<Helmet>
+					<title>{ playlistInfo ? `${playlistInfo.name} - Video v2` : 'Loading... - Video v2'}</title>
+				</Helmet>
 				<PlaylistInformations>
 					{
 						playlistInfo && (

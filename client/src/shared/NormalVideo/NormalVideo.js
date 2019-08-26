@@ -106,12 +106,13 @@ const DeleteButtonIcon = styled(FontAwesome)``
 const NormalVideo = ({ id, miniature, title, author, views, createdAt, length, deleteButton, onDeleteButtonClick }) => {
 	createdAt = new Date( Number(createdAt) );
 	createdAt = DateTime.fromJSDate( createdAt );
+	let originalTitle = title;
 	if (title.length > 47) {
 		title = title.substring(0, 45)+'...';
 	}
 
 	return (
-		<HeadVideo to={`/watch/${id}`}>
+		<HeadVideo title={originalTitle} to={`/watch/${id}`}>
 			<HeadVideoIcon name="play" />
 			<HeadVideoMiniature miniature={miniature} />
 			<HeadVideoTitle>{title}</HeadVideoTitle>

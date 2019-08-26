@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
+import { Helmet } from 'react-helmet';
 
 import { getVideos } from '../../actions/videoAction';
 import { clearUserVideos } from '../../actions/clearAction';
@@ -286,6 +287,9 @@ class Videos extends Component {
 		const { userVideos } = this.props;
 		return (
 			<VideosContainer>
+				<Helmet>
+					<title>Your videos - Video v2</title>
+				</Helmet>
 				<VideosWrapper id="videos-wrapper">
 					<VideosMenu>
 						<MenuFilmVideoText>Videos</MenuFilmVideoText>

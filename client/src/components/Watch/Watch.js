@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Textarea from 'react-textarea-autosize';
 import Linkify from 'react-linkify';
+import { Helmet } from 'react-helmet';
 
 import { getVideoInformations, increaseViews } from '../../actions/videoAction';
 import { makeComment, checkIfLiked, toggleLike, addVideoToHistory } from '../../actions/userAction';
@@ -358,6 +359,9 @@ class Watch extends Component {
 		}
 		return (
 			<WatchContainer>
+				<Helmet>
+					<title>{singleVideo ? `${singleVideo.title} - Video v2` : 'Loading... - Video v2'}</title>
+				</Helmet>
 				{
 					singleVideo && <VideoPlayer typing={this.state.typing} id={this.props.match.params.id} />
 				}
