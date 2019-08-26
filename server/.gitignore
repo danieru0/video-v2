@@ -3,6 +3,12 @@ package-lock.json
 nodemon.json
 secret.js
 /videos
-/miniatures
-/backgrounds
-/avatars
+
+miniatures/*
+!miniatures/default.png
+
+backgrounds/*
+!backgrounds/default.jpg
+
+avatars/*
+!avatars/default.png

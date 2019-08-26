@@ -138,7 +138,7 @@ class User extends Component {
 		const { user } = this.props;
 		return (
 			<UserContainer onClick={(e) => this.handleDropdownClick(e, true)}>
-				<UserAvatar src={user ? user.profile.avatar : "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclinicforspecialchildren.org%2Fwp-content%2Fuploads%2F2016%2F08%2Favatar-placeholder.gif&f=1"} alt=""/>
+				<UserAvatar src={user ? user.profile.avatar : '/avatars/default.png'} alt=""/>
 				<UserWrapper>
 					<UserName>{user ? user.nick : "Not logged"}</UserName>
 					<UserEmail>{user && user.email}</UserEmail>

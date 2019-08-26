@@ -175,6 +175,9 @@ export const changeProfileInfo = args => {
 			const result = await axios({
 				url: '/graphql',
 				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
 				data: {
 					query: `
 						mutation {
@@ -188,6 +191,8 @@ export const changeProfileInfo = args => {
 					`
 				}
 			});
+
+			console.log(result.data);
 
 			dispatch({
 				type: 'UPDATE_ONE_USER_PROFILE',

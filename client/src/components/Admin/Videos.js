@@ -263,7 +263,7 @@ class Videos extends Component {
 		if (window.confirm('Are you sure?')) {
 			this.props.changeVideoInfo({
 				id: this.state.activeVideoId,
-				miniature: 'https://www.noborders-group.com/templates/newsletter/png/removed-occupations-australia-2017.jpg'
+				miniature: '/miniatures/default.png'
 			});
 		}
 	}

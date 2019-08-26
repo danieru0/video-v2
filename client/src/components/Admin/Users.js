@@ -234,11 +234,11 @@ class Users extends Component {
 	}
 
 	removeBackground = () => {
-		this.props.changeProfileInfo({id: this.state.activeUserId, background: 'https://png.pngtree.com/thumb_back/fw800/back_pic/00/14/65/3256657136926fa.jpg'});
+		this.props.changeProfileInfo({id: this.state.activeUserId, background: '/backgrounds/default.jpg'});
 	}
 
 	removeAvatar = () => {
-		this.props.changeProfileInfo({id: this.state.activeUserId, avatar: 'https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png'});
+		this.props.changeProfileInfo({id: this.state.activeUserId, avatar: '/avatars/default.png'});
 	}
 
 	removeDescription = () => {

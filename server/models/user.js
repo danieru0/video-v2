@@ -46,12 +46,12 @@ const userSchema = new Schema({
 		background: {
 			type: String,
 			required: true,
-			default: 'https://png.pngtree.com/thumb_back/fw800/back_pic/00/14/65/3256657136926fa.jpg'
+			default: '/backgrounds/default.jpg'
 		},
 		avatar: {
 			type: String,
 			required: true,
-			default: 'https://ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png'
+			default: '/avatars/default.png'
 		},
 		description: {
 			type: String,

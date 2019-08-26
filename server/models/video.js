@@ -28,7 +28,7 @@ const videoSchema = new Schema({
 	miniature: {
 		type: String,
 		required: false,
-		default: 'https://beamimagination.com/wp-content/uploads/2017/09/video-placeholder.png'
+		default: '/miniatures/default.png'
 	},
 	status: {
 		type: String,
