@@ -79,8 +79,23 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '../../client/build/index.html'));
 });
 
+import Settings from './models/settings';
+
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@graphqltest-bohk2.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
 	.then(() => {
+		Settings.find({}, (err, docs) => {
+			if (err) throw err;
+			
+			if (docs.length === 0) {
+				const initSettings = new Settings({
+					videoUpload: true,
+					registerAccounts: true,
+					uploadAvatar: true,
+					uploadBackground: true
+				});
+				initSettings.save();
+			}
+		})
 		app.listen(process.env.PORT || 8080);
 	}).catch(err => {
 		throw err;

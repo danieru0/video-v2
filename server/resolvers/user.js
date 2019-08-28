@@ -2,6 +2,7 @@ import User from '../models/user';
 import Video from '../models/video';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import Settings from '../models/settings';
 
 import SECRET from '../secret';
 
@@ -86,6 +87,9 @@ export default {
 
 				const existingUserEmail = await User.findOne({ email: args.email });
 				if (existingUserEmail) throw new Error('email:This email is taken');
+
+				const settings = await Settings.find({});
+				if (!settings[0].registerAccounts) throw new Error('settings:Register function is blocked!');
 
 				const hashedPassword = await bcryptjs.hash(args.password, 12);
 				const user = new User({

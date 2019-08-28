@@ -197,7 +197,7 @@ class Settings extends Component {
 					}
 				});
 			} catch (err) {
-				this.props.showAlert('You cant use settings!', 'error');
+				this.props.showAlert(err.response.data, 'error');
 				this.setState({
 					saving: false
 				});
@@ -219,7 +219,7 @@ class Settings extends Component {
 					}
 				});
 			} catch (err) {
-				this.props.showAlert('You cant use settings!', 'error');
+				this.props.showAlert(err.response.data, 'error');
 				this.setState({
 					saving: false
 				});

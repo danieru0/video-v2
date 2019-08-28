@@ -79,14 +79,26 @@ export const signUp = (nick, email, password) => {
 			const errorMessage = err.split(':')[1];
 			const errorData = {};
 			errorData[errorType] = errorMessage;
-			dispatch({
-				type: 'SET_AUTH_ERRORS',
-				data: errorData
-			});
-			dispatch({
-				type: 'SET_AUTH_PROCESS',
-				data: false
-			});
+			if (errorType === 'settings') {
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: errorMessage,
+					alertType: 'error'
+				});
+				dispatch({
+					type: 'SET_AUTH_PROCESS',
+					data: false
+				});
+			} else {
+				dispatch({
+					type: 'SET_AUTH_ERRORS',
+					data: errorData
+				});
+				dispatch({
+					type: 'SET_AUTH_PROCESS',
+					data: false
+				});
+			}
 		}
 	}
 }
