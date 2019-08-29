@@ -4,7 +4,8 @@ const initState = {
 	history: null,
 	videos: null,
 	oneVideo: null,
-	deleteVideoStatus: null
+	deleteVideoStatus: null,
+	settings: null
 }
 
 const adminReducer = (state = initState, action) => {
@@ -76,6 +77,11 @@ const adminReducer = (state = initState, action) => {
 			return {
 				...state,
 				deleteVideoStatus: Math.random()
+			}
+		case 'UPDATE_SETTINGS':
+			return {
+				...state,
+				settings: action.data
 			}
 		default: return state;
 	}

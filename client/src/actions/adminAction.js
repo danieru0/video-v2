@@ -192,8 +192,6 @@ export const changeProfileInfo = args => {
 				}
 			});
 
-			console.log(result.data);
-
 			dispatch({
 				type: 'UPDATE_ONE_USER_PROFILE',
 				data: result.data.data.adminChangeProfileInfo
@@ -360,6 +358,82 @@ export const removeVideo = id => {
 			dispatch({
 				type: 'SHOW_ALERT',
 				message: 'Video removed!',
+				alertType: 'normal'
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const getSettings = () => {
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						query {
+							getSettings {
+								videoUpload
+								registerAccounts
+								uploadAvatar
+								uploadBackground
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_SETTINGS',
+				data: result.data.data.getSettings
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export const saveSettings = (args) => {
+	const argsForGraphql = stringifyObject(args, { singleQuotes: false });
+	const query = argsForGraphql.substring(1, argsForGraphql.length - 1);
+
+	return async dispatch => {
+		try {
+			const result = await axios({
+				url: '/graphql',
+				method: 'post',
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				},
+				data: {
+					query: `
+						mutation {
+							changeSettings(${query}) {
+								videoUpload
+								registerAccounts
+								uploadAvatar
+								uploadBackground
+							}
+						}
+					`
+				}
+			});
+			if (result.data.errors) throw (result.data.errors[0].message);
+
+			dispatch({
+				type: 'UPDATE_SETTINGS',
+				data: result.data.data.changeSettings
+			});
+			dispatch({
+				type: 'SHOW_ALERT',
+				message: 'Settings saved!',
 				alertType: 'normal'
 			});
 		} catch (err) {

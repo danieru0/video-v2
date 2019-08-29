@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 import Home from './Home';
 import Users from './Users';
 import Videos from './Videos';
+import Settings from './Settings';
 
 const AdminContainer = styled.div`
 	width: 100%;
@@ -166,6 +167,9 @@ class Admin extends Component {
 			case 'videos':
 				content = <Videos />;
 				break;
+			case 'settings':
+				content = <Settings />;
+				break;
 			default: return null;
 		}
 		return (
@@ -202,6 +206,10 @@ class Admin extends Component {
 								<SideNavLink active={match.params.page === 'videos' ? 1 : 0} to="/admin/videos">
 									<SideNavIcon name="video"/>
 									Videos
+								</SideNavLink>
+								<SideNavLink active={match.params.page === 'settings' ? 1 : 0} to="/admin/settings">
+									<SideNavIcon name="cog"/>
+									Settings
 								</SideNavLink>
 							</SideNavItem>
 						</SideNavMenu>
