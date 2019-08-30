@@ -119,7 +119,9 @@ export const getFrontUserInformations = () => {
 					`
 				}
 			});
+
 			if (result.data.errors) throw (result.data.errors[0].message);
+			if (!result.data.data.me) throw new Error ('Account deleted!')
 
 			dispatch({
 				type: 'UPDATE_USER_INFO',
@@ -130,6 +132,13 @@ export const getFrontUserInformations = () => {
 			if (err === 'Not authenticated!') {
 				localStorage.removeItem('token');
 				window.location = '/login';
+			} else if (err.message === 'Account deleted!') {
+				localStorage.removeItem('token');
+				dispatch({
+					type: 'SHOW_ALERT',
+					message: 'Your account has been deleted!',
+					alertType: 'error'
+				});
 			}
 		}
 	}
