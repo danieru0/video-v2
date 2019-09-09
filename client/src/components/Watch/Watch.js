@@ -159,7 +159,6 @@ const VideoDescription = styled.div`
 	min-height: 40px;
 	max-height: ${({descMore}) => descMore ? 'auto' : '40px'}; 
 	white-space: pre-line;
-	word-break: break-all;
 	overflow: hidden;
 
 	@media (max-width: 680px) {
@@ -167,7 +166,7 @@ const VideoDescription = styled.div`
 	}
 
 	@media (max-width: 546px) {
-		white-space: pre-wrap;
+		
 	}
 `
 

@@ -16,6 +16,11 @@ const RegisterBackground = styled.div`
 	align-items: center;
 	flex-direction: column;
 	background: #FAFAFA;
+
+	@media (max-width: 920px) {
+		width: 100%;
+		margin-left: 0px;
+	}
 `
 
 const RegisterForm = styled.form`

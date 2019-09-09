@@ -88,7 +88,7 @@ const PlaylistModal = ({onExit, createPlaylist}) => {
 		<Modal onExit={onExit}>
 			<ModalWrapper>
 				<ModalTitle>Create playlist</ModalTitle>
-				<ModalInput onChange={handleInputChange} placeholder="Playlist name..."/>
+				<ModalInput id="playlist-modal" onChange={handleInputChange} placeholder="Playlist name..."/>
 				<ModalButtons>
 					<ModalButton onClick={onExit}>Cancel</ModalButton>
 					<ModalButton onClick={handleCreateClick}>Create</ModalButton>

@@ -224,7 +224,7 @@ class VideoPlayer extends Component {
 	}
 
 	detectButton = e => {
-		if (!this.props.typing) {
+		if (!this.props.typing && e.target.id !== 'playlist-modal') {
 			switch(e.keyCode) {
 				case 32:
 					this.togglePause();
